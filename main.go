@@ -3,9 +3,11 @@ package main
 import (
 	"flag"
 	"fmt"
+	"net/http"
 	"os"
 
 	"github.com/charmbracelet/log"
+	"github.com/gin-gonic/gin"
 )
 
 var (
@@ -33,6 +35,22 @@ func main() {
 
 	_, quotes := scrapeGoodreads(userId, options)
 
+	// Create a Gin router with default middleware (logger and recovery)
+	r := gin.Default()
+
+	// r.LoadHTMLGlob("views/*")
+	r.Static("/game", "views")
+
+	// r.GET("/", func(c *gin.Context) {
+	// 	c.HTML(http.StatusOK, "index.html", nil)
+	// })
+
+	r.GET("/quotes", func(c *gin.Context) {
+		c.JSON(http.StatusOK, quotes)
+	})
+
+	logg.Fatal(r.Run(":8000"))
+}
 
 type Book struct {
 	BookId      string   `json:"book_id"`
