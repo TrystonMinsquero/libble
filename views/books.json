@@ -1,0 +1,5583 @@
+[
+    {
+        "book_id": "5266667-a-kiss-in-time",
+        "raw_title": "A Kiss in Time",
+        "author": "Flinn, Alex",
+        "author_id": "79589.Alex_Flinn",
+        "stars": 4,
+        "avg_rating": 3.75,
+        "rating_count": 19564,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Feb 25, 2014"
+    },
+    {
+        "book_id": "11859244-bewitching",
+        "raw_title": "Bewitching\n               \n                (Kendra Chronicles, #2)",
+        "author": "Flinn, Alex",
+        "author_id": "79589.Alex_Flinn",
+        "stars": 4,
+        "avg_rating": 3.94,
+        "rating_count": 10544,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Feb 25, 2014"
+    },
+    {
+        "book_id": "51738.Just_Listen",
+        "raw_title": "Just Listen",
+        "author": "Dessen, Sarah",
+        "author_id": "2987.Sarah_Dessen",
+        "stars": 4,
+        "avg_rating": 4.05,
+        "rating_count": 250157,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Feb 25, 2014"
+    },
+    {
+        "book_id": "89731.Kira_Kira",
+        "raw_title": "Kira-Kira",
+        "author": "Kadohata, Cynthia",
+        "author_id": "51527.Cynthia_Kadohata",
+        "stars": 5,
+        "avg_rating": 3.97,
+        "rating_count": 27980,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Feb 25, 2014"
+    },
+    {
+        "book_id": "11387515-wonder",
+        "raw_title": "Wonder\n               \n                (Wonder, #1)",
+        "author": "Palacio, R.J.",
+        "author_id": "4859212.R_J_Palacio",
+        "stars": 4,
+        "avg_rating": 4.36,
+        "rating_count": 1179276,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Feb 25, 2014"
+    },
+    {
+        "book_id": "7735333-matched",
+        "raw_title": "Matched\n               \n                (Matched, #1)",
+        "author": "Condie, Ally",
+        "author_id": "1304470.Ally_Condie",
+        "stars": 2,
+        "avg_rating": 3.62,
+        "rating_count": 811782,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Feb 25, 2014"
+    },
+    {
+        "book_id": "2172094.A_Thousand_Never_Evers",
+        "raw_title": "A Thousand Never Evers",
+        "author": "Burg, Shana",
+        "author_id": "985739.Shana_Burg",
+        "stars": 2,
+        "avg_rating": 3.84,
+        "rating_count": 805,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Feb 25, 2014"
+    },
+    {
+        "book_id": "28186.The_Sea_of_Monsters",
+        "raw_title": "The Sea of Monsters\n               \n                (Percy Jackson and the Olympians, #2)",
+        "author": "Riordan, Rick",
+        "author_id": "15872.Rick_Riordan",
+        "stars": 4,
+        "avg_rating": 4.24,
+        "rating_count": 1334759,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Feb 25, 2014"
+    },
+    {
+        "book_id": "11947156-prince-of-wolves",
+        "raw_title": "Prince of Wolves\n               \n                (The Grey Wolves, #1)",
+        "author": "Loftis, Quinn",
+        "author_id": "5014564.Quinn_Loftis",
+        "stars": 1,
+        "avg_rating": 4.03,
+        "rating_count": 40040,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Feb 25, 2014"
+    },
+    {
+        "book_id": "28187.The_Lightning_Thief",
+        "raw_title": "The Lightning Thief\n               \n                (Percy Jackson and the Olympians, #1)",
+        "author": "Riordan, Rick",
+        "author_id": "15872.Rick_Riordan",
+        "stars": 4,
+        "avg_rating": 4.31,
+        "rating_count": 3372084,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Feb 25, 2014"
+    },
+    {
+        "book_id": "13335037-divergent",
+        "raw_title": "Divergent\n               \n                (Divergent, #1)",
+        "author": "Roth, Veronica",
+        "author_id": "4039811.Veronica_Roth",
+        "stars": 5,
+        "avg_rating": 4.13,
+        "rating_count": 4321209,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Feb 25, 2014"
+    },
+    {
+        "book_id": "9520360-the-son-of-neptune",
+        "raw_title": "The Son of Neptune\n               \n                (The Heroes of Olympus, #2)",
+        "author": "Riordan, Rick",
+        "author_id": "15872.Rick_Riordan",
+        "stars": 3,
+        "avg_rating": 4.4,
+        "rating_count": 657663,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Feb 26, 2014"
+    },
+    {
+        "book_id": "12127750-the-mark-of-athena",
+        "raw_title": "The Mark of Athena\n               \n                (The Heroes of Olympus, #3)",
+        "author": "Riordan, Rick",
+        "author_id": "15872.Rick_Riordan",
+        "stars": 5,
+        "avg_rating": 4.47,
+        "rating_count": 664965,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Feb 26, 2014"
+    },
+    {
+        "book_id": "41865.Twilight",
+        "raw_title": "Twilight\n               \n                (The Twilight Saga, #1)",
+        "author": "Meyer, Stephenie",
+        "author_id": "941441.Stephenie_Meyer",
+        "stars": 4,
+        "avg_rating": 3.67,
+        "rating_count": 7191254,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Oct 14, 2014"
+    },
+    {
+        "book_id": "32075853-erotic-stories-for-punjabi-widows",
+        "raw_title": "Erotic Stories for Punjabi Widows",
+        "author": "Jaswal, Balli Kaur",
+        "author_id": "6924387.Balli_Kaur_Jaswal",
+        "stars": 5,
+        "avg_rating": 3.93,
+        "rating_count": 110447,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Jul 28, 2021"
+    },
+    {
+        "book_id": "58733693-remarkably-bright-creatures",
+        "raw_title": "Remarkably Bright Creatures",
+        "author": "Van Pelt, Shelby",
+        "author_id": "21374195.Shelby_Van_Pelt",
+        "stars": 0,
+        "avg_rating": 4.36,
+        "rating_count": 1127669,
+        "dates_read": [],
+        "date_added": "Jan 17, 2022"
+    },
+    {
+        "book_id": "58784475-tomorrow-and-tomorrow-and-tomorrow",
+        "raw_title": "Tomorrow, and Tomorrow, and Tomorrow",
+        "author": "Zevin, Gabrielle",
+        "author_id": "40593.Gabrielle_Zevin",
+        "stars": 5,
+        "avg_rating": 4.12,
+        "rating_count": 1296238,
+        "dates_read": [
+            "Sep 02, 2023"
+        ],
+        "date_added": "Jan 17, 2022"
+    },
+    {
+        "book_id": "58690308-book-lovers",
+        "raw_title": "Book Lovers",
+        "author": "Henry, Emily",
+        "author_id": "13905555.Emily_Henry",
+        "stars": 3,
+        "avg_rating": 4.1,
+        "rating_count": 1494153,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Jan 04, 2023"
+    },
+    {
+        "book_id": "32620332-the-seven-husbands-of-evelyn-hugo",
+        "raw_title": "The Seven Husbands of Evelyn Hugo",
+        "author": "Reid, Taylor Jenkins",
+        "author_id": "6572605.Taylor_Jenkins_Reid",
+        "stars": 5,
+        "avg_rating": 4.4,
+        "rating_count": 3936335,
+        "dates_read": [
+            "Jan 2023"
+        ],
+        "date_added": "Apr 03, 2023"
+    },
+    {
+        "book_id": "36809135-where-the-crawdads-sing",
+        "raw_title": "Where the Crawdads Sing",
+        "author": "Owens, Delia",
+        "author_id": "7043934.Delia_Owens",
+        "stars": 5,
+        "avg_rating": 4.37,
+        "rating_count": 3532797,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 03, 2023"
+    },
+    {
+        "book_id": "38746485-becoming",
+        "raw_title": "Becoming",
+        "author": "Obama, Michelle",
+        "author_id": "2338628.Michelle_Obama",
+        "stars": 3,
+        "avg_rating": 4.44,
+        "rating_count": 1173943,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 03, 2023"
+    },
+    {
+        "book_id": "35133922-educated",
+        "raw_title": "Educated",
+        "author": "Westover, Tara",
+        "author_id": "16121977.Tara_Westover",
+        "stars": 5,
+        "avg_rating": 4.47,
+        "rating_count": 1805452,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 03, 2023"
+    },
+    {
+        "book_id": "35900387-eleanor-oliphant-is-completely-fine",
+        "raw_title": "Eleanor Oliphant Is Completely Fine",
+        "author": "Honeyman, Gail",
+        "author_id": "14558709.Gail_Honeyman",
+        "stars": 5,
+        "avg_rating": 4.23,
+        "rating_count": 1392675,
+        "dates_read": [
+            "Mar 2023"
+        ],
+        "date_added": "Apr 03, 2023"
+    },
+    {
+        "book_id": "35068705-the-poppy-war",
+        "raw_title": "The Poppy War\n               \n                (The Poppy War, #1)",
+        "author": "Kuang, R.F.",
+        "author_id": "16820001.R_F_Kuang",
+        "stars": 5,
+        "avg_rating": 4.17,
+        "rating_count": 447054,
+        "dates_read": [
+            "Apr 08, 2023"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "15835031-if-he-had-been-with-me",
+        "raw_title": "If He Had Been With Me\n               \n                (If He Had Been with Me, #1)",
+        "author": "Nowlin, Laura",
+        "author_id": "6472187.Laura_Nowlin",
+        "stars": 3,
+        "avg_rating": 3.79,
+        "rating_count": 555934,
+        "dates_read": [
+            "Apr 04, 2023"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "4865.How_to_Win_Friends_Influence_People",
+        "raw_title": "How to Win Friends & Influence People",
+        "author": "Carnegie, Dale",
+        "author_id": "3317.Dale_Carnegie",
+        "stars": 4,
+        "avg_rating": 4.22,
+        "rating_count": 1125348,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "11330361-a-stolen-life",
+        "raw_title": "A Stolen Life",
+        "author": "Dugard, Jaycee",
+        "author_id": "4842866.Jaycee_Dugard",
+        "stars": 3,
+        "avg_rating": 3.97,
+        "rating_count": 143434,
+        "dates_read": [
+            "Mar 2023"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "35506211-the-flight-attendant",
+        "raw_title": "The Flight Attendant",
+        "author": "Bohjalian, Chris",
+        "author_id": "3509.Chris_Bohjalian",
+        "stars": 2,
+        "avg_rating": 3.53,
+        "rating_count": 91706,
+        "dates_read": [
+            "Mar 2023"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "36336078-call-me-by-your-name",
+        "raw_title": "Call Me By Your Name\n               \n                (Call Me By Your Name, #1)",
+        "author": "Aciman, Andr\u00e9",
+        "author_id": "2922229.Andr_Aciman",
+        "stars": 3,
+        "avg_rating": 4.1,
+        "rating_count": 582554,
+        "dates_read": [
+            "Mar 2023"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "31685789-room",
+        "raw_title": "Room",
+        "author": "Donoghue, Emma",
+        "author_id": "23613.Emma_Donoghue",
+        "stars": 4,
+        "avg_rating": 4.08,
+        "rating_count": 828964,
+        "dates_read": [
+            "Jan 2023"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "53451781-the-man-i-didn-t-marry",
+        "raw_title": "The Man I Didn\u2019t Marry",
+        "author": "Bell, Anna",
+        "author_id": "4106795.Anna_Bell",
+        "stars": 2,
+        "avg_rating": 3.76,
+        "rating_count": 1571,
+        "dates_read": [
+            "Jan 2023"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "13539044-the-silver-linings-playbook",
+        "raw_title": "The Silver Linings Playbook",
+        "author": "Quick, Matthew",
+        "author_id": "1251730.Matthew_Quick",
+        "stars": 3,
+        "avg_rating": 3.98,
+        "rating_count": 162301,
+        "dates_read": [
+            "Jan 2023"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "12557.The_Kitchen_God_s_Wife",
+        "raw_title": "The Kitchen God's Wife",
+        "author": "Tan, Amy",
+        "author_id": "5246.Amy_Tan",
+        "stars": 3,
+        "avg_rating": 4.04,
+        "rating_count": 87503,
+        "dates_read": [
+            "Feb 2023"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "9777.The_God_of_Small_Things",
+        "raw_title": "The God of Small Things",
+        "author": "Roy, Arundhati",
+        "author_id": "6134.Arundhati_Roy",
+        "stars": 5,
+        "avg_rating": 3.96,
+        "rating_count": 320101,
+        "dates_read": [
+            "Feb 2023"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "17333223-the-goldfinch",
+        "raw_title": "The Goldfinch",
+        "author": "Tartt, Donna",
+        "author_id": "8719.Donna_Tartt",
+        "stars": 5,
+        "avg_rating": 3.96,
+        "rating_count": 1022454,
+        "dates_read": [
+            "Mar 2023"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "32956365-the-light-we-lost",
+        "raw_title": "The Light We Lost",
+        "author": "Santopolo, Jill",
+        "author_id": "1251059.Jill_Santopolo",
+        "stars": 2,
+        "avg_rating": 3.84,
+        "rating_count": 195218,
+        "dates_read": [
+            "Feb 2023"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "53717123-the-end-of-men",
+        "raw_title": "The End of Men",
+        "author": "Sweeney-Baird, Christina",
+        "author_id": "19990625.Christina_Sweeney_Baird",
+        "stars": 4,
+        "avg_rating": 3.77,
+        "rating_count": 21558,
+        "dates_read": [
+            "Jan 2023"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "32889533-the-marsh-king-s-daughter",
+        "raw_title": "The Marsh King's Daughter",
+        "author": "Dionne, Karen",
+        "author_id": "1385698.Karen_Dionne",
+        "stars": 1,
+        "avg_rating": 3.87,
+        "rating_count": 48215,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "6567017-will-grayson-will-grayson",
+        "raw_title": "Will Grayson, Will Grayson",
+        "author": "Green, John",
+        "author_id": "1406384.John_Green",
+        "stars": 3,
+        "avg_rating": 3.69,
+        "rating_count": 410671,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "75555793-beautiful-world-where-are-you",
+        "raw_title": "Beautiful World, Where Are You",
+        "author": "Rooney, Sally",
+        "author_id": "15860970.Sally_Rooney",
+        "stars": 4,
+        "avg_rating": 3.53,
+        "rating_count": 482033,
+        "dates_read": [
+            "Feb 2023"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "32187419-conversations-with-friends",
+        "raw_title": "Conversations with Friends",
+        "author": "Rooney, Sally",
+        "author_id": "15860970.Sally_Rooney",
+        "stars": 4,
+        "avg_rating": 3.74,
+        "rating_count": 586750,
+        "dates_read": [
+            "Mar 2023"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "45714854-the-hunting-wives",
+        "raw_title": "The Hunting Wives",
+        "author": "Cobb, May",
+        "author_id": "17151210.May_Cobb",
+        "stars": 3,
+        "avg_rating": 3.49,
+        "rating_count": 74770,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "56269064-rock-paper-scissors",
+        "raw_title": "Rock Paper Scissors",
+        "author": "Feeney, Alice",
+        "author_id": "15904689.Alice_Feeney",
+        "stars": 3,
+        "avg_rating": 3.88,
+        "rating_count": 656664,
+        "dates_read": [
+            "Feb 2023"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "41880609-on-earth-we-re-briefly-gorgeous",
+        "raw_title": "On Earth We're Briefly Gorgeous",
+        "author": "Vuong, Ocean",
+        "author_id": "4456871.Ocean_Vuong",
+        "stars": 3,
+        "avg_rating": 4.02,
+        "rating_count": 386646,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "59088365-honey-spice",
+        "raw_title": "Honey & Spice",
+        "author": "Babalola, Bolu",
+        "author_id": "19331796.Bolu_Babalola",
+        "stars": 1,
+        "avg_rating": 3.91,
+        "rating_count": 44022,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "15952899-life-after-life",
+        "raw_title": "Life After Life",
+        "author": "McCorkle, Jill",
+        "author_id": "67262.Jill_McCorkle",
+        "stars": 3,
+        "avg_rating": 3.33,
+        "rating_count": 4805,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "28815371-the-mothers",
+        "raw_title": "The Mothers",
+        "author": "Bennett, Brit",
+        "author_id": "10802967.Brit_Bennett",
+        "stars": 4,
+        "avg_rating": 3.88,
+        "rating_count": 127589,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "56980548-aristotle-and-dante-dive-into-the-waters-of-the-world",
+        "raw_title": "Aristotle and Dante Dive into the Waters of the World\n               \n                (Aristotle and Dante, #2)",
+        "author": "S\u00e1enz, Benjamin Alire",
+        "author_id": "4841310.Benjamin_Alire_S_enz",
+        "stars": 0,
+        "avg_rating": 4.13,
+        "rating_count": 108268,
+        "dates_read": [],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "12000020-aristotle-and-dante-discover-the-secrets-of-the-universe",
+        "raw_title": "Aristotle and Dante Discover the Secrets of the Universe\n               \n                (Aristotle and Dante, #1)",
+        "author": "S\u00e1enz, Benjamin Alire",
+        "author_id": "4841310.Benjamin_Alire_S_enz",
+        "stars": 5,
+        "avg_rating": 4.29,
+        "rating_count": 668454,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "54719856-gold-diggers",
+        "raw_title": "Gold Diggers",
+        "author": "Sathian, Sanjena",
+        "author_id": "15757839.Sanjena_Sathian",
+        "stars": 4,
+        "avg_rating": 3.58,
+        "rating_count": 11544,
+        "dates_read": [
+            "Jan 2023"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "52578297-the-midnight-library",
+        "raw_title": "The Midnight Library",
+        "author": "Haig, Matt",
+        "author_id": "76360.Matt_Haig",
+        "stars": 5,
+        "avg_rating": 3.98,
+        "rating_count": 2350288,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "56143578-apples-never-fall",
+        "raw_title": "Apples Never Fall",
+        "author": "Moriarty, Liane",
+        "author_id": "322069.Liane_Moriarty",
+        "stars": 3,
+        "avg_rating": 3.75,
+        "rating_count": 434053,
+        "dates_read": [
+            "Jan 2023"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "10614.Misery",
+        "raw_title": "Misery",
+        "author": "King, Stephen",
+        "author_id": "3389.Stephen_King",
+        "stars": 4,
+        "avg_rating": 4.23,
+        "rating_count": 827123,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "55404546-malibu-rising",
+        "raw_title": "Malibu Rising",
+        "author": "Reid, Taylor Jenkins",
+        "author_id": "6572605.Taylor_Jenkins_Reid",
+        "stars": 5,
+        "avg_rating": 4.02,
+        "rating_count": 1257652,
+        "dates_read": [
+            "Mar 2023"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "33815781-the-wedding-date",
+        "raw_title": "The Wedding Date\n               \n                (The Wedding Date, #1)",
+        "author": "Guillory, Jasmine",
+        "author_id": "16287225.Jasmine_Guillory",
+        "stars": 2,
+        "avg_rating": 3.57,
+        "rating_count": 161599,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "50093704-in-five-years",
+        "raw_title": "In Five Years",
+        "author": "Serle, Rebecca",
+        "author_id": "3192845.Rebecca_Serle",
+        "stars": 3,
+        "avg_rating": 3.78,
+        "rating_count": 628794,
+        "dates_read": [
+            "Feb 2023"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "55648820-seven-days-in-june",
+        "raw_title": "Seven Days in June",
+        "author": "Williams, Tia",
+        "author_id": "306028.Tia_Williams",
+        "stars": 3,
+        "avg_rating": 3.99,
+        "rating_count": 212053,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "37585577-before-we-were-strangers",
+        "raw_title": "Before We Were Strangers",
+        "author": "Novak, Brenda",
+        "author_id": "12937.Brenda_Novak",
+        "stars": 2,
+        "avg_rating": 3.76,
+        "rating_count": 10045,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "40597810-daisy-jones-the-six",
+        "raw_title": "Daisy Jones & The Six",
+        "author": "Reid, Taylor Jenkins",
+        "author_id": "6572605.Taylor_Jenkins_Reid",
+        "stars": 5,
+        "avg_rating": 4.2,
+        "rating_count": 1806014,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "54659771-neon-gods",
+        "raw_title": "Neon Gods\n               \n                (Dark Olympus, #1)",
+        "author": "Robert, Katee",
+        "author_id": "5398028.Katee_Robert",
+        "stars": 3,
+        "avg_rating": 3.68,
+        "rating_count": 301119,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "35959740-circe",
+        "raw_title": "Circe",
+        "author": "Miller, Madeline",
+        "author_id": "176372.Madeline_Miller",
+        "stars": 4,
+        "avg_rating": 4.22,
+        "rating_count": 1306589,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "36341204-what-if-it-s-us",
+        "raw_title": "What If It's Us\n               \n                (What If It's Us, #1)",
+        "author": "Albertalli, Becky",
+        "author_id": "7579036.Becky_Albertalli",
+        "stars": 3,
+        "avg_rating": 3.8,
+        "rating_count": 167066,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "33843362-genuine-fraud",
+        "raw_title": "Genuine Fraud",
+        "author": "Lockhart, E.",
+        "author_id": "173491.E_Lockhart",
+        "stars": 4,
+        "avg_rating": 3.24,
+        "rating_count": 51434,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "55277891-the-siren",
+        "raw_title": "The Siren",
+        "author": "St. John, Katherine",
+        "author_id": "18715822.Katherine_St_John",
+        "stars": 3,
+        "avg_rating": 3.72,
+        "rating_count": 9570,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "17884042-still-life-with-bread-crumbs",
+        "raw_title": "Still Life with Bread Crumbs",
+        "author": "Quindlen, Anna",
+        "author_id": "3500.Anna_Quindlen",
+        "stars": 1,
+        "avg_rating": 3.69,
+        "rating_count": 53936,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "43317482-in-the-dream-house",
+        "raw_title": "In the Dream House",
+        "author": "Machado, Carmen Maria",
+        "author_id": "6860265.Carmen_Maria_Machado",
+        "stars": 3,
+        "avg_rating": 4.39,
+        "rating_count": 156118,
+        "dates_read": [
+            "Mar 31, 2025",
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "53137893-the-wife-upstairs",
+        "raw_title": "The Wife Upstairs",
+        "author": "Hawkins, Rachel",
+        "author_id": "2261547.Rachel_Hawkins",
+        "stars": 4,
+        "avg_rating": 3.72,
+        "rating_count": 309843,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "29437949-behind-closed-doors",
+        "raw_title": "Behind Closed Doors",
+        "author": "Paris, B.A.",
+        "author_id": "14425604.B_A_Paris",
+        "stars": 3,
+        "avg_rating": 3.97,
+        "rating_count": 735112,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "34189556-the-wife-between-us",
+        "raw_title": "The Wife Between Us",
+        "author": "Hendricks, Greer",
+        "author_id": "16935182.Greer_Hendricks",
+        "stars": 2,
+        "avg_rating": 3.83,
+        "rating_count": 439368,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "36236125-invisible-monsters",
+        "raw_title": "Invisible Monsters",
+        "author": "Palahniuk, Chuck",
+        "author_id": "2546.Chuck_Palahniuk",
+        "stars": 3,
+        "avg_rating": 4.0,
+        "rating_count": 150223,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "9736930-before-i-go-to-sleep",
+        "raw_title": "Before I Go to Sleep",
+        "author": "Watson, S.J.",
+        "author_id": "4470653.S_J_Watson",
+        "stars": 4,
+        "avg_rating": 3.9,
+        "rating_count": 364893,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "29059.Choke",
+        "raw_title": "Choke",
+        "author": "Palahniuk, Chuck",
+        "author_id": "2546.Chuck_Palahniuk",
+        "stars": 3,
+        "avg_rating": 3.71,
+        "rating_count": 219554,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "34964898-the-family-next-door",
+        "raw_title": "The Family Next Door",
+        "author": "Hepworth, Sally",
+        "author_id": "8123141.Sally_Hepworth",
+        "stars": 3,
+        "avg_rating": 3.83,
+        "rating_count": 74359,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "25574782-pretty-girls",
+        "raw_title": "Pretty Girls",
+        "author": "Slaughter, Karin",
+        "author_id": "12504.Karin_Slaughter",
+        "stars": 3,
+        "avg_rating": 4.01,
+        "rating_count": 663544,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "54798175-later",
+        "raw_title": "Later",
+        "author": "King, Stephen",
+        "author_id": "3389.Stephen_King",
+        "stars": 4,
+        "avg_rating": 3.96,
+        "rating_count": 145965,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "18143977-all-the-light-we-cannot-see",
+        "raw_title": "All the Light We Cannot See",
+        "author": "Doerr, Anthony",
+        "author_id": "28186.Anthony_Doerr",
+        "stars": 3,
+        "avg_rating": 4.31,
+        "rating_count": 1930616,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "13623848-the-song-of-achilles",
+        "raw_title": "The Song of Achilles",
+        "author": "Miller, Madeline",
+        "author_id": "176372.Madeline_Miller",
+        "stars": 4,
+        "avg_rating": 4.31,
+        "rating_count": 1911461,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "54424592-what-s-mine-and-yours",
+        "raw_title": "What's Mine and Yours",
+        "author": "Coster, Naima",
+        "author_id": "16113141.Naima_Coster",
+        "stars": 3,
+        "avg_rating": 3.55,
+        "rating_count": 22996,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "56935099-the-sanatorium",
+        "raw_title": "The Sanatorium\n               \n                (Detective Elin Warner, #1)",
+        "author": "Pearse, Sarah",
+        "author_id": "20458083.Sarah_Pearse",
+        "stars": 2,
+        "avg_rating": 3.36,
+        "rating_count": 197823,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "51791252-the-vanishing-half",
+        "raw_title": "The Vanishing Half",
+        "author": "Bennett, Brit",
+        "author_id": "10802967.Brit_Bennett",
+        "stars": 3,
+        "avg_rating": 4.13,
+        "rating_count": 841342,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "50997696-outlawed",
+        "raw_title": "Outlawed",
+        "author": "North, Anna",
+        "author_id": "4601475.Anna_North",
+        "stars": 4,
+        "avg_rating": 3.5,
+        "rating_count": 81671,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "51152433-just-like-you",
+        "raw_title": "Just Like You",
+        "author": "Hornby, Nick",
+        "author_id": "2929.Nick_Hornby",
+        "stars": 3,
+        "avg_rating": 3.36,
+        "rating_count": 24992,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "38355282-watching-you",
+        "raw_title": "Watching You",
+        "author": "Jewell, Lisa",
+        "author_id": "93504.Lisa_Jewell",
+        "stars": 5,
+        "avg_rating": 3.87,
+        "rating_count": 217934,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "43884209-get-a-life-chloe-brown",
+        "raw_title": "Get a Life, Chloe Brown\n               \n                (The Brown Sisters, #1)",
+        "author": "Hibbert, Talia",
+        "author_id": "17088554.Talia_Hibbert",
+        "stars": 4,
+        "avg_rating": 3.79,
+        "rating_count": 204939,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "33984056-a-stranger-in-the-house",
+        "raw_title": "A Stranger in the House",
+        "author": "Lapena, Shari",
+        "author_id": "1278320.Shari_Lapena",
+        "stars": 4,
+        "avg_rating": 3.68,
+        "rating_count": 169806,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "43923951-such-a-fun-age",
+        "raw_title": "Such a Fun Age",
+        "author": "Reid, Kiley",
+        "author_id": "18257829.Kiley_Reid",
+        "stars": 3,
+        "avg_rating": 3.77,
+        "rating_count": 570262,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "36388243-something-in-the-water",
+        "raw_title": "Something in the Water",
+        "author": "Steadman, Catherine",
+        "author_id": "16847770.Catherine_Steadman",
+        "stars": 2,
+        "avg_rating": 3.55,
+        "rating_count": 227994,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "41555931-whisper-network",
+        "raw_title": "Whisper Network",
+        "author": "Baker, Chandler",
+        "author_id": "7214344.Chandler_Baker",
+        "stars": 4,
+        "avg_rating": 3.58,
+        "rating_count": 81592,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "52129515-untamed",
+        "raw_title": "Untamed",
+        "author": "Doyle, Glennon",
+        "author_id": "17099759.Glennon_Doyle",
+        "stars": 2,
+        "avg_rating": 3.98,
+        "rating_count": 505078,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "50891570-group",
+        "raw_title": "Group: How One Therapist and a Circle of Strangers Saved My Life",
+        "author": "Tate, Christie",
+        "author_id": "19986899.Christie_Tate",
+        "stars": 3,
+        "avg_rating": 3.81,
+        "rating_count": 55940,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "50607466-the-henna-artist",
+        "raw_title": "The Henna Artist\n               \n                (The Jaipur Trilogy, #1)",
+        "author": "Joshi, Alka",
+        "author_id": "18257842.Alka_Joshi",
+        "stars": 5,
+        "avg_rating": 4.18,
+        "rating_count": 210753,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "52656911-the-guest-list",
+        "raw_title": "The Guest List",
+        "author": "Foley, Lucy",
+        "author_id": "7770523.Lucy_Foley",
+        "stars": 4,
+        "avg_rating": 3.8,
+        "rating_count": 1241641,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "49374507-the-last-story-of-mina-lee",
+        "raw_title": "The Last Story of Mina Lee",
+        "author": "Kim, Nancy Jooyoun",
+        "author_id": "19816320.Nancy_Jooyoun_Kim",
+        "stars": 4,
+        "avg_rating": 3.53,
+        "rating_count": 45534,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "52661162-the-searcher",
+        "raw_title": "The Searcher",
+        "author": "French, Tana",
+        "author_id": "138825.Tana_French",
+        "stars": 3,
+        "avg_rating": 3.8,
+        "rating_count": 157898,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "53799686-anxious-people",
+        "raw_title": "Anxious People",
+        "author": "Backman, Fredrik",
+        "author_id": "6485178.Fredrik_Backman",
+        "stars": 5,
+        "avg_rating": 4.17,
+        "rating_count": 773646,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "49398072-when-no-one-is-watching",
+        "raw_title": "When No One Is Watching",
+        "author": "Cole, Alyssa",
+        "author_id": "7790155.Alyssa_Cole",
+        "stars": 2,
+        "avg_rating": 3.47,
+        "rating_count": 111762,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "28815474-the-couple-next-door",
+        "raw_title": "The Couple Next Door",
+        "author": "Lapena, Shari",
+        "author_id": "1278320.Shari_Lapena",
+        "stars": 4,
+        "avg_rating": 3.8,
+        "rating_count": 695435,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "40605223-i-m-thinking-of-ending-things",
+        "raw_title": "I'm Thinking of Ending Things",
+        "author": "Reid, Iain",
+        "author_id": "4112760.Iain_Reid",
+        "stars": 4,
+        "avg_rating": 3.52,
+        "rating_count": 193348,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "41837243-lock-every-door",
+        "raw_title": "Lock Every Door",
+        "author": "Sager, Riley",
+        "author_id": "15263414.Riley_Sager",
+        "stars": 3,
+        "avg_rating": 3.89,
+        "rating_count": 288375,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "39796904-my-lovely-wife",
+        "raw_title": "My Lovely Wife",
+        "author": "Downing, Samantha",
+        "author_id": "17310869.Samantha_Downing",
+        "stars": 3,
+        "avg_rating": 3.83,
+        "rating_count": 162392,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "40097951-the-silent-patient",
+        "raw_title": "The Silent Patient",
+        "author": "Michaelides, Alex",
+        "author_id": "17621440.Alex_Michaelides",
+        "stars": 4,
+        "avg_rating": 4.17,
+        "rating_count": 3094007,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "123040173-pet-sematary",
+        "raw_title": "Pet Sematary",
+        "author": "King, Stephen",
+        "author_id": "3389.Stephen_King",
+        "stars": 4,
+        "avg_rating": 4.08,
+        "rating_count": 679793,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "40389527-the-woman-in-the-window",
+        "raw_title": "The Woman in the Window",
+        "author": "Finn, A.J.",
+        "author_id": "7992137.A_J_Finn",
+        "stars": 5,
+        "avg_rating": 3.94,
+        "rating_count": 872719,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Apr 04, 2023"
+    },
+    {
+        "book_id": "41118857-the-dragon-republic",
+        "raw_title": "The Dragon Republic\n               \n                (The Poppy War, #2)",
+        "author": "Kuang, R.F.",
+        "author_id": "16820001.R_F_Kuang",
+        "stars": 5,
+        "avg_rating": 4.36,
+        "rating_count": 202409,
+        "dates_read": [
+            "Apr 13, 2023"
+        ],
+        "date_added": "Apr 09, 2023"
+    },
+    {
+        "book_id": "76334.A_New_Earth",
+        "raw_title": "A New Earth: Awakening to Your Life's Purpose",
+        "author": "Tolle, Eckhart",
+        "author_id": "4493.Eckhart_Tolle",
+        "stars": 0,
+        "avg_rating": 4.16,
+        "rating_count": 216589,
+        "dates_read": [],
+        "date_added": "Apr 10, 2023"
+    },
+    {
+        "book_id": "36206591-love-and-other-words",
+        "raw_title": "Love and Other Words",
+        "author": "Lauren, Christina",
+        "author_id": "6556689.Christina_Lauren",
+        "stars": 2,
+        "avg_rating": 4.22,
+        "rating_count": 782699,
+        "dates_read": [
+            "May 10, 2024"
+        ],
+        "date_added": "Apr 10, 2023"
+    },
+    {
+        "book_id": "23492533-swear-on-this-life",
+        "raw_title": "Swear on This Life",
+        "author": "Carlino, Renee",
+        "author_id": "6994731.Renee_Carlino",
+        "stars": 0,
+        "avg_rating": 4.13,
+        "rating_count": 58968,
+        "dates_read": [],
+        "date_added": "Apr 10, 2023"
+    },
+    {
+        "book_id": "51475209-small-pleasures",
+        "raw_title": "Small Pleasures",
+        "author": "Chambers, Clare",
+        "author_id": "420064.Clare_Chambers",
+        "stars": 0,
+        "avg_rating": 3.76,
+        "rating_count": 67268,
+        "dates_read": [],
+        "date_added": "Apr 10, 2023"
+    },
+    {
+        "book_id": "22822858-a-little-life",
+        "raw_title": "A Little Life",
+        "author": "Yanagihara, Hanya",
+        "author_id": "6571447.Hanya_Yanagihara",
+        "stars": 5,
+        "avg_rating": 4.29,
+        "rating_count": 887639,
+        "dates_read": [
+            "May 04, 2023"
+        ],
+        "date_added": "Apr 10, 2023"
+    },
+    {
+        "book_id": "56587382-the-island-of-missing-trees",
+        "raw_title": "The Island of Missing Trees",
+        "author": "Shafak, Elif",
+        "author_id": "6542440.Elif_Shafak",
+        "stars": 0,
+        "avg_rating": 4.15,
+        "rating_count": 154965,
+        "dates_read": [],
+        "date_added": "Apr 10, 2023"
+    },
+    {
+        "book_id": "54860443-one-last-stop",
+        "raw_title": "One Last Stop",
+        "author": "McQuiston, Casey",
+        "author_id": "17949486.Casey_McQuiston",
+        "stars": 3,
+        "avg_rating": 3.89,
+        "rating_count": 279619,
+        "dates_read": [
+            "May 13, 2023"
+        ],
+        "date_added": "Apr 10, 2023"
+    },
+    {
+        "book_id": "53414230-open-water",
+        "raw_title": "Open Water",
+        "author": "Nelson, Caleb Azumah",
+        "author_id": "20293142.Caleb_Azumah_Nelson",
+        "stars": 4,
+        "avg_rating": 4.0,
+        "rating_count": 85066,
+        "dates_read": [
+            "Jun 16, 2023"
+        ],
+        "date_added": "Apr 10, 2023"
+    },
+    {
+        "book_id": "61126612-alone-with-you-in-the-ether",
+        "raw_title": "Alone With You in the Ether",
+        "author": "Blake, Olivie",
+        "author_id": "16225393.Olivie_Blake",
+        "stars": 3,
+        "avg_rating": 3.78,
+        "rating_count": 105341,
+        "dates_read": [
+            "Dec 05, 2023"
+        ],
+        "date_added": "Apr 10, 2023"
+    },
+    {
+        "book_id": "56802275-elena-knows",
+        "raw_title": "Elena Knows",
+        "author": "Pi\u00f1eiro, Claudia",
+        "author_id": "291980.Claudia_Pi_eiro",
+        "stars": 0,
+        "avg_rating": 4.06,
+        "rating_count": 26905,
+        "dates_read": [],
+        "date_added": "Apr 10, 2023"
+    },
+    {
+        "book_id": "58537371-nightcrawling",
+        "raw_title": "Nightcrawling",
+        "author": "Mottley, Leila",
+        "author_id": "18332460.Leila_Mottley",
+        "stars": 5,
+        "avg_rating": 3.96,
+        "rating_count": 58600,
+        "dates_read": [
+            "Feb 22, 2024"
+        ],
+        "date_added": "Apr 10, 2023"
+    },
+    {
+        "book_id": "58659343-our-wives-under-the-sea",
+        "raw_title": "Our Wives Under the Sea",
+        "author": "Armfield, Julia",
+        "author_id": "18202262.Julia_Armfield",
+        "stars": 4,
+        "avg_rating": 3.72,
+        "rating_count": 119301,
+        "dates_read": [
+            "Jul 06, 2023"
+        ],
+        "date_added": "Apr 10, 2023"
+    },
+    {
+        "book_id": "49110165-sorrow-and-bliss",
+        "raw_title": "Sorrow and Bliss",
+        "author": "Mason, Meg",
+        "author_id": "6160470.Meg_Mason",
+        "stars": 3,
+        "avg_rating": 4.07,
+        "rating_count": 120218,
+        "dates_read": [
+            "Dec 28, 2023"
+        ],
+        "date_added": "Apr 10, 2023"
+    },
+    {
+        "book_id": "57693262-cleopatra-and-frankenstein",
+        "raw_title": "Cleopatra and Frankenstein",
+        "author": "Mellors, Coco",
+        "author_id": "21373404.Coco_Mellors",
+        "stars": 0,
+        "avg_rating": 3.7,
+        "rating_count": 216695,
+        "dates_read": [],
+        "date_added": "Apr 10, 2023"
+    },
+    {
+        "book_id": "54304105-milk-fed",
+        "raw_title": "Milk Fed",
+        "author": "Broder, Melissa",
+        "author_id": "3192838.Melissa_Broder",
+        "stars": 4,
+        "avg_rating": 3.56,
+        "rating_count": 76670,
+        "dates_read": [
+            "Jul 24, 2024"
+        ],
+        "date_added": "Apr 10, 2023"
+    },
+    {
+        "book_id": "57809811-the-bread-the-devil-knead",
+        "raw_title": "The Bread the Devil Knead",
+        "author": "Allen-Agostini, Lisa",
+        "author_id": "3046822.Lisa_Allen_Agostini",
+        "stars": 0,
+        "avg_rating": 4.02,
+        "rating_count": 6785,
+        "dates_read": [],
+        "date_added": "Apr 10, 2023"
+    },
+    {
+        "book_id": "58678518-acts-of-service",
+        "raw_title": "Acts of Service",
+        "author": "Fishman, Lillian",
+        "author_id": "20858955.Lillian_Fishman",
+        "stars": 0,
+        "avg_rating": 3.06,
+        "rating_count": 14639,
+        "dates_read": [],
+        "date_added": "Apr 10, 2023"
+    },
+    {
+        "book_id": "6514.The_Bell_Jar",
+        "raw_title": "The Bell Jar",
+        "author": "Plath, Sylvia",
+        "author_id": "4379.Sylvia_Plath",
+        "stars": 3,
+        "avg_rating": 4.05,
+        "rating_count": 1180801,
+        "dates_read": [
+            "Sep 02, 2023"
+        ],
+        "date_added": "Apr 10, 2023"
+    },
+    {
+        "book_id": "19063.The_Book_Thief",
+        "raw_title": "The Book Thief",
+        "author": "Zusak, Markus",
+        "author_id": "11466.Markus_Zusak",
+        "stars": 0,
+        "avg_rating": 4.39,
+        "rating_count": 2829799,
+        "dates_read": [],
+        "date_added": "Apr 10, 2023"
+    },
+    {
+        "book_id": "2459785.In_the_Woods",
+        "raw_title": "In the Woods",
+        "author": "French, Tana",
+        "author_id": "138825.Tana_French",
+        "stars": 0,
+        "avg_rating": 3.78,
+        "rating_count": 433599,
+        "dates_read": [],
+        "date_added": "Apr 10, 2023"
+    },
+    {
+        "book_id": "41021501-small-great-things",
+        "raw_title": "Small Great Things",
+        "author": "Picoult, Jodi",
+        "author_id": "7128.Jodi_Picoult",
+        "stars": 5,
+        "avg_rating": 4.36,
+        "rating_count": 429548,
+        "dates_read": [
+            "Oct 18, 2024"
+        ],
+        "date_added": "Apr 10, 2023"
+    },
+    {
+        "book_id": "18007564-the-martian",
+        "raw_title": "The Martian",
+        "author": "Weir, Andy",
+        "author_id": "6540057.Andy_Weir",
+        "stars": 0,
+        "avg_rating": 4.42,
+        "rating_count": 1257314,
+        "dates_read": [],
+        "date_added": "Apr 10, 2023"
+    },
+    {
+        "book_id": "50042494-ghosts",
+        "raw_title": "Ghosts",
+        "author": "Alderton, Dolly",
+        "author_id": "16508320.Dolly_Alderton",
+        "stars": 4,
+        "avg_rating": 3.87,
+        "rating_count": 147656,
+        "dates_read": [
+            "Nov 13, 2023"
+        ],
+        "date_added": "Apr 10, 2023"
+    },
+    {
+        "book_id": "60435878-carrie-soto-is-back",
+        "raw_title": "Carrie Soto Is Back",
+        "author": "Reid, Taylor Jenkins",
+        "author_id": "6572605.Taylor_Jenkins_Reid",
+        "stars": 5,
+        "avg_rating": 4.2,
+        "rating_count": 687844,
+        "dates_read": [
+            "Jun 25, 2023"
+        ],
+        "date_added": "Apr 10, 2023"
+    },
+    {
+        "book_id": "27833670-dark-matter",
+        "raw_title": "Dark Matter",
+        "author": "Crouch, Blake",
+        "author_id": "442240.Blake_Crouch",
+        "stars": 3,
+        "avg_rating": 4.13,
+        "rating_count": 686229,
+        "dates_read": [
+            "Jan 19, 2025"
+        ],
+        "date_added": "Apr 10, 2023"
+    },
+    {
+        "book_id": "29044.The_Secret_History",
+        "raw_title": "The Secret History",
+        "author": "Tartt, Donna",
+        "author_id": "8719.Donna_Tartt",
+        "stars": 3,
+        "avg_rating": 4.16,
+        "rating_count": 978519,
+        "dates_read": [
+            "Jun 05, 2023",
+            "Jun 05, 2023"
+        ],
+        "date_added": "Apr 10, 2023"
+    },
+    {
+        "book_id": "58756502-jackal",
+        "raw_title": "Jackal",
+        "author": "Adams, Erin E.",
+        "author_id": "21725767.Erin_E_Adams",
+        "stars": 0,
+        "avg_rating": 3.66,
+        "rating_count": 18051,
+        "dates_read": [],
+        "date_added": "Apr 10, 2023"
+    },
+    {
+        "book_id": "62050275-wrong-place-wrong-time",
+        "raw_title": "Wrong Place Wrong Time",
+        "author": "McAllister, Gillian",
+        "author_id": "15967497.Gillian_McAllister",
+        "stars": 3,
+        "avg_rating": 3.97,
+        "rating_count": 444166,
+        "dates_read": [
+            "Nov 16, 2023"
+        ],
+        "date_added": "Apr 10, 2023"
+    },
+    {
+        "book_id": "16299.And_Then_There_Were_None",
+        "raw_title": "And Then There Were None",
+        "author": "Christie, Agatha",
+        "author_id": "123715.Agatha_Christie",
+        "stars": 0,
+        "avg_rating": 4.27,
+        "rating_count": 1570160,
+        "dates_read": [],
+        "date_added": "Apr 10, 2023"
+    },
+    {
+        "book_id": "29751398-the-power",
+        "raw_title": "The Power",
+        "author": "Alderman, Naomi",
+        "author_id": "118226.Naomi_Alderman",
+        "stars": 3,
+        "avg_rating": 3.75,
+        "rating_count": 249143,
+        "dates_read": [
+            "Jun 11, 2023"
+        ],
+        "date_added": "Apr 10, 2023"
+    },
+    {
+        "book_id": "41057294-normal-people",
+        "raw_title": "Normal People",
+        "author": "Rooney, Sally",
+        "author_id": "15860970.Sally_Rooney",
+        "stars": 5,
+        "avg_rating": 3.81,
+        "rating_count": 1802707,
+        "dates_read": [
+            "May 18, 2023"
+        ],
+        "date_added": "Apr 10, 2023"
+    },
+    {
+        "book_id": "58909880-the-house-across-the-lake",
+        "raw_title": "The House Across the Lake",
+        "author": "Sager, Riley",
+        "author_id": "15263414.Riley_Sager",
+        "stars": 3,
+        "avg_rating": 3.58,
+        "rating_count": 419045,
+        "dates_read": [
+            "Oct 29, 2023"
+        ],
+        "date_added": "Apr 10, 2023"
+    },
+    {
+        "book_id": "56852407-billy-summers",
+        "raw_title": "Billy Summers",
+        "author": "King, Stephen",
+        "author_id": "3389.Stephen_King",
+        "stars": 0,
+        "avg_rating": 4.18,
+        "rating_count": 187232,
+        "dates_read": [],
+        "date_added": "Apr 10, 2023"
+    },
+    {
+        "book_id": "50175419-exciting-times",
+        "raw_title": "Exciting Times",
+        "author": "Dolan, Naoise",
+        "author_id": "18979380.Naoise_Dolan",
+        "stars": 0,
+        "avg_rating": 3.21,
+        "rating_count": 74001,
+        "dates_read": [],
+        "date_added": "Apr 13, 2023"
+    },
+    {
+        "book_id": "44421460-before-the-coffee-gets-cold",
+        "raw_title": "Before the Coffee Gets Cold\n               \n                (Before the Coffee Gets Cold, #1)",
+        "author": "Kawaguchi, Toshikazu",
+        "author_id": "16836980.Toshikazu_Kawaguchi",
+        "stars": 5,
+        "avg_rating": 3.66,
+        "rating_count": 650284,
+        "dates_read": [
+            "May 08, 2023"
+        ],
+        "date_added": "Apr 13, 2023"
+    },
+    {
+        "book_id": "45857086-the-burning-god",
+        "raw_title": "The Burning God\n               \n                (The Poppy War, #3)",
+        "author": "Kuang, R.F.",
+        "author_id": "16820001.R_F_Kuang",
+        "stars": 5,
+        "avg_rating": 4.29,
+        "rating_count": 155485,
+        "dates_read": [
+            "Apr 21, 2023"
+        ],
+        "date_added": "Apr 13, 2023"
+    },
+    {
+        "book_id": "55710822-better-than-the-movies",
+        "raw_title": "Better Than the Movies\n               \n                (Better Than the Movies, #1)",
+        "author": "Painter, Lynn",
+        "author_id": "19322026.Lynn_Painter",
+        "stars": 2,
+        "avg_rating": 4.26,
+        "rating_count": 711424,
+        "dates_read": [],
+        "date_added": "Apr 17, 2023"
+    },
+    {
+        "book_id": "44088751-pizza-girl",
+        "raw_title": "Pizza Girl",
+        "author": "Frazier, Jean Kyoung",
+        "author_id": "18900253.Jean_Kyoung_Frazier",
+        "stars": 0,
+        "avg_rating": 3.35,
+        "rating_count": 31242,
+        "dates_read": [],
+        "date_added": "Apr 18, 2023"
+    },
+    {
+        "book_id": "54173267-happy-hour",
+        "raw_title": "Happy Hour",
+        "author": "Granados, Marlowe",
+        "author_id": "20427605.Marlowe_Granados",
+        "stars": 0,
+        "avg_rating": 3.48,
+        "rating_count": 26771,
+        "dates_read": [],
+        "date_added": "Apr 18, 2023"
+    },
+    {
+        "book_id": "44890081-my-dark-vanessa",
+        "raw_title": "My Dark Vanessa",
+        "author": "Russell, Kate Elizabeth",
+        "author_id": "18692517.Kate_Elizabeth_Russell",
+        "stars": 4,
+        "avg_rating": 4.1,
+        "rating_count": 408776,
+        "dates_read": [
+            "Nov 26, 2023"
+        ],
+        "date_added": "Apr 22, 2023"
+    },
+    {
+        "book_id": "48890225-detransition-baby",
+        "raw_title": "Detransition, Baby",
+        "author": "Peters, Torrey",
+        "author_id": "15271884.Torrey_Peters",
+        "stars": 3,
+        "avg_rating": 3.93,
+        "rating_count": 90214,
+        "dates_read": [
+            "Jul 29, 2023"
+        ],
+        "date_added": "Apr 22, 2023"
+    },
+    {
+        "book_id": "50196744-know-my-name",
+        "raw_title": "Know My Name",
+        "author": "Miller, Chanel",
+        "author_id": "19527332.Chanel_Miller",
+        "stars": 0,
+        "avg_rating": 4.69,
+        "rating_count": 248938,
+        "dates_read": [
+            "Oct 10, 2024"
+        ],
+        "date_added": "Apr 26, 2023"
+    },
+    {
+        "book_id": "38357895-convenience-store-woman",
+        "raw_title": "Convenience Store Woman",
+        "author": "Murata, Sayaka",
+        "author_id": "8816506.Sayaka_Murata",
+        "stars": 4,
+        "avg_rating": 3.67,
+        "rating_count": 358709,
+        "dates_read": [
+            "Jun 12, 2023"
+        ],
+        "date_added": "Apr 28, 2023"
+    },
+    {
+        "book_id": "56587383-the-island-of-missing-trees",
+        "raw_title": "The Island of Missing Trees",
+        "author": "Shafak, Elif",
+        "author_id": "6542440.Elif_Shafak",
+        "stars": 0,
+        "avg_rating": 4.15,
+        "rating_count": 154965,
+        "dates_read": [],
+        "date_added": "May 03, 2023"
+    },
+    {
+        "book_id": "59364173-i-m-glad-my-mom-died",
+        "raw_title": "I'm Glad My Mom Died",
+        "author": "McCurdy, Jennette",
+        "author_id": "15457334.Jennette_McCurdy",
+        "stars": 0,
+        "avg_rating": 4.44,
+        "rating_count": 1392100,
+        "dates_read": [
+            "Aug 25, 2023"
+        ],
+        "date_added": "May 03, 2023"
+    },
+    {
+        "book_id": "62628727-romantic-comedy",
+        "raw_title": "Romantic Comedy",
+        "author": "Sittenfeld, Curtis",
+        "author_id": "6429.Curtis_Sittenfeld",
+        "stars": 3,
+        "avg_rating": 3.62,
+        "rating_count": 239431,
+        "dates_read": [
+            "Sep 22, 2023"
+        ],
+        "date_added": "May 03, 2023"
+    },
+    {
+        "book_id": "101145713-the-clementine-complex",
+        "raw_title": "The Clementine Complex\n               \n                (Gary Thorn, 1)",
+        "author": "Mortimer, Bob",
+        "author_id": "375338.Bob_Mortimer",
+        "stars": 0,
+        "avg_rating": 3.68,
+        "rating_count": 64400,
+        "dates_read": [],
+        "date_added": "May 03, 2023"
+    },
+    {
+        "book_id": "59366252-magpie",
+        "raw_title": "Magpie",
+        "author": "Day, Elizabeth",
+        "author_id": "1612493.Elizabeth_Day",
+        "stars": 0,
+        "avg_rating": 3.62,
+        "rating_count": 54187,
+        "dates_read": [],
+        "date_added": "May 03, 2023"
+    },
+    {
+        "book_id": "121121.Harry_Potter_and_the_Sorcerer_s_Stone",
+        "raw_title": "Harry Potter and the Sorcerer's Stone\n               \n                (Harry Potter, #1)",
+        "author": "Rowling, J.K.",
+        "author_id": "1077326.J_K_Rowling",
+        "stars": 5,
+        "avg_rating": 4.47,
+        "rating_count": 11187521,
+        "dates_read": [
+            "Oct 26, 2024",
+            "not set"
+        ],
+        "date_added": "May 06, 2023"
+    },
+    {
+        "book_id": "58065033-lessons-in-chemistry",
+        "raw_title": "Lessons in Chemistry",
+        "author": "Garmus, Bonnie",
+        "author_id": "21370624.Bonnie_Garmus",
+        "stars": 4,
+        "avg_rating": 4.28,
+        "rating_count": 1718390,
+        "dates_read": [
+            "May 07, 2023"
+        ],
+        "date_added": "May 07, 2023"
+    },
+    {
+        "book_id": "1885.Pride_and_Prejudice",
+        "raw_title": "Pride and Prejudice",
+        "author": "Austen, Jane",
+        "author_id": "1265.Jane_Austen",
+        "stars": 0,
+        "avg_rating": 4.29,
+        "rating_count": 4698150,
+        "dates_read": [
+            "Jul 2023"
+        ],
+        "date_added": "May 07, 2023"
+    },
+    {
+        "book_id": "45047384-the-house-in-the-cerulean-sea",
+        "raw_title": "The House in the Cerulean Sea\n               \n                (Cerulean Chronicles, #1)",
+        "author": "Klune, T.J.",
+        "author_id": "5073330.T_J_Klune",
+        "stars": 0,
+        "avg_rating": 4.37,
+        "rating_count": 905309,
+        "dates_read": [],
+        "date_added": "May 09, 2023"
+    },
+    {
+        "book_id": "55410610-panenka",
+        "raw_title": "Panenka",
+        "author": "Hession, Ronan",
+        "author_id": "18776546.Ronan_Hession",
+        "stars": 0,
+        "avg_rating": 3.98,
+        "rating_count": 7914,
+        "dates_read": [],
+        "date_added": "May 10, 2023"
+    },
+    {
+        "book_id": "54493401-project-hail-mary",
+        "raw_title": "Project Hail Mary",
+        "author": "Weir, Andy",
+        "author_id": "6540057.Andy_Weir",
+        "stars": 0,
+        "avg_rating": 4.5,
+        "rating_count": 968126,
+        "dates_read": [
+            "Jul 2024"
+        ],
+        "date_added": "May 10, 2023"
+    },
+    {
+        "book_id": "48570454-transcendent-kingdom",
+        "raw_title": "Transcendent Kingdom",
+        "author": "Gyasi, Yaa",
+        "author_id": "14493315.Yaa_Gyasi",
+        "stars": 4,
+        "avg_rating": 4.1,
+        "rating_count": 160044,
+        "dates_read": [
+            "Nov 24, 2024"
+        ],
+        "date_added": "May 10, 2023"
+    },
+    {
+        "book_id": "34842610-recitatif",
+        "raw_title": "Recitatif",
+        "author": "Morrison, Toni",
+        "author_id": "3534.Toni_Morrison",
+        "stars": 0,
+        "avg_rating": 4.3,
+        "rating_count": 29502,
+        "dates_read": [],
+        "date_added": "May 10, 2023"
+    },
+    {
+        "book_id": "54860614-ariadne",
+        "raw_title": "Ariadne",
+        "author": "Saint, Jennifer",
+        "author_id": "19734894.Jennifer_Saint",
+        "stars": 4,
+        "avg_rating": 3.79,
+        "rating_count": 143018,
+        "dates_read": [
+            "Aug 08, 2023"
+        ],
+        "date_added": "May 10, 2023"
+    },
+    {
+        "book_id": "54814676-crying-in-h-mart",
+        "raw_title": "Crying in H Mart",
+        "author": "Zauner, Michelle",
+        "author_id": "18916582.Michelle_Zauner",
+        "stars": 4,
+        "avg_rating": 4.24,
+        "rating_count": 571893,
+        "dates_read": [
+            "Oct 24, 2023"
+        ],
+        "date_added": "May 10, 2023"
+    },
+    {
+        "book_id": "9361589-the-night-circus",
+        "raw_title": "The Night Circus",
+        "author": "Morgenstern, Erin",
+        "author_id": "4370565.Erin_Morgenstern",
+        "stars": 0,
+        "avg_rating": 4.0,
+        "rating_count": 1079808,
+        "dates_read": [],
+        "date_added": "May 10, 2023"
+    },
+    {
+        "book_id": "50269327-earthlings",
+        "raw_title": "Earthlings",
+        "author": "Murata, Sayaka",
+        "author_id": "8816506.Sayaka_Murata",
+        "stars": 0,
+        "avg_rating": 3.6,
+        "rating_count": 95324,
+        "dates_read": [],
+        "date_added": "May 10, 2023"
+    },
+    {
+        "book_id": "51733706-afterparties",
+        "raw_title": "Afterparties",
+        "author": "So, Anthony Veasna",
+        "author_id": "19991932.Anthony_Veasna_So",
+        "stars": 0,
+        "avg_rating": 3.93,
+        "rating_count": 14613,
+        "dates_read": [],
+        "date_added": "May 10, 2023"
+    },
+    {
+        "book_id": "58837536-nevada",
+        "raw_title": "Nevada",
+        "author": "Binnie, Imogen",
+        "author_id": "6430658.Imogen_Binnie",
+        "stars": 0,
+        "avg_rating": 3.94,
+        "rating_count": 18111,
+        "dates_read": [],
+        "date_added": "May 11, 2023"
+    },
+    {
+        "book_id": "44279110-my-year-of-rest-and-relaxation",
+        "raw_title": "My Year of Rest and Relaxation",
+        "author": "Moshfegh, Ottessa",
+        "author_id": "3276202.Ottessa_Moshfegh",
+        "stars": 4,
+        "avg_rating": 3.61,
+        "rating_count": 541045,
+        "dates_read": [
+            "May 29, 2023"
+        ],
+        "date_added": "May 19, 2023"
+    },
+    {
+        "book_id": "61718053-happy-place",
+        "raw_title": "Happy Place",
+        "author": "Henry, Emily",
+        "author_id": "13905555.Emily_Henry",
+        "stars": 3,
+        "avg_rating": 3.95,
+        "rating_count": 1365840,
+        "dates_read": [
+            "May 26, 2023"
+        ],
+        "date_added": "May 19, 2023"
+    },
+    {
+        "book_id": "58065372-in-love",
+        "raw_title": "In Love: A Memoir of Love and Loss",
+        "author": "Bloom, Amy",
+        "author_id": "115220.Amy_Bloom",
+        "stars": 0,
+        "avg_rating": 4.26,
+        "rating_count": 24626,
+        "dates_read": [],
+        "date_added": "May 19, 2023"
+    },
+    {
+        "book_id": "16130531-forever-interrupted",
+        "raw_title": "Forever, Interrupted",
+        "author": "Reid, Taylor Jenkins",
+        "author_id": "6572605.Taylor_Jenkins_Reid",
+        "stars": 3,
+        "avg_rating": 3.64,
+        "rating_count": 203154,
+        "dates_read": [
+            "Jun 07, 2023"
+        ],
+        "date_added": "May 24, 2023"
+    },
+    {
+        "book_id": "46041465-everything-i-know-about-love",
+        "raw_title": "Everything I Know About Love",
+        "author": "Alderton, Dolly",
+        "author_id": "16508320.Dolly_Alderton",
+        "stars": 0,
+        "avg_rating": 3.95,
+        "rating_count": 478019,
+        "dates_read": [
+            "Dec 13, 2023"
+        ],
+        "date_added": "May 30, 2023"
+    },
+    {
+        "book_id": "61102615-stone-blind",
+        "raw_title": "Stone Blind",
+        "author": "Haynes, Natalie",
+        "author_id": "995841.Natalie_Haynes",
+        "stars": 0,
+        "avg_rating": 3.79,
+        "rating_count": 73803,
+        "dates_read": [],
+        "date_added": "Jun 03, 2023"
+    },
+    {
+        "book_id": "41886271-the-sword-of-kaigen",
+        "raw_title": "The Sword of Kaigen",
+        "author": "Wang, M.L.",
+        "author_id": "15735471.M_L_Wang",
+        "stars": 5,
+        "avg_rating": 4.45,
+        "rating_count": 80661,
+        "dates_read": [
+            "Aug 21, 2023"
+        ],
+        "date_added": "Jun 06, 2023"
+    },
+    {
+        "book_id": "58687126-finding-me",
+        "raw_title": "Finding Me",
+        "author": "Davis, Viola",
+        "author_id": "3262562.Viola_Davis",
+        "stars": 0,
+        "avg_rating": 4.54,
+        "rating_count": 170579,
+        "dates_read": [
+            "Feb 06, 2024"
+        ],
+        "date_added": "Jun 12, 2023"
+    },
+    {
+        "book_id": "29780253-born-a-crime",
+        "raw_title": "Born a Crime: Stories From a South African Childhood",
+        "author": "Noah, Trevor",
+        "author_id": "15149526.Trevor_Noah",
+        "stars": 5,
+        "avg_rating": 4.49,
+        "rating_count": 788036,
+        "dates_read": [
+            "Nov 03, 2023"
+        ],
+        "date_added": "Jun 12, 2023"
+    },
+    {
+        "book_id": "2767052-the-hunger-games",
+        "raw_title": "The Hunger Games\n               \n                (The Hunger Games, #1)",
+        "author": "Collins, Suzanne",
+        "author_id": "153394.Suzanne_Collins",
+        "stars": 4,
+        "avg_rating": 4.35,
+        "rating_count": 9708171,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Jun 12, 2023"
+    },
+    {
+        "book_id": "7260188-mockingjay",
+        "raw_title": "Mockingjay\n               \n                (The Hunger Games, #3)",
+        "author": "Collins, Suzanne",
+        "author_id": "153394.Suzanne_Collins",
+        "stars": 3,
+        "avg_rating": 4.12,
+        "rating_count": 3643810,
+        "dates_read": [
+            "Jun 29, 2023"
+        ],
+        "date_added": "Jun 14, 2023"
+    },
+    {
+        "book_id": "6148028-catching-fire",
+        "raw_title": "Catching Fire\n               \n                (The Hunger Games, #2)",
+        "author": "Collins, Suzanne",
+        "author_id": "153394.Suzanne_Collins",
+        "stars": 3,
+        "avg_rating": 4.35,
+        "rating_count": 4068214,
+        "dates_read": [
+            "Jun 24, 2023"
+        ],
+        "date_added": "Jun 14, 2023"
+    },
+    {
+        "book_id": "57945316-babel",
+        "raw_title": "Babel",
+        "author": "Kuang, R.F.",
+        "author_id": "16820001.R_F_Kuang",
+        "stars": 3,
+        "avg_rating": 4.15,
+        "rating_count": 427162,
+        "dates_read": [
+            "Sep 18, 2023"
+        ],
+        "date_added": "Jun 15, 2023"
+    },
+    {
+        "book_id": "45304101-the-great-believers",
+        "raw_title": "The Great Believers",
+        "author": "Makkai, Rebecca",
+        "author_id": "3134707.Rebecca_Makkai",
+        "stars": 0,
+        "avg_rating": 4.29,
+        "rating_count": 165851,
+        "dates_read": [],
+        "date_added": "Jun 17, 2023"
+    },
+    {
+        "book_id": "10873.Shopgirl",
+        "raw_title": "Shopgirl",
+        "author": "Martin, Steve",
+        "author_id": "7103.Steve_Martin",
+        "stars": 3,
+        "avg_rating": 3.42,
+        "rating_count": 39511,
+        "dates_read": [
+            "Aug 05, 2023",
+            "Aug 05, 2023"
+        ],
+        "date_added": "Jun 17, 2023"
+    },
+    {
+        "book_id": "10867.The_Pleasure_of_My_Company",
+        "raw_title": "The Pleasure of My Company",
+        "author": "Martin, Steve",
+        "author_id": "7103.Steve_Martin",
+        "stars": 4,
+        "avg_rating": 3.79,
+        "rating_count": 16591,
+        "dates_read": [
+            "Jun 19, 2023"
+        ],
+        "date_added": "Jun 17, 2023"
+    },
+    {
+        "book_id": "20525628-how-to-build-a-girl",
+        "raw_title": "How to Build a Girl\n               \n                (How to Build a Girl, #1)",
+        "author": "Moran, Caitlin",
+        "author_id": "939363.Caitlin_Moran",
+        "stars": 0,
+        "avg_rating": 3.72,
+        "rating_count": 36719,
+        "dates_read": [],
+        "date_added": "Jun 17, 2023"
+    },
+    {
+        "book_id": "35068933-how-to-be-famous",
+        "raw_title": "How to be Famous\n               \n                (How to Build a Girl, #2)",
+        "author": "Moran, Caitlin",
+        "author_id": "939363.Caitlin_Moran",
+        "stars": 0,
+        "avg_rating": 4.01,
+        "rating_count": 8732,
+        "dates_read": [],
+        "date_added": "Jun 17, 2023"
+    },
+    {
+        "book_id": "52915339-the-chicken-sisters",
+        "raw_title": "The Chicken Sisters",
+        "author": "Dell'Antonia, K.J.",
+        "author_id": "3944366.K_J_Dell_Antonia",
+        "stars": 2,
+        "avg_rating": 3.4,
+        "rating_count": 37080,
+        "dates_read": [
+            "Jul 22, 2023"
+        ],
+        "date_added": "Jun 24, 2023"
+    },
+    {
+        "book_id": "60194162-demon-copperhead",
+        "raw_title": "Demon Copperhead",
+        "author": "Kingsolver, Barbara",
+        "author_id": "3541.Barbara_Kingsolver",
+        "stars": 0,
+        "avg_rating": 4.47,
+        "rating_count": 743916,
+        "dates_read": [],
+        "date_added": "Jul 01, 2023"
+    },
+    {
+        "book_id": "54304125-the-final-revival-of-opal-nev",
+        "raw_title": "The Final Revival of Opal & Nev",
+        "author": "Walton, Dawnie",
+        "author_id": "20145640.Dawnie_Walton",
+        "stars": 3,
+        "avg_rating": 3.82,
+        "rating_count": 33004,
+        "dates_read": [
+            "Dec 09, 2023"
+        ],
+        "date_added": "Jul 01, 2023"
+    },
+    {
+        "book_id": "43890641-hamnet",
+        "raw_title": "Hamnet",
+        "author": "O'Farrell, Maggie",
+        "author_id": "91236.Maggie_O_Farrell",
+        "stars": 0,
+        "avg_rating": 4.19,
+        "rating_count": 322152,
+        "dates_read": [],
+        "date_added": "Jul 01, 2023"
+    },
+    {
+        "book_id": "57500766-love-in-the-big-city",
+        "raw_title": "Love in the Big City",
+        "author": "Park, Sang Young",
+        "author_id": "42207519.Sang_Young_Park",
+        "stars": 3,
+        "avg_rating": 3.68,
+        "rating_count": 16590,
+        "dates_read": [
+            "Oct 2023"
+        ],
+        "date_added": "Jul 01, 2023"
+    },
+    {
+        "book_id": "65215789-i-m-a-fan",
+        "raw_title": "I'm a Fan",
+        "author": "Patel, Sheena",
+        "author_id": "16612475.Sheena_Patel",
+        "stars": 0,
+        "avg_rating": 3.25,
+        "rating_count": 31160,
+        "dates_read": [],
+        "date_added": "Jul 01, 2023"
+    },
+    {
+        "book_id": "61431922-fourth-wing",
+        "raw_title": "Fourth Wing\n               \n                (The Empyrean, #1)",
+        "author": "Yarros, Rebecca",
+        "author_id": "7539785.Rebecca_Yarros",
+        "stars": 3,
+        "avg_rating": 4.57,
+        "rating_count": 3288048,
+        "dates_read": [
+            "Nov 07, 2023"
+        ],
+        "date_added": "Jul 01, 2023"
+    },
+    {
+        "book_id": "18293427-the-storied-life-of-a-j-fikry",
+        "raw_title": "The Storied Life of A.J. Fikry",
+        "author": "Zevin, Gabrielle",
+        "author_id": "40593.Gabrielle_Zevin",
+        "stars": 4,
+        "avg_rating": 4.04,
+        "rating_count": 350630,
+        "dates_read": [
+            "Aug 12, 2023"
+        ],
+        "date_added": "Jul 02, 2023"
+    },
+    {
+        "book_id": "50736031-breasts-and-eggs",
+        "raw_title": "Breasts and Eggs",
+        "author": "Kawakami, Mieko",
+        "author_id": "5559451.Mieko_Kawakami",
+        "stars": 0,
+        "avg_rating": 3.86,
+        "rating_count": 76283,
+        "dates_read": [],
+        "date_added": "Jul 11, 2023"
+    },
+    {
+        "book_id": "18402464-the-rosie-project",
+        "raw_title": "The Rosie Project",
+        "author": "Simsion, Graeme",
+        "author_id": "1895943.Graeme_Simsion",
+        "stars": 3,
+        "avg_rating": 4.01,
+        "rating_count": 588716,
+        "dates_read": [
+            "Aug 02, 2023"
+        ],
+        "date_added": "Jul 29, 2023"
+    },
+    {
+        "book_id": "9969571-ready-player-one",
+        "raw_title": "Ready Player One\n               \n                (Ready Player One, #1)",
+        "author": "Cline, Ernest",
+        "author_id": "31712.Ernest_Cline",
+        "stars": 5,
+        "avg_rating": 4.23,
+        "rating_count": 1279106,
+        "dates_read": [
+            "Sep 26, 2023"
+        ],
+        "date_added": "Aug 03, 2023"
+    },
+    {
+        "book_id": "141421.The_Woman_Destroyed",
+        "raw_title": "The Woman Destroyed",
+        "author": "Beauvoir, Simone de",
+        "author_id": "5548.Simone_de_Beauvoir",
+        "stars": 0,
+        "avg_rating": 4.02,
+        "rating_count": 43293,
+        "dates_read": [],
+        "date_added": "Aug 05, 2023"
+    },
+    {
+        "book_id": "53223710-heaven",
+        "raw_title": "Heaven",
+        "author": "Kawakami, Mieko",
+        "author_id": "5559451.Mieko_Kawakami",
+        "stars": 0,
+        "avg_rating": 3.79,
+        "rating_count": 83948,
+        "dates_read": [],
+        "date_added": "Aug 05, 2023"
+    },
+    {
+        "book_id": "58891551-young-mungo",
+        "raw_title": "Young Mungo",
+        "author": "Stuart, Douglas",
+        "author_id": "19629033.Douglas_Stuart",
+        "stars": 0,
+        "avg_rating": 4.37,
+        "rating_count": 83541,
+        "dates_read": [],
+        "date_added": "Aug 08, 2023"
+    },
+    {
+        "book_id": "8143909-foster",
+        "raw_title": "Foster",
+        "author": "Keegan, Claire",
+        "author_id": "274817.Claire_Keegan",
+        "stars": 4,
+        "avg_rating": 4.31,
+        "rating_count": 148508,
+        "dates_read": [
+            "Jan 05, 2025"
+        ],
+        "date_added": "Aug 08, 2023"
+    },
+    {
+        "book_id": "58725016-elektra",
+        "raw_title": "Elektra",
+        "author": "Saint, Jennifer",
+        "author_id": "19734894.Jennifer_Saint",
+        "stars": 0,
+        "avg_rating": 3.66,
+        "rating_count": 54390,
+        "dates_read": [],
+        "date_added": "Aug 08, 2023"
+    },
+    {
+        "book_id": "6969361-2-states",
+        "raw_title": "2 States: The Story of My Marriage",
+        "author": "Bhagat, Chetan",
+        "author_id": "61124.Chetan_Bhagat",
+        "stars": 4,
+        "avg_rating": 3.44,
+        "rating_count": 98072,
+        "dates_read": [
+            "Sep 27, 2023"
+        ],
+        "date_added": "Aug 11, 2023"
+    },
+    {
+        "book_id": "15745753-eleanor-park",
+        "raw_title": "Eleanor & Park",
+        "author": "Rowell, Rainbow",
+        "author_id": "4208569.Rainbow_Rowell",
+        "stars": 4,
+        "avg_rating": 3.93,
+        "rating_count": 1247489,
+        "dates_read": [
+            "Aug 12, 2023"
+        ],
+        "date_added": "Aug 11, 2023"
+    },
+    {
+        "book_id": "58724801-the-bodyguard",
+        "raw_title": "The Bodyguard",
+        "author": "Center, Katherine",
+        "author_id": "409113.Katherine_Center",
+        "stars": 4,
+        "avg_rating": 3.94,
+        "rating_count": 371190,
+        "dates_read": [
+            "Aug 11, 2023"
+        ],
+        "date_added": "Aug 11, 2023"
+    },
+    {
+        "book_id": "16068905-fangirl",
+        "raw_title": "Fangirl",
+        "author": "Rowell, Rainbow",
+        "author_id": "4208569.Rainbow_Rowell",
+        "stars": 3,
+        "avg_rating": 3.94,
+        "rating_count": 775590,
+        "dates_read": [
+            "Sep 07, 2023"
+        ],
+        "date_added": "Aug 12, 2023"
+    },
+    {
+        "book_id": "50659467-a-court-of-thorns-and-roses",
+        "raw_title": "A Court of Thorns and Roses\n               \n                (A Court of Thorns and Roses, #1)",
+        "author": "Maas, Sarah J.",
+        "author_id": "3433047.Sarah_J_Maas",
+        "stars": 2,
+        "avg_rating": 4.16,
+        "rating_count": 4002178,
+        "dates_read": [
+            "Aug 29, 2023"
+        ],
+        "date_added": "Aug 27, 2023"
+    },
+    {
+        "book_id": "62047992-days-at-the-morisaki-bookshop",
+        "raw_title": "Days at the Morisaki Bookshop\n               \n                (Days at the Morisaki Bookshop, #1)",
+        "author": "Yagisawa, Satoshi",
+        "author_id": "7362871.Satoshi_Yagisawa",
+        "stars": 3,
+        "avg_rating": 3.64,
+        "rating_count": 170120,
+        "dates_read": [
+            "May 21, 2024"
+        ],
+        "date_added": "Sep 01, 2023"
+    },
+    {
+        "book_id": "75582270-a-little-luck",
+        "raw_title": "A Little Luck",
+        "author": "Pi\u00f1eiro, Claudia",
+        "author_id": "291980.Claudia_Pi_eiro",
+        "stars": 0,
+        "avg_rating": 4.28,
+        "rating_count": 8846,
+        "dates_read": [],
+        "date_added": "Sep 01, 2023"
+    },
+    {
+        "book_id": "62334530-none-of-this-is-true",
+        "raw_title": "None of This Is True",
+        "author": "Jewell, Lisa",
+        "author_id": "93504.Lisa_Jewell",
+        "stars": 5,
+        "avg_rating": 4.08,
+        "rating_count": 1035116,
+        "dates_read": [
+            "Oct 23, 2023"
+        ],
+        "date_added": "Sep 05, 2023"
+    },
+    {
+        "book_id": "58340706-one-dark-window",
+        "raw_title": "One Dark Window\n               \n                (The Shepherd King, #1)",
+        "author": "Gillig, Rachel",
+        "author_id": "21163293.Rachel_Gillig",
+        "stars": 4,
+        "avg_rating": 4.27,
+        "rating_count": 576788,
+        "dates_read": [
+            "Oct 04, 2023"
+        ],
+        "date_added": "Sep 14, 2023"
+    },
+    {
+        "book_id": "101124639-bright-young-women",
+        "raw_title": "Bright Young Women",
+        "author": "Knoll, Jessica",
+        "author_id": "6464799.Jessica_Knoll",
+        "stars": 3,
+        "avg_rating": 3.99,
+        "rating_count": 217063,
+        "dates_read": [
+            "Mar 14, 2024"
+        ],
+        "date_added": "Sep 15, 2023"
+    },
+    {
+        "book_id": "53487148-a-thousand-ships",
+        "raw_title": "A Thousand Ships",
+        "author": "Haynes, Natalie",
+        "author_id": "995841.Natalie_Haynes",
+        "stars": 0,
+        "avg_rating": 4.05,
+        "rating_count": 87526,
+        "dates_read": [],
+        "date_added": "Sep 17, 2023"
+    },
+    {
+        "book_id": "52867387-beach-read",
+        "raw_title": "Beach Read",
+        "author": "Henry, Emily",
+        "author_id": "13905555.Emily_Henry",
+        "stars": 4,
+        "avg_rating": 3.97,
+        "rating_count": 1574986,
+        "dates_read": [
+            "Sep 20, 2023"
+        ],
+        "date_added": "Sep 19, 2023"
+    },
+    {
+        "book_id": "56554626-the-ex-hex",
+        "raw_title": "The Ex Hex\n               \n                (The Ex Hex, #1)",
+        "author": "Sterling, Erin",
+        "author_id": "12326128.Erin_Sterling",
+        "stars": 0,
+        "avg_rating": 3.48,
+        "rating_count": 266688,
+        "dates_read": [],
+        "date_added": "Sep 25, 2023"
+    },
+    {
+        "book_id": "43459812-things-we-say-in-the-dark",
+        "raw_title": "Things We Say in the Dark",
+        "author": "Logan, Kirsty",
+        "author_id": "4565834.Kirsty_Logan",
+        "stars": 0,
+        "avg_rating": 3.75,
+        "rating_count": 3376,
+        "dates_read": [],
+        "date_added": "Sep 27, 2023"
+    },
+    {
+        "book_id": "9717.The_Unbearable_Lightness_of_Being",
+        "raw_title": "The Unbearable Lightness of Being",
+        "author": "Kundera, Milan",
+        "author_id": "6343.Milan_Kundera",
+        "stars": 0,
+        "avg_rating": 4.11,
+        "rating_count": 532580,
+        "dates_read": [],
+        "date_added": "Sep 27, 2023"
+    },
+    {
+        "book_id": "53273828-bunny",
+        "raw_title": "Bunny\n               \n                (Bunny, #1)",
+        "author": "Awad, Mona",
+        "author_id": "7104825.Mona_Awad",
+        "stars": 0,
+        "avg_rating": 3.47,
+        "rating_count": 302492,
+        "dates_read": [],
+        "date_added": "Oct 01, 2023"
+    },
+    {
+        "book_id": "63910262-two-twisted-crowns",
+        "raw_title": "Two Twisted Crowns\n               \n                (The Shepherd King, #2)",
+        "author": "Gillig, Rachel",
+        "author_id": "21163293.Rachel_Gillig",
+        "stars": 4,
+        "avg_rating": 4.4,
+        "rating_count": 435768,
+        "dates_read": [
+            "Oct 21, 2023"
+        ],
+        "date_added": "Oct 04, 2023"
+    },
+    {
+        "book_id": "1934.Little_Women",
+        "raw_title": "Little Women\n               \n                (Little Women, #1)",
+        "author": "Alcott, Louisa May",
+        "author_id": "1315.Louisa_May_Alcott",
+        "stars": 4,
+        "avg_rating": 4.17,
+        "rating_count": 2417271,
+        "dates_read": [
+            "Oct 19, 2023"
+        ],
+        "date_added": "Oct 05, 2023"
+    },
+    {
+        "book_id": "40539136-lie-with-me",
+        "raw_title": "Lie With Me",
+        "author": "Besson, Philippe",
+        "author_id": "199634.Philippe_Besson",
+        "stars": 0,
+        "avg_rating": 4.26,
+        "rating_count": 61545,
+        "dates_read": [],
+        "date_added": "Oct 09, 2023"
+    },
+    {
+        "book_id": "61361681-clytemnestra",
+        "raw_title": "Clytemnestra",
+        "author": "Casati, Costanza",
+        "author_id": "18391866.Costanza_Casati",
+        "stars": 0,
+        "avg_rating": 4.22,
+        "rating_count": 53649,
+        "dates_read": [],
+        "date_added": "Oct 19, 2023"
+    },
+    {
+        "book_id": "61065982-the-bandit-queens",
+        "raw_title": "The Bandit Queens",
+        "author": "Shroff, Parini",
+        "author_id": "21665404.Parini_Shroff",
+        "stars": 0,
+        "avg_rating": 3.93,
+        "rating_count": 44850,
+        "dates_read": [],
+        "date_added": "Oct 23, 2023"
+    },
+    {
+        "book_id": "62926938-the-seven-year-slip",
+        "raw_title": "The Seven Year Slip",
+        "author": "Poston, Ashley",
+        "author_id": "4279769.Ashley_Poston",
+        "stars": 4,
+        "avg_rating": 4.17,
+        "rating_count": 537006,
+        "dates_read": [
+            "Dec 16, 2023"
+        ],
+        "date_added": "Oct 27, 2023"
+    },
+    {
+        "book_id": "99561.Looking_for_Alaska",
+        "raw_title": "Looking for Alaska",
+        "author": "Green, John",
+        "author_id": "1406384.John_Green",
+        "stars": 4,
+        "avg_rating": 3.96,
+        "rating_count": 1728163,
+        "dates_read": [
+            "Oct 31, 2023"
+        ],
+        "date_added": "Oct 29, 2023"
+    },
+    {
+        "book_id": "63241104-tom-lake",
+        "raw_title": "Tom Lake",
+        "author": "Patchett, Ann",
+        "author_id": "7136914.Ann_Patchett",
+        "stars": 3,
+        "avg_rating": 3.94,
+        "rating_count": 470893,
+        "dates_read": [
+            "Feb 29, 2024"
+        ],
+        "date_added": "Oct 30, 2023"
+    },
+    {
+        "book_id": "54508798-the-guncle",
+        "raw_title": "The Guncle\n               \n                (The Guncle, #1)",
+        "author": "Rowley, Steven",
+        "author_id": "14972725.Steven_Rowley",
+        "stars": 3,
+        "avg_rating": 4.11,
+        "rating_count": 189008,
+        "dates_read": [
+            "Apr 09, 2024"
+        ],
+        "date_added": "Oct 30, 2023"
+    },
+    {
+        "book_id": "75494215-eve",
+        "raw_title": "Eve: How the Female Body Drove 200 Million Years of Human Evolution",
+        "author": "Bohannon, Cat",
+        "author_id": "16338445.Cat_Bohannon",
+        "stars": 0,
+        "avg_rating": 4.26,
+        "rating_count": 14460,
+        "dates_read": [],
+        "date_added": "Oct 30, 2023"
+    },
+    {
+        "book_id": "34313931-a-woman-is-no-man",
+        "raw_title": "A Woman Is No Man",
+        "author": "Rum, Etaf",
+        "author_id": "16458196.Etaf_Rum",
+        "stars": 0,
+        "avg_rating": 4.26,
+        "rating_count": 171100,
+        "dates_read": [],
+        "date_added": "Oct 30, 2023"
+    },
+    {
+        "book_id": "61783798-leg",
+        "raw_title": "Leg: The Story of a Limb and the Boy Who Grew from It",
+        "author": "Marshall, Greg R.",
+        "author_id": "23015948.Greg_Marshall",
+        "stars": 0,
+        "avg_rating": 3.95,
+        "rating_count": 2275,
+        "dates_read": [],
+        "date_added": "Oct 30, 2023"
+    },
+    {
+        "book_id": "60784546-divine-rivals",
+        "raw_title": "Divine Rivals\n               \n                (Letters of Enchantment, #1)",
+        "author": "Ross, Rebecca",
+        "author_id": "14926516.Rebecca_Ross",
+        "stars": 0,
+        "avg_rating": 4.15,
+        "rating_count": 699180,
+        "dates_read": [],
+        "date_added": "Nov 05, 2023"
+    },
+    {
+        "book_id": "60701439-big-swiss",
+        "raw_title": "Big Swiss",
+        "author": "Beagin, Jen",
+        "author_id": "13923211.Jen_Beagin",
+        "stars": 3,
+        "avg_rating": 3.68,
+        "rating_count": 135050,
+        "dates_read": [
+            "Aug 09, 2024"
+        ],
+        "date_added": "Nov 08, 2023"
+    },
+    {
+        "book_id": "43795562-one-for-my-enemy",
+        "raw_title": "One for My Enemy",
+        "author": "Blake, Olivie",
+        "author_id": "16225393.Olivie_Blake",
+        "stars": 0,
+        "avg_rating": 3.7,
+        "rating_count": 32824,
+        "dates_read": [],
+        "date_added": "Nov 08, 2023"
+    },
+    {
+        "book_id": "61214136-the-collected-regrets-of-clover",
+        "raw_title": "The Collected Regrets of Clover",
+        "author": "Brammer, Mikki",
+        "author_id": "22459580.Mikki_Brammer",
+        "stars": 3,
+        "avg_rating": 4.16,
+        "rating_count": 113398,
+        "dates_read": [
+            "Nov 11, 2023"
+        ],
+        "date_added": "Nov 08, 2023"
+    },
+    {
+        "book_id": "61326735-love-theoretically",
+        "raw_title": "Love, Theoretically",
+        "author": "Hazelwood, Ali",
+        "author_id": "21098177.Ali_Hazelwood",
+        "stars": 4,
+        "avg_rating": 4.08,
+        "rating_count": 625414,
+        "dates_read": [
+            "Dec 2023"
+        ],
+        "date_added": "Nov 27, 2023"
+    },
+    {
+        "book_id": "199148360-the-bandit-queens",
+        "raw_title": "The Bandit Queens",
+        "author": "Shroff, Parini",
+        "author_id": "21665404.Parini_Shroff",
+        "stars": 0,
+        "avg_rating": 3.93,
+        "rating_count": 44850,
+        "dates_read": [],
+        "date_added": "Dec 01, 2023"
+    },
+    {
+        "book_id": "49083140-boy-parts",
+        "raw_title": "Boy Parts",
+        "author": "Clark, Eliza",
+        "author_id": "20473391.Eliza_Clark",
+        "stars": 3,
+        "avg_rating": 3.73,
+        "rating_count": 78562,
+        "dates_read": [
+            "Mar 04, 2025"
+        ],
+        "date_added": "Dec 02, 2023"
+    },
+    {
+        "book_id": "36249638-how-to-walk-away",
+        "raw_title": "How to Walk Away",
+        "author": "Center, Katherine",
+        "author_id": "409113.Katherine_Center",
+        "stars": 4,
+        "avg_rating": 4.08,
+        "rating_count": 118211,
+        "dates_read": [
+            "Dec 11, 2023"
+        ],
+        "date_added": "Dec 10, 2023"
+    },
+    {
+        "book_id": "123202240-a-beautiful-surrender",
+        "raw_title": "A Beautiful Surrender",
+        "author": "Mays, Rachel",
+        "author_id": "21688820.Rachel_Mays",
+        "stars": 0,
+        "avg_rating": 3.45,
+        "rating_count": 332,
+        "dates_read": [],
+        "date_added": "Dec 11, 2023"
+    },
+    {
+        "book_id": "30841984-kings-of-the-wyld",
+        "raw_title": "Kings of the Wyld\n               \n                (The Band, #1)",
+        "author": "Eames, Nicholas",
+        "author_id": "15388346.Nicholas_Eames",
+        "stars": 0,
+        "avg_rating": 4.27,
+        "rating_count": 62738,
+        "dates_read": [],
+        "date_added": "Dec 11, 2023"
+    },
+    {
+        "book_id": "57127277-kaikeyi",
+        "raw_title": "Kaikeyi",
+        "author": "Patel, Vaishnavi",
+        "author_id": "20288648.Vaishnavi_Patel",
+        "stars": 3,
+        "avg_rating": 4.18,
+        "rating_count": 36641,
+        "dates_read": [
+            "Mar 09, 2024"
+        ],
+        "date_added": "Dec 12, 2023"
+    },
+    {
+        "book_id": "195820807-just-for-the-summer",
+        "raw_title": "Just for the Summer\n               \n                (Part of Your World, #3)",
+        "author": "Jimenez, Abby",
+        "author_id": "18446724.Abby_Jimenez",
+        "stars": 4,
+        "avg_rating": 4.36,
+        "rating_count": 1004589,
+        "dates_read": [
+            "May 15, 2024"
+        ],
+        "date_added": "Dec 13, 2023"
+    },
+    {
+        "book_id": "124950295-out-on-a-limb",
+        "raw_title": "Out on a Limb\n               \n                (Out, #1)",
+        "author": "Bonam-Young, Hannah",
+        "author_id": "22325481.Hannah_Bonam_Young",
+        "stars": 3,
+        "avg_rating": 4.26,
+        "rating_count": 166290,
+        "dates_read": [
+            "Feb 02, 2024"
+        ],
+        "date_added": "Dec 13, 2023"
+    },
+    {
+        "book_id": "64645812-if-only-i-had-told-her",
+        "raw_title": "If Only I Had Told Her\n               \n                (If He Had Been with Me, #2)",
+        "author": "Nowlin, Laura",
+        "author_id": "6472187.Laura_Nowlin",
+        "stars": 0,
+        "avg_rating": 3.86,
+        "rating_count": 175289,
+        "dates_read": [],
+        "date_added": "Dec 13, 2023"
+    },
+    {
+        "book_id": "181350812-bride",
+        "raw_title": "Bride",
+        "author": "Hazelwood, Ali",
+        "author_id": "21098177.Ali_Hazelwood",
+        "stars": 0,
+        "avg_rating": 3.99,
+        "rating_count": 614172,
+        "dates_read": [],
+        "date_added": "Dec 13, 2023"
+    },
+    {
+        "book_id": "6334.Never_Let_Me_Go",
+        "raw_title": "Never Let Me Go",
+        "author": "Ishiguro, Kazuo",
+        "author_id": "4280.Kazuo_Ishiguro",
+        "stars": 4,
+        "avg_rating": 3.85,
+        "rating_count": 829799,
+        "dates_read": [
+            "Jul 28, 2024"
+        ],
+        "date_added": "Dec 13, 2023"
+    },
+    {
+        "book_id": "203518965-good-material",
+        "raw_title": "Good Material",
+        "author": "Alderton, Dolly",
+        "author_id": "16508320.Dolly_Alderton",
+        "stars": 3,
+        "avg_rating": 3.83,
+        "rating_count": 239043,
+        "dates_read": [
+            "Jun 02, 2024"
+        ],
+        "date_added": "Dec 13, 2023"
+    },
+    {
+        "book_id": "40045986-the-last-letter",
+        "raw_title": "The Last Letter",
+        "author": "Yarros, Rebecca",
+        "author_id": "7539785.Rebecca_Yarros",
+        "stars": 0,
+        "avg_rating": 4.49,
+        "rating_count": 380221,
+        "dates_read": [],
+        "date_added": "Dec 14, 2023"
+    },
+    {
+        "book_id": "58684524-part-of-your-world",
+        "raw_title": "Part of Your World\n               \n                (Part of Your World, #1)",
+        "author": "Jimenez, Abby",
+        "author_id": "18446724.Abby_Jimenez",
+        "stars": 5,
+        "avg_rating": 4.26,
+        "rating_count": 786042,
+        "dates_read": [
+            "Jan 24, 2024"
+        ],
+        "date_added": "Dec 17, 2023"
+    },
+    {
+        "book_id": "61918816-yours-truly",
+        "raw_title": "Yours Truly\n               \n                (Part of Your World, #2)",
+        "author": "Jimenez, Abby",
+        "author_id": "18446724.Abby_Jimenez",
+        "stars": 5,
+        "avg_rating": 4.3,
+        "rating_count": 774047,
+        "dates_read": [
+            "Dec 19, 2023"
+        ],
+        "date_added": "Dec 17, 2023"
+    },
+    {
+        "book_id": "54373691-tales-from-the-cafe",
+        "raw_title": "Tales from the Cafe\n               \n                (Before the Coffee Gets Cold, #2)",
+        "author": "Kawaguchi, Toshikazu",
+        "author_id": "16836980.Toshikazu_Kawaguchi",
+        "stars": 4,
+        "avg_rating": 3.97,
+        "rating_count": 125816,
+        "dates_read": [
+            "Dec 21, 2023"
+        ],
+        "date_added": "Dec 20, 2023"
+    },
+    {
+        "book_id": "44019067-the-bromance-book-club",
+        "raw_title": "The Bromance Book Club\n               \n                (Bromance Book Club, #1)",
+        "author": "Adams, Lyssa Kay",
+        "author_id": "15076037.Lyssa_Kay_Adams",
+        "stars": 4,
+        "avg_rating": 3.86,
+        "rating_count": 132279,
+        "dates_read": [
+            "Dec 30, 2023"
+        ],
+        "date_added": "Dec 29, 2023"
+    },
+    {
+        "book_id": "60784815-couplets",
+        "raw_title": "Couplets",
+        "author": "Millner, Maggie",
+        "author_id": "16892716.Maggie_Millner",
+        "stars": 0,
+        "avg_rating": 3.72,
+        "rating_count": 4425,
+        "dates_read": [],
+        "date_added": "Dec 29, 2023"
+    },
+    {
+        "book_id": "76703559-throne-of-glass",
+        "raw_title": "Throne of Glass\n               \n                (Throne of Glass, #1)",
+        "author": "Maas, Sarah J.",
+        "author_id": "3433047.Sarah_J_Maas",
+        "stars": 4,
+        "avg_rating": 4.18,
+        "rating_count": 2274110,
+        "dates_read": [
+            "Jan 02, 2024"
+        ],
+        "date_added": "Dec 31, 2023"
+    },
+    {
+        "book_id": "60657589-emily-wilde-s-encyclopaedia-of-faeries",
+        "raw_title": "Emily Wilde's Encyclopaedia of Faeries\n               \n                (Emily Wilde, #1)",
+        "author": "Fawcett, Heather",
+        "author_id": "8202155.Heather_Fawcett",
+        "stars": 0,
+        "avg_rating": 3.97,
+        "rating_count": 194154,
+        "dates_read": [],
+        "date_added": "Jan 01, 2024"
+    },
+    {
+        "book_id": "44799982-the-mindf-ck-series",
+        "raw_title": "The Mindf*ck Series\n               \n                (Mindf*ck, #1-5)",
+        "author": "Abby, S.T.",
+        "author_id": "16120982.S_T_Abby",
+        "stars": 0,
+        "avg_rating": 4.61,
+        "rating_count": 98452,
+        "dates_read": [],
+        "date_added": "Jan 02, 2024"
+    },
+    {
+        "book_id": "76705490-crown-of-midnight",
+        "raw_title": "Crown of Midnight\n               \n                (Throne of Glass, #2)",
+        "author": "Maas, Sarah J.",
+        "author_id": "3433047.Sarah_J_Maas",
+        "stars": 5,
+        "avg_rating": 4.36,
+        "rating_count": 1660143,
+        "dates_read": [
+            "Jan 05, 2024"
+        ],
+        "date_added": "Jan 03, 2024"
+    },
+    {
+        "book_id": "76706470-heir-of-fire",
+        "raw_title": "Heir of Fire\n               \n                (Throne of Glass, #3)",
+        "author": "Maas, Sarah J.",
+        "author_id": "3433047.Sarah_J_Maas",
+        "stars": 3,
+        "avg_rating": 4.45,
+        "rating_count": 1468668,
+        "dates_read": [
+            "Jan 14, 2024"
+        ],
+        "date_added": "Jan 04, 2024"
+    },
+    {
+        "book_id": "126062562-the-assassin-s-blade",
+        "raw_title": "The Assassin's Blade\n               \n                (Throne of Glass, #0.1-0.5)",
+        "author": "Maas, Sarah J.",
+        "author_id": "3433047.Sarah_J_Maas",
+        "stars": 5,
+        "avg_rating": 4.2,
+        "rating_count": 1092387,
+        "dates_read": [
+            "Jan 08, 2024"
+        ],
+        "date_added": "Jan 04, 2024"
+    },
+    {
+        "book_id": "153283393-powerless",
+        "raw_title": "Powerless\n               \n                (The Powerless Trilogy, #1)",
+        "author": "Roberts, Lauren",
+        "author_id": "21728475.Lauren_Roberts",
+        "stars": 0,
+        "avg_rating": 4.17,
+        "rating_count": 833781,
+        "dates_read": [],
+        "date_added": "Jan 04, 2024"
+    },
+    {
+        "book_id": "40495957-heartstopper",
+        "raw_title": "Heartstopper: Volume One\n               \n                (Heartstopper, #1)",
+        "author": "Oseman, Alice",
+        "author_id": "7789423.Alice_Oseman",
+        "stars": 4,
+        "avg_rating": 4.43,
+        "rating_count": 864998,
+        "dates_read": [
+            "Jan 05, 2024"
+        ],
+        "date_added": "Jan 04, 2024"
+    },
+    {
+        "book_id": "43449920-heartstopper",
+        "raw_title": "Heartstopper: Volume Three\n               \n                (Heartstopper, #3)",
+        "author": "Oseman, Alice",
+        "author_id": "7789423.Alice_Oseman",
+        "stars": 5,
+        "avg_rating": 4.54,
+        "rating_count": 491871,
+        "dates_read": [
+            "Jan 05, 2024"
+        ],
+        "date_added": "Jan 05, 2024"
+    },
+    {
+        "book_id": "43307358-heartstopper",
+        "raw_title": "Heartstopper: Volume Two\n               \n                (Heartstopper, #2)",
+        "author": "Oseman, Alice",
+        "author_id": "7789423.Alice_Oseman",
+        "stars": 4,
+        "avg_rating": 4.51,
+        "rating_count": 561367,
+        "dates_read": [
+            "Jan 05, 2024"
+        ],
+        "date_added": "Jan 05, 2024"
+    },
+    {
+        "book_id": "56060300-heartstopper",
+        "raw_title": "Heartstopper: Volume Four\n               \n                (Heartstopper, #4)",
+        "author": "Oseman, Alice",
+        "author_id": "7789423.Alice_Oseman",
+        "stars": 5,
+        "avg_rating": 4.58,
+        "rating_count": 435532,
+        "dates_read": [
+            "Jan 06, 2024"
+        ],
+        "date_added": "Jan 06, 2024"
+    },
+    {
+        "book_id": "76707900-queen-of-shadows",
+        "raw_title": "Queen of Shadows\n               \n                (Throne of Glass, #4)",
+        "author": "Maas, Sarah J.",
+        "author_id": "3433047.Sarah_J_Maas",
+        "stars": 4,
+        "avg_rating": 4.62,
+        "rating_count": 1319963,
+        "dates_read": [
+            "Jan 20, 2024"
+        ],
+        "date_added": "Jan 15, 2024"
+    },
+    {
+        "book_id": "50623864-the-invisible-life-of-addie-larue",
+        "raw_title": "The Invisible Life of Addie LaRue",
+        "author": "Schwab, V.E.",
+        "author_id": "7168230.V_E_Schwab",
+        "stars": 3,
+        "avg_rating": 4.17,
+        "rating_count": 1435898,
+        "dates_read": [
+            "May 04, 2024"
+        ],
+        "date_added": "Jan 20, 2024"
+    },
+    {
+        "book_id": "61373532-heartless",
+        "raw_title": "Heartless\n               \n                (Chestnut Springs, #2)",
+        "author": "Silver, Elsie",
+        "author_id": "21312387.Elsie_Silver",
+        "stars": 4,
+        "avg_rating": 4.37,
+        "rating_count": 517932,
+        "dates_read": [
+            "Dec 28, 2024"
+        ],
+        "date_added": "Jan 21, 2024"
+    },
+    {
+        "book_id": "60755618-flawless",
+        "raw_title": "Flawless\n               \n                (Chestnut Springs, #1)",
+        "author": "Silver, Elsie",
+        "author_id": "21312387.Elsie_Silver",
+        "stars": 3,
+        "avg_rating": 4.02,
+        "rating_count": 611945,
+        "dates_read": [
+            "Jan 21, 2024",
+            "Jan 21, 2024"
+        ],
+        "date_added": "Jan 21, 2024"
+    },
+    {
+        "book_id": "55711633-heatwave",
+        "raw_title": "Heatwave",
+        "author": "Jestin, Victor",
+        "author_id": "19378109.Victor_Jestin",
+        "stars": 3,
+        "avg_rating": 3.16,
+        "rating_count": 8280,
+        "dates_read": [
+            "Jan 22, 2024"
+        ],
+        "date_added": "Jan 22, 2024"
+    },
+    {
+        "book_id": "55922299-the-night-she-disappeared",
+        "raw_title": "The Night She Disappeared",
+        "author": "Jewell, Lisa",
+        "author_id": "93504.Lisa_Jewell",
+        "stars": 0,
+        "avg_rating": 4.09,
+        "rating_count": 312998,
+        "dates_read": [],
+        "date_added": "Jan 24, 2024"
+    },
+    {
+        "book_id": "76714487-tower-of-dawn",
+        "raw_title": "Tower of Dawn\n               \n                (Throne of Glass, #6)",
+        "author": "Maas, Sarah J.",
+        "author_id": "3433047.Sarah_J_Maas",
+        "stars": 4,
+        "avg_rating": 4.28,
+        "rating_count": 986779,
+        "dates_read": [
+            "Feb 13, 2024"
+        ],
+        "date_added": "Jan 25, 2024"
+    },
+    {
+        "book_id": "76713323-empire-of-storms",
+        "raw_title": "Empire of Storms\n               \n                (Throne of Glass, #5)",
+        "author": "Maas, Sarah J.",
+        "author_id": "3433047.Sarah_J_Maas",
+        "stars": 3,
+        "avg_rating": 4.63,
+        "rating_count": 1151142,
+        "dates_read": [
+            "Feb 12, 2024"
+        ],
+        "date_added": "Jan 25, 2024"
+    },
+    {
+        "book_id": "76715522-kingdom-of-ash",
+        "raw_title": "Kingdom of Ash\n               \n                (Throne of Glass, #7)",
+        "author": "Maas, Sarah J.",
+        "author_id": "3433047.Sarah_J_Maas",
+        "stars": 4,
+        "avg_rating": 4.71,
+        "rating_count": 1009953,
+        "dates_read": [
+            "Mar 25, 2024"
+        ],
+        "date_added": "Feb 13, 2024"
+    },
+    {
+        "book_id": "54377375-life-s-too-short",
+        "raw_title": "Life\u2019s Too Short\n               \n                (The Friend Zone, #3)",
+        "author": "Jimenez, Abby",
+        "author_id": "18446724.Abby_Jimenez",
+        "stars": 3,
+        "avg_rating": 4.15,
+        "rating_count": 262554,
+        "dates_read": [
+            "Feb 19, 2024"
+        ],
+        "date_added": "Feb 13, 2024"
+    },
+    {
+        "book_id": "59722217-sam",
+        "raw_title": "Sam",
+        "author": "Goodman, Allegra",
+        "author_id": "16264.Allegra_Goodman",
+        "stars": 0,
+        "avg_rating": 3.77,
+        "rating_count": 14856,
+        "dates_read": [],
+        "date_added": "Feb 20, 2024"
+    },
+    {
+        "book_id": "40864002-a-psalm-for-the-wild-built",
+        "raw_title": "A Psalm for the Wild-Built\n               \n                (Monk & Robot, #1)",
+        "author": "Chambers, Becky",
+        "author_id": "17650479.Becky_Chambers",
+        "stars": 0,
+        "avg_rating": 4.23,
+        "rating_count": 174216,
+        "dates_read": [],
+        "date_added": "Mar 13, 2024"
+    },
+    {
+        "book_id": "54870208-mary-jane",
+        "raw_title": "Mary Jane",
+        "author": "Blau, Jessica Anya",
+        "author_id": "1149861.Jessica_Anya_Blau",
+        "stars": 4,
+        "avg_rating": 4.12,
+        "rating_count": 108929,
+        "dates_read": [
+            "Mar 16, 2024"
+        ],
+        "date_added": "Mar 15, 2024"
+    },
+    {
+        "book_id": "63310838-tomb-sweeping",
+        "raw_title": "Tomb Sweeping",
+        "author": "Chang, Alexandra",
+        "author_id": "16716630.Alexandra_Chang",
+        "stars": 3,
+        "avg_rating": 3.34,
+        "rating_count": 5590,
+        "dates_read": [
+            "Mar 20, 2024"
+        ],
+        "date_added": "Mar 17, 2024"
+    },
+    {
+        "book_id": "936208.Serious_Concerns",
+        "raw_title": "Serious Concerns",
+        "author": "Cope, Wendy",
+        "author_id": "105289.Wendy_Cope",
+        "stars": 0,
+        "avg_rating": 3.87,
+        "rating_count": 4949,
+        "dates_read": [],
+        "date_added": "Mar 20, 2024"
+    },
+    {
+        "book_id": "36199084-the-kiss-quotient",
+        "raw_title": "The Kiss Quotient\n               \n                (The Kiss Quotient, #1)",
+        "author": "Hoang, Helen",
+        "author_id": "17147855.Helen_Hoang",
+        "stars": 4,
+        "avg_rating": 3.87,
+        "rating_count": 490643,
+        "dates_read": [
+            "Mar 28, 2024"
+        ],
+        "date_added": "Mar 27, 2024"
+    },
+    {
+        "book_id": "60092579-when-in-rome",
+        "raw_title": "When in Rome\n               \n                (When in Rome, #1)",
+        "author": "Adams, Sarah",
+        "author_id": "19682177.Sarah_Adams",
+        "stars": 0,
+        "avg_rating": 3.88,
+        "rating_count": 197988,
+        "dates_read": [],
+        "date_added": "Mar 29, 2024"
+    },
+    {
+        "book_id": "61897968-practice-makes-perfect",
+        "raw_title": "Practice Makes Perfect\n               \n                (When in Rome, #2)",
+        "author": "Adams, Sarah",
+        "author_id": "19682177.Sarah_Adams",
+        "stars": 4,
+        "avg_rating": 4.0,
+        "rating_count": 210585,
+        "dates_read": [
+            "Mar 30, 2024"
+        ],
+        "date_added": "Mar 29, 2024"
+    },
+    {
+        "book_id": "63313297-the-details",
+        "raw_title": "The Details",
+        "author": "Genberg, Ia",
+        "author_id": "6430130.Ia_Genberg",
+        "stars": 0,
+        "avg_rating": 3.88,
+        "rating_count": 23716,
+        "dates_read": [],
+        "date_added": "Apr 02, 2024"
+    },
+    {
+        "book_id": "59366182-everyone-in-this-room-will-someday-be-dead",
+        "raw_title": "Everyone in This Room Will Someday Be Dead",
+        "author": "Austin, Emily",
+        "author_id": "16340756.Emily_R_Austin",
+        "stars": 0,
+        "avg_rating": 3.85,
+        "rating_count": 85467,
+        "dates_read": [],
+        "date_added": "Apr 02, 2024"
+    },
+    {
+        "book_id": "55467800-that-summer",
+        "raw_title": "That Summer",
+        "author": "Weiner, Jennifer",
+        "author_id": "9212.Jennifer_Weiner",
+        "stars": 4,
+        "avg_rating": 3.75,
+        "rating_count": 92076,
+        "dates_read": [
+            "Apr 11, 2024"
+        ],
+        "date_added": "Apr 10, 2024"
+    },
+    {
+        "book_id": "63028672-bellies",
+        "raw_title": "Bellies",
+        "author": "Dinan, Nicola",
+        "author_id": "22361249.Nicola_Dinan",
+        "stars": 4,
+        "avg_rating": 4.03,
+        "rating_count": 11256,
+        "dates_read": [
+            "Apr 13, 2024"
+        ],
+        "date_added": "Apr 12, 2024"
+    },
+    {
+        "book_id": "58673061-nsfw",
+        "raw_title": "NSFW",
+        "author": "Kaplan, Isabel",
+        "author_id": "2776125.Isabel_Kaplan",
+        "stars": 2,
+        "avg_rating": 3.46,
+        "rating_count": 4462,
+        "dates_read": [
+            "Apr 14, 2024",
+            "not set"
+        ],
+        "date_added": "Apr 14, 2024"
+    },
+    {
+        "book_id": "52655000-undercover-bromance",
+        "raw_title": "Undercover Bromance\n               \n                (Bromance Book Club, #2)",
+        "author": "Adams, Lyssa Kay",
+        "author_id": "15076037.Lyssa_Kay_Adams",
+        "stars": 3,
+        "avg_rating": 3.86,
+        "rating_count": 61747,
+        "dates_read": [
+            "Apr 16, 2024"
+        ],
+        "date_added": "Apr 15, 2024"
+    },
+    {
+        "book_id": "139253.The_House_on_Mango_Street",
+        "raw_title": "The House on Mango Street",
+        "author": "Cisneros, Sandra",
+        "author_id": "13234.Sandra_Cisneros",
+        "stars": 3,
+        "avg_rating": 3.69,
+        "rating_count": 226817,
+        "dates_read": [
+            "Apr 15, 2024"
+        ],
+        "date_added": "Apr 15, 2024"
+    },
+    {
+        "book_id": "63133205-the-woman-in-me",
+        "raw_title": "The Woman in Me",
+        "author": "Spears, Britney",
+        "author_id": "228521.Britney_Spears",
+        "stars": 0,
+        "avg_rating": 3.83,
+        "rating_count": 558250,
+        "dates_read": [
+            "Apr 23, 2024"
+        ],
+        "date_added": "Apr 19, 2024"
+    },
+    {
+        "book_id": "50208350-the-happy-ever-after-playlist",
+        "raw_title": "The Happy Ever After Playlist\n               \n                (The Friend Zone, #2)",
+        "author": "Jimenez, Abby",
+        "author_id": "18446724.Abby_Jimenez",
+        "stars": 3,
+        "avg_rating": 4.17,
+        "rating_count": 304630,
+        "dates_read": [
+            "Apr 23, 2024"
+        ],
+        "date_added": "Apr 23, 2024"
+    },
+    {
+        "book_id": "34078010-beartown",
+        "raw_title": "Beartown",
+        "author": "Backman, Fredrik",
+        "author_id": "6485178.Fredrik_Backman",
+        "stars": 5,
+        "avg_rating": 4.29,
+        "rating_count": 565164,
+        "dates_read": [
+            "May 2024"
+        ],
+        "date_added": "Apr 25, 2024"
+    },
+    {
+        "book_id": "194802722-funny-story",
+        "raw_title": "Funny Story",
+        "author": "Henry, Emily",
+        "author_id": "13905555.Emily_Henry",
+        "stars": 4,
+        "avg_rating": 4.19,
+        "rating_count": 1192100,
+        "dates_read": [
+            "Dec 30, 2024"
+        ],
+        "date_added": "Apr 26, 2024"
+    },
+    {
+        "book_id": "200776812-butter",
+        "raw_title": "Butter",
+        "author": "Yuzuki, Asako",
+        "author_id": "14071697.Asako_Yuzuki",
+        "stars": 0,
+        "avg_rating": 3.47,
+        "rating_count": 95918,
+        "dates_read": [],
+        "date_added": "May 02, 2024"
+    },
+    {
+        "book_id": "199798179-the-ministry-of-time",
+        "raw_title": "The Ministry of Time",
+        "author": "Bradley, Kaliane",
+        "author_id": "22032713.Kaliane_Bradley",
+        "stars": 4,
+        "avg_rating": 3.58,
+        "rating_count": 192469,
+        "dates_read": [
+            "Jun 23, 2024"
+        ],
+        "date_added": "May 09, 2024"
+    },
+    {
+        "book_id": "164408.Happy_All_the_Time",
+        "raw_title": "Happy All the Time",
+        "author": "Colwin, Laurie",
+        "author_id": "95513.Laurie_Colwin",
+        "stars": 4,
+        "avg_rating": 3.83,
+        "rating_count": 10734,
+        "dates_read": [
+            "Aug 04, 2024"
+        ],
+        "date_added": "May 13, 2024"
+    },
+    {
+        "book_id": "195430687-blue-sisters",
+        "raw_title": "Blue Sisters",
+        "author": "Mellors, Coco",
+        "author_id": "21373404.Coco_Mellors",
+        "stars": 4,
+        "avg_rating": 3.93,
+        "rating_count": 260967,
+        "dates_read": [
+            "Sep 15, 2024"
+        ],
+        "date_added": "May 23, 2024"
+    },
+    {
+        "book_id": "43271325-us-against-you",
+        "raw_title": "Us Against You",
+        "author": "Backman, Fredrik",
+        "author_id": "6485178.Fredrik_Backman",
+        "stars": 4,
+        "avg_rating": 4.37,
+        "rating_count": 245432,
+        "dates_read": [
+            "May 30, 2024"
+        ],
+        "date_added": "May 23, 2024"
+    },
+    {
+        "book_id": "127282939-beautyland",
+        "raw_title": "Beautyland",
+        "author": "Bertino, Marie-Helene",
+        "author_id": "5814200.Marie_Helene_Bertino",
+        "stars": 0,
+        "avg_rating": 4.08,
+        "rating_count": 32719,
+        "dates_read": [],
+        "date_added": "May 31, 2024"
+    },
+    {
+        "book_id": "125152974-hello-stranger",
+        "raw_title": "Hello Stranger",
+        "author": "Center, Katherine",
+        "author_id": "409113.Katherine_Center",
+        "stars": 3,
+        "avg_rating": 3.92,
+        "rating_count": 163036,
+        "dates_read": [
+            "Jun 07, 2024"
+        ],
+        "date_added": "Jun 03, 2024"
+    },
+    {
+        "book_id": "73071451-throne-of-the-fallen",
+        "raw_title": "Throne of the Fallen\n               \n                (Prince of Sin, #1)",
+        "author": "Maniscalco, Kerri",
+        "author_id": "14584166.Kerri_Maniscalco",
+        "stars": 4,
+        "avg_rating": 3.98,
+        "rating_count": 102504,
+        "dates_read": [
+            "Jun 12, 2024"
+        ],
+        "date_added": "Jun 08, 2024"
+    },
+    {
+        "book_id": "208931300-intermezzo",
+        "raw_title": "Intermezzo",
+        "author": "Rooney, Sally",
+        "author_id": "15860970.Sally_Rooney",
+        "stars": 5,
+        "avg_rating": 3.83,
+        "rating_count": 298794,
+        "dates_read": [
+            "Feb 22, 2025"
+        ],
+        "date_added": "Jun 09, 2024"
+    },
+    {
+        "book_id": "15839976-red-rising",
+        "raw_title": "Red Rising\n               \n                (Red Rising Saga, #1)",
+        "author": "Brown, Pierce",
+        "author_id": "6474348.Pierce_Brown",
+        "stars": 4,
+        "avg_rating": 4.27,
+        "rating_count": 700158,
+        "dates_read": [
+            "Jun 19, 2024"
+        ],
+        "date_added": "Jun 14, 2024"
+    },
+    {
+        "book_id": "199465836-close-knit",
+        "raw_title": "Close Knit",
+        "author": "Colgan, Jenny",
+        "author_id": "39272.Jenny_Colgan",
+        "stars": 0,
+        "avg_rating": 3.83,
+        "rating_count": 8797,
+        "dates_read": [],
+        "date_added": "Jun 15, 2024"
+    },
+    {
+        "book_id": "203164564-like-mother-like-mother",
+        "raw_title": "Like Mother, Like Mother",
+        "author": "Rieger, Susan",
+        "author_id": "7155023.Susan_Rieger",
+        "stars": 0,
+        "avg_rating": 3.79,
+        "rating_count": 16009,
+        "dates_read": [],
+        "date_added": "Jun 15, 2024"
+    },
+    {
+        "book_id": "44107480-lovely-war",
+        "raw_title": "Lovely War",
+        "author": "Berry, Julie",
+        "author_id": "1638953.Julie_Berry",
+        "stars": 3,
+        "avg_rating": 4.22,
+        "rating_count": 67845,
+        "dates_read": [
+            "Sep 03, 2024"
+        ],
+        "date_added": "Jun 20, 2024"
+    },
+    {
+        "book_id": "59468833-the-english-understand-wool",
+        "raw_title": "The English Understand Wool",
+        "author": "DeWitt, Helen",
+        "author_id": "110897.Helen_DeWitt",
+        "stars": 0,
+        "avg_rating": 4.06,
+        "rating_count": 12669,
+        "dates_read": [],
+        "date_added": "Jun 22, 2024"
+    },
+    {
+        "book_id": "198563734-summer-romance",
+        "raw_title": "Summer Romance",
+        "author": "Monaghan, Annabel",
+        "author_id": "645867.Annabel_Monaghan",
+        "stars": 4,
+        "avg_rating": 4.02,
+        "rating_count": 121252,
+        "dates_read": [
+            "Jun 27, 2024"
+        ],
+        "date_added": "Jun 22, 2024"
+    },
+    {
+        "book_id": "34810320-sadie",
+        "raw_title": "Sadie",
+        "author": "Summers, Courtney",
+        "author_id": "1487748.Courtney_Summers",
+        "stars": 5,
+        "avg_rating": 4.03,
+        "rating_count": 129019,
+        "dates_read": [
+            "Jun 23, 2024"
+        ],
+        "date_added": "Jun 23, 2024"
+    },
+    {
+        "book_id": "28243032-we-are-okay",
+        "raw_title": "We Are Okay",
+        "author": "LaCour, Nina",
+        "author_id": "2889003.Nina_LaCour",
+        "stars": 4,
+        "avg_rating": 3.93,
+        "rating_count": 99681,
+        "dates_read": [
+            "Aug 30, 2024"
+        ],
+        "date_added": "Jun 23, 2024"
+    },
+    {
+        "book_id": "14836.Midnight_s_Children",
+        "raw_title": "Midnight\u2019s Children",
+        "author": "Rushdie, Salman",
+        "author_id": "3299.Salman_Rushdie",
+        "stars": 0,
+        "avg_rating": 3.98,
+        "rating_count": 131593,
+        "dates_read": [],
+        "date_added": "Jun 29, 2024"
+    },
+    {
+        "book_id": "54981009-the-last-thing-he-told-me",
+        "raw_title": "The Last Thing He Told Me\n               \n                (Hannah Hall, #1)",
+        "author": "Dave, Laura",
+        "author_id": "2672.Laura_Dave",
+        "stars": 2,
+        "avg_rating": 3.83,
+        "rating_count": 1119526,
+        "dates_read": [
+            "Jul 03, 2024"
+        ],
+        "date_added": "Jul 01, 2024"
+    },
+    {
+        "book_id": "1772910.White_Nights",
+        "raw_title": "White Nights",
+        "author": "Dostoevsky, Fyodor",
+        "author_id": "3137322.Fyodor_Dostoevsky",
+        "stars": 0,
+        "avg_rating": 4.08,
+        "rating_count": 303127,
+        "dates_read": [],
+        "date_added": "Jul 02, 2024"
+    },
+    {
+        "book_id": "182118536-the-breakaway-center-point-platinum-fiction",
+        "raw_title": "The Breakaway (Center Point Platinum Fiction",
+        "author": "Weiner, Jennifer",
+        "author_id": "9212.Jennifer_Weiner",
+        "stars": 4,
+        "avg_rating": 3.75,
+        "rating_count": 60663,
+        "dates_read": [
+            "Jul 14, 2024"
+        ],
+        "date_added": "Jul 04, 2024"
+    },
+    {
+        "book_id": "29875903-uncomfortably-happily",
+        "raw_title": "Uncomfortably Happily",
+        "author": "Hong, Yeon-Sik",
+        "author_id": "9834354.Yeon_Sik_Hong",
+        "stars": 3,
+        "avg_rating": 3.95,
+        "rating_count": 1048,
+        "dates_read": [
+            "Jul 17, 2024"
+        ],
+        "date_added": "Jul 14, 2024"
+    },
+    {
+        "book_id": "55711675-the-startup-wife",
+        "raw_title": "The Startup Wife",
+        "author": "Anam, Tahmima",
+        "author_id": "429519.Tahmima_Anam",
+        "stars": 3,
+        "avg_rating": 3.56,
+        "rating_count": 9297,
+        "dates_read": [
+            "Jul 23, 2024"
+        ],
+        "date_added": "Jul 20, 2024"
+    },
+    {
+        "book_id": "127305853-the-women",
+        "raw_title": "The Women",
+        "author": "Hannah, Kristin",
+        "author_id": "54493.Kristin_Hannah",
+        "stars": 4,
+        "avg_rating": 4.6,
+        "rating_count": 1425879,
+        "dates_read": [
+            "Oct 10, 2024"
+        ],
+        "date_added": "Jul 26, 2024"
+    },
+    {
+        "book_id": "3187658-het-parfum",
+        "raw_title": "Het parfum",
+        "author": "S\u00fcskind, Patrick",
+        "author_id": "39402.Patrick_S_skind",
+        "stars": 0,
+        "avg_rating": 4.04,
+        "rating_count": 538697,
+        "dates_read": [],
+        "date_added": "Jul 26, 2024"
+    },
+    {
+        "book_id": "43352954-this-is-how-you-lose-the-time-war",
+        "raw_title": "This Is How You Lose the Time War",
+        "author": "El-Mohtar, Amal",
+        "author_id": "4175512.Amal_El_Mohtar",
+        "stars": 3,
+        "avg_rating": 3.85,
+        "rating_count": 318922,
+        "dates_read": [
+            "Aug 17, 2024"
+        ],
+        "date_added": "Jul 26, 2024"
+    },
+    {
+        "book_id": "63834978-the-happy-couple",
+        "raw_title": "The Happy Couple",
+        "author": "Dolan, Naoise",
+        "author_id": "18979380.Naoise_Dolan",
+        "stars": 2,
+        "avg_rating": 3.34,
+        "rating_count": 18562,
+        "dates_read": [
+            "Jul 29, 2024"
+        ],
+        "date_added": "Jul 29, 2024"
+    },
+    {
+        "book_id": "25489025-the-vegetarian",
+        "raw_title": "The Vegetarian",
+        "author": "Han, Kang",
+        "author_id": "4119155.Han_Kang",
+        "stars": 4,
+        "avg_rating": 3.65,
+        "rating_count": 346797,
+        "dates_read": [
+            "Aug 16, 2024"
+        ],
+        "date_added": "Aug 01, 2024"
+    },
+    {
+        "book_id": "164397.Home_Cooking",
+        "raw_title": "Home Cooking: A Writer in the Kitchen",
+        "author": "Colwin, Laurie",
+        "author_id": "95513.Laurie_Colwin",
+        "stars": 0,
+        "avg_rating": 4.09,
+        "rating_count": 8717,
+        "dates_read": [],
+        "date_added": "Aug 02, 2024"
+    },
+    {
+        "book_id": "62365905-we-could-be-so-good",
+        "raw_title": "We Could Be So Good",
+        "author": "Sebastian, Cat",
+        "author_id": "15171247.Cat_Sebastian",
+        "stars": 3,
+        "avg_rating": 4.27,
+        "rating_count": 18504,
+        "dates_read": [
+            "Aug 15, 2024"
+        ],
+        "date_added": "Aug 10, 2024"
+    },
+    {
+        "book_id": "181109993-evenings-and-weekends",
+        "raw_title": "Evenings and Weekends",
+        "author": "McKenna, Ois\u00edn",
+        "author_id": "19259439.Ois_n_McKenna",
+        "stars": 0,
+        "avg_rating": 3.79,
+        "rating_count": 41981,
+        "dates_read": [],
+        "date_added": "Aug 16, 2024"
+    },
+    {
+        "book_id": "197798168-all-fours",
+        "raw_title": "All Fours",
+        "author": "July, Miranda",
+        "author_id": "65678.Miranda_July",
+        "stars": 3,
+        "avg_rating": 3.43,
+        "rating_count": 184894,
+        "dates_read": [
+            "Jun 27, 2025"
+        ],
+        "date_added": "Aug 16, 2024"
+    },
+    {
+        "book_id": "62583508-talking-at-night",
+        "raw_title": "Talking at Night",
+        "author": "Daverley, Claire",
+        "author_id": "22278494.Claire_Daverley",
+        "stars": 4,
+        "avg_rating": 3.91,
+        "rating_count": 63499,
+        "dates_read": [
+            "Jan 05, 2025"
+        ],
+        "date_added": "Aug 17, 2024"
+    },
+    {
+        "book_id": "204297685-gold-rush",
+        "raw_title": "Gold Rush",
+        "author": "Petter, Olivia",
+        "author_id": "21287224.Olivia_Petter",
+        "stars": 0,
+        "avg_rating": 3.33,
+        "rating_count": 1611,
+        "dates_read": [],
+        "date_added": "Aug 17, 2024"
+    },
+    {
+        "book_id": "199373500-anyone-s-ghost",
+        "raw_title": "Anyone's Ghost",
+        "author": "Thompson, August",
+        "author_id": "41373391.August_Thompson",
+        "stars": 0,
+        "avg_rating": 3.99,
+        "rating_count": 3226,
+        "dates_read": [],
+        "date_added": "Aug 18, 2024"
+    },
+    {
+        "book_id": "41592780-mrs-everything",
+        "raw_title": "Mrs. Everything",
+        "author": "Weiner, Jennifer",
+        "author_id": "9212.Jennifer_Weiner",
+        "stars": 5,
+        "avg_rating": 3.85,
+        "rating_count": 93888,
+        "dates_read": [
+            "Aug 22, 2024"
+        ],
+        "date_added": "Aug 18, 2024"
+    },
+    {
+        "book_id": "62397519-between-us",
+        "raw_title": "Between Us",
+        "author": "McFarlane, Mhairi",
+        "author_id": "6434584.Mhairi_McFarlane",
+        "stars": 0,
+        "avg_rating": 3.71,
+        "rating_count": 24174,
+        "dates_read": [],
+        "date_added": "Aug 18, 2024"
+    },
+    {
+        "book_id": "157184735-rouge",
+        "raw_title": "Rouge",
+        "author": "Awad, Mona",
+        "author_id": "7104825.Mona_Awad",
+        "stars": 2,
+        "avg_rating": 3.54,
+        "rating_count": 47036,
+        "dates_read": [
+            "Sep 09, 2024"
+        ],
+        "date_added": "Sep 04, 2024"
+    },
+    {
+        "book_id": "51234226-it-s-not-all-downhill-from-here",
+        "raw_title": "It's Not All Downhill from Here",
+        "author": "McMillan, Terry",
+        "author_id": "20704.Terry_McMillan",
+        "stars": 4,
+        "avg_rating": 3.85,
+        "rating_count": 7881,
+        "dates_read": [
+            "Sep 09, 2024"
+        ],
+        "date_added": "Sep 07, 2024"
+    },
+    {
+        "book_id": "203956643-a-sunny-place-for-shady-people",
+        "raw_title": "A Sunny Place for Shady People",
+        "author": "Enriquez, Mariana",
+        "author_id": "4930107.Mariana_Enriquez",
+        "stars": 0,
+        "avg_rating": 3.78,
+        "rating_count": 20151,
+        "dates_read": [],
+        "date_added": "Sep 15, 2024"
+    },
+    {
+        "book_id": "214283601-dream-girl-drama",
+        "raw_title": "Dream Girl Drama\n               \n                (Big Shots, #3)",
+        "author": "Bailey, Tessa",
+        "author_id": "6953499.Tessa_Bailey",
+        "stars": 0,
+        "avg_rating": 3.42,
+        "rating_count": 49292,
+        "dates_read": [],
+        "date_added": "Sep 15, 2024"
+    },
+    {
+        "book_id": "214151487-the-women-on-platform-two",
+        "raw_title": "The Women on Platform Two",
+        "author": "Anthony, Laura",
+        "author_id": "51140369.Laura_Anthony",
+        "stars": 0,
+        "avg_rating": 4.43,
+        "rating_count": 9960,
+        "dates_read": [],
+        "date_added": "Sep 15, 2024"
+    },
+    {
+        "book_id": "216405568-house-of-blight",
+        "raw_title": "House of Blight\n               \n                (The Threadmender Chronicles, #1)",
+        "author": "Martineau, Maxym",
+        "author_id": "8383739.Maxym_M_Martineau",
+        "stars": 0,
+        "avg_rating": 3.78,
+        "rating_count": 3324,
+        "dates_read": [],
+        "date_added": "Sep 15, 2024"
+    },
+    {
+        "book_id": "214152057-sweet-fury",
+        "raw_title": "Sweet Fury",
+        "author": "Bischoff, Sash",
+        "author_id": "36313480.Sash_Bischoff",
+        "stars": 0,
+        "avg_rating": 3.33,
+        "rating_count": 1924,
+        "dates_read": [],
+        "date_added": "Sep 15, 2024"
+    },
+    {
+        "book_id": "211003835-my-big-fat-fake-marriage",
+        "raw_title": "My Big Fat Fake Marriage",
+        "author": "Stein, Charlotte",
+        "author_id": "3200938.Charlotte_Stein",
+        "stars": 0,
+        "avg_rating": 3.52,
+        "rating_count": 2492,
+        "dates_read": [],
+        "date_added": "Sep 15, 2024"
+    },
+    {
+        "book_id": "199116957-pride-or-die",
+        "raw_title": "Pride or Die",
+        "author": "Montblanc, CL",
+        "author_id": "44345489.CL_Montblanc",
+        "stars": 0,
+        "avg_rating": 3.54,
+        "rating_count": 788,
+        "dates_read": [],
+        "date_added": "Sep 15, 2024"
+    },
+    {
+        "book_id": "207298106-the-third-gilmore-girl",
+        "raw_title": "The Third Gilmore Girl: A Memoir",
+        "author": "Bishop, Kelly",
+        "author_id": "32988350.Kelly_Bishop",
+        "stars": 0,
+        "avg_rating": 4.33,
+        "rating_count": 112504,
+        "dates_read": [],
+        "date_added": "Sep 15, 2024"
+    },
+    {
+        "book_id": "207294976-the-lightning-bottles",
+        "raw_title": "The Lightning Bottles",
+        "author": "Stapley, Marissa",
+        "author_id": "7382096.Marissa_Stapley",
+        "stars": 0,
+        "avg_rating": 3.9,
+        "rating_count": 3655,
+        "dates_read": [],
+        "date_added": "Sep 15, 2024"
+    },
+    {
+        "book_id": "70238951-window-shopping",
+        "raw_title": "Window Shopping",
+        "author": "Bailey, Tessa",
+        "author_id": "6953499.Tessa_Bailey",
+        "stars": 0,
+        "avg_rating": 3.47,
+        "rating_count": 112548,
+        "dates_read": [],
+        "date_added": "Sep 15, 2024"
+    },
+    {
+        "book_id": "215003781-red-clay",
+        "raw_title": "Red Clay",
+        "author": "Fancher, Charles B.",
+        "author_id": "50604158.Charles_B_Fancher",
+        "stars": 0,
+        "avg_rating": 4.44,
+        "rating_count": 3469,
+        "dates_read": [],
+        "date_added": "Sep 15, 2024"
+    },
+    {
+        "book_id": "215003810-the-ends-of-things",
+        "raw_title": "The Ends of Things",
+        "author": "Chwialkowska, Sandra",
+        "author_id": "50604163.Sandra_Chwialkowska",
+        "stars": 0,
+        "avg_rating": 2.99,
+        "rating_count": 715,
+        "dates_read": [],
+        "date_added": "Sep 15, 2024"
+    },
+    {
+        "book_id": "204906186-the-holiday-cottage",
+        "raw_title": "The Holiday Cottage",
+        "author": "Morgan, Sarah",
+        "author_id": "45898.Sarah_Morgan",
+        "stars": 0,
+        "avg_rating": 4.1,
+        "rating_count": 11459,
+        "dates_read": [],
+        "date_added": "Sep 15, 2024"
+    },
+    {
+        "book_id": "203578881-the-grey-wolf",
+        "raw_title": "The Grey Wolf\n               \n                (Chief Inspector Armand Gamache, #19)",
+        "author": "Penny, Louise",
+        "author_id": "194243.Louise_Penny",
+        "stars": 0,
+        "avg_rating": 4.13,
+        "rating_count": 57590,
+        "dates_read": [],
+        "date_added": "Sep 15, 2024"
+    },
+    {
+        "book_id": "207297848-my-darling-girl",
+        "raw_title": "My Darling Girl",
+        "author": "McMahon, Jennifer",
+        "author_id": "29471.Jennifer_McMahon",
+        "stars": 0,
+        "avg_rating": 3.73,
+        "rating_count": 22734,
+        "dates_read": [],
+        "date_added": "Sep 15, 2024"
+    },
+    {
+        "book_id": "127282554-piglet",
+        "raw_title": "Piglet",
+        "author": "Hazell, Lottie",
+        "author_id": "31134709.Lottie_Hazell",
+        "stars": 2,
+        "avg_rating": 3.39,
+        "rating_count": 40817,
+        "dates_read": [
+            "Feb 12, 2025"
+        ],
+        "date_added": "Sep 15, 2024"
+    },
+    {
+        "book_id": "40916679-a-good-girl-s-guide-to-murder",
+        "raw_title": "A Good Girl's Guide to Murder\n               \n                (A Good Girl's Guide to Murder, #1)",
+        "author": "Jackson, Holly",
+        "author_id": "18229614.Holly_Jackson",
+        "stars": 3,
+        "avg_rating": 4.29,
+        "rating_count": 1686226,
+        "dates_read": [
+            "Sep 21, 2024"
+        ],
+        "date_added": "Sep 16, 2024"
+    },
+    {
+        "book_id": "51335759-good-girl-bad-blood",
+        "raw_title": "Good Girl, Bad Blood\n               \n                (A Good Girl's Guide to Murder, #2)",
+        "author": "Jackson, Holly",
+        "author_id": "18229614.Holly_Jackson",
+        "stars": 4,
+        "avg_rating": 4.26,
+        "rating_count": 747023,
+        "dates_read": [
+            "Sep 22, 2024"
+        ],
+        "date_added": "Sep 21, 2024"
+    },
+    {
+        "book_id": "56905097-as-good-as-dead",
+        "raw_title": "As Good As Dead\n               \n                (A Good Girl's Guide to Murder, #3)",
+        "author": "Jackson, Holly",
+        "author_id": "18229614.Holly_Jackson",
+        "stars": 3,
+        "avg_rating": 4.19,
+        "rating_count": 542246,
+        "dates_read": [
+            "Sep 29, 2024"
+        ],
+        "date_added": "Sep 22, 2024"
+    },
+    {
+        "book_id": "61688564-bitterthorn",
+        "raw_title": "Bitterthorn",
+        "author": "Dunn, Kat",
+        "author_id": "19318016.Kat_Dunn",
+        "stars": 0,
+        "avg_rating": 3.88,
+        "rating_count": 6321,
+        "dates_read": [],
+        "date_added": "Sep 23, 2024"
+    },
+    {
+        "book_id": "22544764-uprooted",
+        "raw_title": "Uprooted",
+        "author": "Novik, Naomi",
+        "author_id": "8730.Naomi_Novik",
+        "stars": 0,
+        "avg_rating": 4.02,
+        "rating_count": 259447,
+        "dates_read": [],
+        "date_added": "Sep 23, 2024"
+    },
+    {
+        "book_id": "34912895-the-great-alone",
+        "raw_title": "The Great Alone",
+        "author": "Hannah, Kristin",
+        "author_id": "54493.Kristin_Hannah",
+        "stars": 0,
+        "avg_rating": 4.45,
+        "rating_count": 1119077,
+        "dates_read": [],
+        "date_added": "Oct 13, 2024"
+    },
+    {
+        "book_id": "21853621-the-nightingale",
+        "raw_title": "The Nightingale",
+        "author": "Hannah, Kristin",
+        "author_id": "54493.Kristin_Hannah",
+        "stars": 3,
+        "avg_rating": 4.64,
+        "rating_count": 1977485,
+        "dates_read": [
+            "Oct 23, 2024"
+        ],
+        "date_added": "Oct 19, 2024"
+    },
+    {
+        "book_id": "210847437-rewitched",
+        "raw_title": "Rewitched",
+        "author": "Wood, Lucy Jane",
+        "author_id": "48419966.Lucy_Jane_Wood",
+        "stars": 0,
+        "avg_rating": 3.81,
+        "rating_count": 18531,
+        "dates_read": [],
+        "date_added": "Oct 21, 2024"
+    },
+    {
+        "book_id": "15881.Harry_Potter_and_the_Chamber_of_Secrets",
+        "raw_title": "Harry Potter and the Chamber of Secrets\n               \n                (Harry Potter, #2)",
+        "author": "Rowling, J.K.",
+        "author_id": "1077326.J_K_Rowling",
+        "stars": 4,
+        "avg_rating": 4.43,
+        "rating_count": 4400556,
+        "dates_read": [
+            "Oct 28, 2024"
+        ],
+        "date_added": "Oct 26, 2024"
+    },
+    {
+        "book_id": "204593914-phantasma",
+        "raw_title": "Phantasma\n               \n                (Wicked Games, #1)",
+        "author": "Smith, Kaylie",
+        "author_id": "21767301.Kaylie_Smith",
+        "stars": 0,
+        "avg_rating": 4.06,
+        "rating_count": 265229,
+        "dates_read": [],
+        "date_added": "Oct 26, 2024"
+    },
+    {
+        "book_id": "182484360-the-reappearance-of-rachel-price",
+        "raw_title": "The Reappearance of Rachel Price",
+        "author": "Jackson, Holly",
+        "author_id": "18229614.Holly_Jackson",
+        "stars": 2,
+        "avg_rating": 4.09,
+        "rating_count": 194662,
+        "dates_read": [
+            "Nov 10, 2024"
+        ],
+        "date_added": "Oct 26, 2024"
+    },
+    {
+        "book_id": "5.Harry_Potter_and_the_Prisoner_of_Azkaban",
+        "raw_title": "Harry Potter and the Prisoner of Azkaban\n               \n                (Harry Potter, #3)",
+        "author": "Rowling, J.K.",
+        "author_id": "1077326.J_K_Rowling",
+        "stars": 5,
+        "avg_rating": 4.58,
+        "rating_count": 4736631,
+        "dates_read": [
+            "Nov 2024"
+        ],
+        "date_added": "Oct 31, 2024"
+    },
+    {
+        "book_id": "17675462-the-raven-boys",
+        "raw_title": "The Raven Boys\n               \n                (The Raven Cycle, #1)",
+        "author": "Stiefvater, Maggie",
+        "author_id": "1330292.Maggie_Stiefvater",
+        "stars": 0,
+        "avg_rating": 4.05,
+        "rating_count": 398107,
+        "dates_read": [],
+        "date_added": "Nov 01, 2024"
+    },
+    {
+        "book_id": "6.Harry_Potter_and_the_Goblet_of_Fire",
+        "raw_title": "Harry Potter and the Goblet of Fire\n               \n                (Harry Potter, #4)",
+        "author": "Rowling, J.K.",
+        "author_id": "1077326.J_K_Rowling",
+        "stars": 4,
+        "avg_rating": 4.57,
+        "rating_count": 4114633,
+        "dates_read": [
+            "Nov 09, 2024"
+        ],
+        "date_added": "Nov 02, 2024"
+    },
+    {
+        "book_id": "62703226-the-only-one-left",
+        "raw_title": "The Only One Left",
+        "author": "Sager, Riley",
+        "author_id": "15263414.Riley_Sager",
+        "stars": 3,
+        "avg_rating": 4.13,
+        "rating_count": 555911,
+        "dates_read": [
+            "Nov 11, 2024"
+        ],
+        "date_added": "Nov 10, 2024"
+    },
+    {
+        "book_id": "2.Harry_Potter_and_the_Order_of_the_Phoenix",
+        "raw_title": "Harry Potter and the Order of the Phoenix\n               \n                (Harry Potter, #5)",
+        "author": "Rowling, J.K.",
+        "author_id": "1077326.J_K_Rowling",
+        "stars": 3,
+        "avg_rating": 4.5,
+        "rating_count": 3729859,
+        "dates_read": [
+            "Nov 23, 2024"
+        ],
+        "date_added": "Nov 11, 2024"
+    },
+    {
+        "book_id": "35796008-dance-of-thieves",
+        "raw_title": "Dance of Thieves\n               \n                (Dance of Thieves, #1)",
+        "author": "Pearson, Mary E.",
+        "author_id": "123463.Mary_E_Pearson",
+        "stars": 0,
+        "avg_rating": 4.11,
+        "rating_count": 190568,
+        "dates_read": [],
+        "date_added": "Nov 18, 2024"
+    },
+    {
+        "book_id": "63017297-my-husband",
+        "raw_title": "My Husband",
+        "author": "Ventura, Maud",
+        "author_id": "21487493.Maud_Ventura",
+        "stars": 3,
+        "avg_rating": 3.65,
+        "rating_count": 59687,
+        "dates_read": [
+            "Jan 25, 2025"
+        ],
+        "date_added": "Nov 20, 2024"
+    },
+    {
+        "book_id": "52755548-big-summer",
+        "raw_title": "Big Summer",
+        "author": "Weiner, Jennifer",
+        "author_id": "9212.Jennifer_Weiner",
+        "stars": 2,
+        "avg_rating": 3.59,
+        "rating_count": 148474,
+        "dates_read": [
+            "Nov 22, 2024"
+        ],
+        "date_added": "Nov 20, 2024"
+    },
+    {
+        "book_id": "22237215-single-carefree-mellow",
+        "raw_title": "Single, Carefree, Mellow",
+        "author": "Heiny, Katherine",
+        "author_id": "8247959.Katherine_Heiny",
+        "stars": 3,
+        "avg_rating": 3.55,
+        "rating_count": 6214,
+        "dates_read": [
+            "Nov 24, 2024"
+        ],
+        "date_added": "Nov 24, 2024"
+    },
+    {
+        "book_id": "91239751-death-valley",
+        "raw_title": "Death Valley",
+        "author": "Broder, Melissa",
+        "author_id": "3192838.Melissa_Broder",
+        "stars": 2,
+        "avg_rating": 3.46,
+        "rating_count": 28388,
+        "dates_read": [
+            "Nov 26, 2024"
+        ],
+        "date_added": "Nov 25, 2024"
+    },
+    {
+        "book_id": "199534613-margo-s-got-money-troubles",
+        "raw_title": "Margo's Got Money Troubles",
+        "author": "Thorpe, Rufi",
+        "author_id": "7276904.Rufi_Thorpe",
+        "stars": 5,
+        "avg_rating": 3.84,
+        "rating_count": 148903,
+        "dates_read": [
+            "Jan 14, 2025"
+        ],
+        "date_added": "Dec 06, 2024"
+    },
+    {
+        "book_id": "198902277-the-wedding-people",
+        "raw_title": "The Wedding People",
+        "author": "Espach, Alison",
+        "author_id": "4269913.Alison_Espach",
+        "stars": 3,
+        "avg_rating": 4.09,
+        "rating_count": 848503,
+        "dates_read": [
+            "Feb 08, 2025"
+        ],
+        "date_added": "Dec 06, 2024"
+    },
+    {
+        "book_id": "7815.The_Year_of_Magical_Thinking",
+        "raw_title": "The Year of Magical Thinking",
+        "author": "Didion, Joan",
+        "author_id": "238.Joan_Didion",
+        "stars": 0,
+        "avg_rating": 3.93,
+        "rating_count": 290907,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Dec 06, 2024"
+    },
+    {
+        "book_id": "1.Harry_Potter_and_the_Half_Blood_Prince",
+        "raw_title": "Harry Potter and the Half-Blood Prince\n               \n                (Harry Potter, #6)",
+        "author": "Rowling, J.K.",
+        "author_id": "1077326.J_K_Rowling",
+        "stars": 5,
+        "avg_rating": 4.58,
+        "rating_count": 3598374,
+        "dates_read": [
+            "Dec 10, 2024"
+        ],
+        "date_added": "Dec 07, 2024"
+    },
+    {
+        "book_id": "136251.Harry_Potter_and_the_Deathly_Hallows",
+        "raw_title": "Harry Potter and the Deathly Hallows\n               \n                (Harry Potter, #7)",
+        "author": "Rowling, J.K.",
+        "author_id": "1077326.J_K_Rowling",
+        "stars": 4,
+        "avg_rating": 4.62,
+        "rating_count": 4046896,
+        "dates_read": [
+            "Dec 17, 2024"
+        ],
+        "date_added": "Dec 14, 2024"
+    },
+    {
+        "book_id": "50056075-the-heart-principle",
+        "raw_title": "The Heart Principle\n               \n                (The Kiss Quotient, #3)",
+        "author": "Hoang, Helen",
+        "author_id": "17147855.Helen_Hoang",
+        "stars": 3,
+        "avg_rating": 3.92,
+        "rating_count": 127749,
+        "dates_read": [
+            "Dec 18, 2024"
+        ],
+        "date_added": "Dec 17, 2024"
+    },
+    {
+        "book_id": "128029.A_Thousand_Splendid_Suns",
+        "raw_title": "A Thousand Splendid Suns",
+        "author": "Hosseini, Khaled",
+        "author_id": "569.Khaled_Hosseini",
+        "stars": 5,
+        "avg_rating": 4.45,
+        "rating_count": 1703364,
+        "dates_read": [
+            "Dec 22, 2024"
+        ],
+        "date_added": "Dec 19, 2024"
+    },
+    {
+        "book_id": "213309864-metal-slinger",
+        "raw_title": "Metal Slinger\n               \n                (Fire & Metal, #1)",
+        "author": "Schneider, Rachel",
+        "author_id": "49711528.Rachel_Schneider",
+        "stars": 0,
+        "avg_rating": 4.26,
+        "rating_count": 92275,
+        "dates_read": [],
+        "date_added": "Dec 20, 2024"
+    },
+    {
+        "book_id": "217885191-the-situationship",
+        "raw_title": "The Situationship\n               \n                (Part of Your World, #3.5)",
+        "author": "Jimenez, Abby",
+        "author_id": "18446724.Abby_Jimenez",
+        "stars": 3,
+        "avg_rating": 3.86,
+        "rating_count": 42280,
+        "dates_read": [
+            "Dec 28, 2024"
+        ],
+        "date_added": "Dec 29, 2024"
+    },
+    {
+        "book_id": "53344030-heartstopper",
+        "raw_title": "Heartstopper: Volume Five\n               \n                (Heartstopper, #5)",
+        "author": "Oseman, Alice",
+        "author_id": "7789423.Alice_Oseman",
+        "stars": 4,
+        "avg_rating": 4.46,
+        "rating_count": 190531,
+        "dates_read": [
+            "Dec 28, 2024"
+        ],
+        "date_added": "Dec 29, 2024"
+    },
+    {
+        "book_id": "63031640-powerless",
+        "raw_title": "Powerless\n               \n                (Chestnut Springs, #3)",
+        "author": "Silver, Elsie",
+        "author_id": "21312387.Elsie_Silver",
+        "stars": 2,
+        "avg_rating": 4.05,
+        "rating_count": 409108,
+        "dates_read": [
+            "Jan 2025"
+        ],
+        "date_added": "Jan 01, 2025"
+    },
+    {
+        "book_id": "17465709-braiding-sweetgrass",
+        "raw_title": "Braiding Sweetgrass: Indigenous Wisdom, Scientific Knowledge, and the Teachings of Plants",
+        "author": "Kimmerer, Robin Wall",
+        "author_id": "49921.Robin_Wall_Kimmerer",
+        "stars": 0,
+        "avg_rating": 4.51,
+        "rating_count": 164106,
+        "dates_read": [],
+        "date_added": "Jan 04, 2025"
+    },
+    {
+        "book_id": "201465867-you-are-here",
+        "raw_title": "You Are Here",
+        "author": "Nicholls, David",
+        "author_id": "46118.David_Nicholls",
+        "stars": 3,
+        "avg_rating": 4.01,
+        "rating_count": 72768,
+        "dates_read": [
+            "Jan 10, 2025"
+        ],
+        "date_added": "Jan 05, 2025"
+    },
+    {
+        "book_id": "60556912-the-housemaid",
+        "raw_title": "The Housemaid\n               \n                (The Housemaid, #1)",
+        "author": "McFadden, Freida",
+        "author_id": "7244758.Freida_McFadden",
+        "stars": 3,
+        "avg_rating": 4.28,
+        "rating_count": 2761931,
+        "dates_read": [
+            "Jan 07, 2025"
+        ],
+        "date_added": "Jan 05, 2025"
+    },
+    {
+        "book_id": "21853666-happiness-for-beginners",
+        "raw_title": "Happiness for Beginners",
+        "author": "Center, Katherine",
+        "author_id": "409113.Katherine_Center",
+        "stars": 5,
+        "avg_rating": 4.04,
+        "rating_count": 74403,
+        "dates_read": [
+            "Sep 11, 2025"
+        ],
+        "date_added": "Jan 05, 2025"
+    },
+    {
+        "book_id": "209891406-our-evenings",
+        "raw_title": "Our Evenings",
+        "author": "Hollinghurst, Alan",
+        "author_id": "15543.Alan_Hollinghurst",
+        "stars": 0,
+        "avg_rating": 3.92,
+        "rating_count": 7806,
+        "dates_read": [],
+        "date_added": "Jan 08, 2025"
+    },
+    {
+        "book_id": "62848145-the-housemaid-s-secret",
+        "raw_title": "The Housemaid's Secret\n               \n                (The Housemaid, #2)",
+        "author": "McFadden, Freida",
+        "author_id": "7244758.Freida_McFadden",
+        "stars": 2,
+        "avg_rating": 4.18,
+        "rating_count": 1417025,
+        "dates_read": [
+            "Jan 11, 2025"
+        ],
+        "date_added": "Jan 11, 2025"
+    },
+    {
+        "book_id": "108518990-reckless",
+        "raw_title": "Reckless\n               \n                (Chestnut Springs, #4)",
+        "author": "Silver, Elsie",
+        "author_id": "21312387.Elsie_Silver",
+        "stars": 3,
+        "avg_rating": 4.36,
+        "rating_count": 381101,
+        "dates_read": [
+            "Jan 12, 2025"
+        ],
+        "date_added": "Jan 12, 2025"
+    },
+    {
+        "book_id": "199635125-rejection",
+        "raw_title": "Rejection",
+        "author": "Tulathimutte, Tony",
+        "author_id": "3404470.Tony_Tulathimutte",
+        "stars": 0,
+        "avg_rating": 3.81,
+        "rating_count": 23722,
+        "dates_read": [],
+        "date_added": "Jan 13, 2025"
+    },
+    {
+        "book_id": "34840184-the-perfect-couple",
+        "raw_title": "The Perfect Couple\n               \n                (Nantucket, #3)",
+        "author": "Hilderbrand, Elin",
+        "author_id": "88301.Elin_Hilderbrand",
+        "stars": 4,
+        "avg_rating": 3.97,
+        "rating_count": 255797,
+        "dates_read": [
+            "Jan 18, 2025"
+        ],
+        "date_added": "Jan 16, 2025"
+    },
+    {
+        "book_id": "54785501-last-summer-in-the-city",
+        "raw_title": "Last Summer in the City",
+        "author": "Calligarich, Gianfranco",
+        "author_id": "4455489.Gianfranco_Calligarich",
+        "stars": 0,
+        "avg_rating": 3.64,
+        "rating_count": 9917,
+        "dates_read": [],
+        "date_added": "Jan 16, 2025"
+    },
+    {
+        "book_id": "63094957-the-rachel-incident",
+        "raw_title": "The Rachel Incident",
+        "author": "O'Donoghue, Caroline",
+        "author_id": "17126758.Caroline_O_Donoghue",
+        "stars": 5,
+        "avg_rating": 4.07,
+        "rating_count": 130006,
+        "dates_read": [
+            "Feb 25, 2025"
+        ],
+        "date_added": "Jan 16, 2025"
+    },
+    {
+        "book_id": "49236083-boulder",
+        "raw_title": "Boulder",
+        "author": "Baltasar, Eva",
+        "author_id": "18655319.Eva_Baltasar",
+        "stars": 0,
+        "avg_rating": 3.9,
+        "rating_count": 15314,
+        "dates_read": [],
+        "date_added": "Jan 16, 2025"
+    },
+    {
+        "book_id": "58988426-nora-goes-off-script",
+        "raw_title": "Nora Goes Off Script",
+        "author": "Monaghan, Annabel",
+        "author_id": "645867.Annabel_Monaghan",
+        "stars": 3,
+        "avg_rating": 4.06,
+        "rating_count": 200905,
+        "dates_read": [
+            "Jan 20, 2025"
+        ],
+        "date_added": "Jan 20, 2025"
+    },
+    {
+        "book_id": "174753697-hopeless",
+        "raw_title": "Hopeless\n               \n                (Chestnut Springs, #5)",
+        "author": "Silver, Elsie",
+        "author_id": "21312387.Elsie_Silver",
+        "stars": 4,
+        "avg_rating": 4.09,
+        "rating_count": 320814,
+        "dates_read": [
+            "Jan 23, 2025"
+        ],
+        "date_added": "Jan 21, 2025"
+    },
+    {
+        "book_id": "200987323-i-hope-this-finds-you-well",
+        "raw_title": "I Hope This Finds You Well",
+        "author": "Sue, Natalie",
+        "author_id": "22714951.Natalie_Sue",
+        "stars": 4,
+        "avg_rating": 3.74,
+        "rating_count": 108268,
+        "dates_read": [
+            "Feb 05, 2025"
+        ],
+        "date_added": "Jan 25, 2025"
+    },
+    {
+        "book_id": "55659629-it-happened-one-summer",
+        "raw_title": "It Happened One Summer\n               \n                (Bellinger Sisters, #1)",
+        "author": "Bailey, Tessa",
+        "author_id": "6953499.Tessa_Bailey",
+        "stars": 0,
+        "avg_rating": 3.91,
+        "rating_count": 695240,
+        "dates_read": [],
+        "date_added": "Feb 06, 2025"
+    },
+    {
+        "book_id": "211399784-the-favorites",
+        "raw_title": "The Favorites",
+        "author": "Fargo, Layne",
+        "author_id": "17861597.Layne_Fargo",
+        "stars": 5,
+        "avg_rating": 4.08,
+        "rating_count": 158704,
+        "dates_read": [
+            "Mar 14, 2025"
+        ],
+        "date_added": "Feb 07, 2025"
+    },
+    {
+        "book_id": "62987104-lady-of-darkness",
+        "raw_title": "Lady of Darkness\n               \n                (Lady of Darkness, #1)",
+        "author": "Roehrich, Melissa K.",
+        "author_id": "21816155.Melissa_K_Roehrich",
+        "stars": 3,
+        "avg_rating": 4.14,
+        "rating_count": 43240,
+        "dates_read": [
+            "Feb 13, 2025"
+        ],
+        "date_added": "Feb 08, 2025"
+    },
+    {
+        "book_id": "123349658-rain-of-shadows-and-endings",
+        "raw_title": "Rain of Shadows and Endings",
+        "author": "Roehrich, Melissa K.",
+        "author_id": "21816155.Melissa_K_Roehrich",
+        "stars": 0,
+        "avg_rating": 3.99,
+        "rating_count": 51104,
+        "dates_read": [],
+        "date_added": "Feb 08, 2025"
+    },
+    {
+        "book_id": "60310757-lightlark",
+        "raw_title": "Lightlark\n               \n                (Lightlark, #1)",
+        "author": "Aster, Alex",
+        "author_id": "18630009.Alex_Aster",
+        "stars": 0,
+        "avg_rating": 3.85,
+        "rating_count": 305732,
+        "dates_read": [],
+        "date_added": "Feb 13, 2025"
+    },
+    {
+        "book_id": "62987128-lady-of-shadows",
+        "raw_title": "Lady of Shadows\n               \n                (Lady of Darkness, #2)",
+        "author": "Roehrich, Melissa K.",
+        "author_id": "21816155.Melissa_K_Roehrich",
+        "stars": 2,
+        "avg_rating": 4.21,
+        "rating_count": 30624,
+        "dates_read": [
+            "Feb 22, 2025"
+        ],
+        "date_added": "Feb 14, 2025"
+    },
+    {
+        "book_id": "61767292-icebreaker",
+        "raw_title": "Icebreaker\n               \n                (UCMH, #1)",
+        "author": "Grace, Hannah",
+        "author_id": "22954957.Hannah_Grace",
+        "stars": 4,
+        "avg_rating": 3.75,
+        "rating_count": 1228473,
+        "dates_read": [
+            "Feb 17, 2025"
+        ],
+        "date_added": "Feb 15, 2025"
+    },
+    {
+        "book_id": "62919375-shark-heart",
+        "raw_title": "Shark Heart",
+        "author": "Habeck, Emily",
+        "author_id": "22936131.Emily_Habeck",
+        "stars": 4,
+        "avg_rating": 3.95,
+        "rating_count": 85206,
+        "dates_read": [
+            "Mar 26, 2025"
+        ],
+        "date_added": "Feb 15, 2025"
+    },
+    {
+        "book_id": "60717747-half-a-soul",
+        "raw_title": "Half a Soul\n               \n                (Regency Faerie Tales, #1)",
+        "author": "Atwater, Olivia",
+        "author_id": "20153683.Olivia_Atwater",
+        "stars": 0,
+        "avg_rating": 4.05,
+        "rating_count": 73660,
+        "dates_read": [],
+        "date_added": "Feb 15, 2025"
+    },
+    {
+        "book_id": "60568471-before-i-let-go",
+        "raw_title": "Before I Let Go\n               \n                (Skyland, #1)",
+        "author": "Ryan, Kennedy",
+        "author_id": "7429243.Kennedy_Ryan",
+        "stars": 3,
+        "avg_rating": 4.33,
+        "rating_count": 109966,
+        "dates_read": [
+            "May 23, 2025"
+        ],
+        "date_added": "Feb 15, 2025"
+    },
+    {
+        "book_id": "61202395-10-minutes-38-second-in-this-strange-world-how-to-stay-sane-in-an-age",
+        "raw_title": "10 Minutes 38 Second in this Strange World & How to Stay Sane in an Age of Division",
+        "author": "Shafak, Elif",
+        "author_id": "6542440.Elif_Shafak",
+        "stars": 0,
+        "avg_rating": 4.09,
+        "rating_count": 80028,
+        "dates_read": [],
+        "date_added": "Feb 21, 2025"
+    },
+    {
+        "book_id": "197156017-pictures-of-you",
+        "raw_title": "Pictures of You",
+        "author": "Grey, Emma",
+        "author_id": "6620485.Emma_Grey",
+        "stars": 2,
+        "avg_rating": 4.0,
+        "rating_count": 44207,
+        "dates_read": [
+            "Feb 28, 2025"
+        ],
+        "date_added": "Feb 26, 2025"
+    },
+    {
+        "book_id": "34376766-blood-sweat-and-pixels",
+        "raw_title": "Blood, Sweat, and Pixels",
+        "author": "Schreier, Jason",
+        "author_id": "16222011.Jason_Schreier",
+        "stars": 0,
+        "avg_rating": 4.2,
+        "rating_count": 23879,
+        "dates_read": [
+            "Jul 2025"
+        ],
+        "date_added": "Feb 28, 2025"
+    },
+    {
+        "book_id": "45484397-the-deal",
+        "raw_title": "The Deal\n               \n                (Off-Campus, #1)",
+        "author": "Kennedy, Elle",
+        "author_id": "1935000.Elle_Kennedy",
+        "stars": 3,
+        "avg_rating": 4.21,
+        "rating_count": 991911,
+        "dates_read": [
+            "Mar 08, 2025"
+        ],
+        "date_added": "Mar 05, 2025"
+    },
+    {
+        "book_id": "45756920-the-mistake",
+        "raw_title": "The Mistake\n               \n                (Off-Campus, #2)",
+        "author": "Kennedy, Elle",
+        "author_id": "1935000.Elle_Kennedy",
+        "stars": 3,
+        "avg_rating": 3.97,
+        "rating_count": 547026,
+        "dates_read": [
+            "Mar 10, 2025"
+        ],
+        "date_added": "Mar 08, 2025"
+    },
+    {
+        "book_id": "101299.The_Reader",
+        "raw_title": "The Reader",
+        "author": "Schlink, Bernhard",
+        "author_id": "2894.Bernhard_Schlink",
+        "stars": 4,
+        "avg_rating": 3.79,
+        "rating_count": 228424,
+        "dates_read": [
+            "Mar 30, 2025"
+        ],
+        "date_added": "Mar 27, 2025"
+    },
+    {
+        "book_id": "199798201-the-safekeep",
+        "raw_title": "The Safekeep",
+        "author": "Wouden, Yael van der",
+        "author_id": "7411759.Yael_van_der_Wouden",
+        "stars": 0,
+        "avg_rating": 4.1,
+        "rating_count": 70338,
+        "dates_read": [],
+        "date_added": "Mar 28, 2025"
+    },
+    {
+        "book_id": "27071490-homegoing",
+        "raw_title": "Homegoing",
+        "author": "Gyasi, Yaa",
+        "author_id": "14493315.Yaa_Gyasi",
+        "stars": 5,
+        "avg_rating": 4.47,
+        "rating_count": 393123,
+        "dates_read": [
+            "Apr 06, 2025"
+        ],
+        "date_added": "Mar 30, 2025"
+    },
+    {
+        "book_id": "127282597-green-dot",
+        "raw_title": "Green Dot",
+        "author": "Gray, Madeleine",
+        "author_id": "3107862.Madeleine_Gray",
+        "stars": 3,
+        "avg_rating": 3.64,
+        "rating_count": 33754,
+        "dates_read": [
+            "Apr 03, 2025"
+        ],
+        "date_added": "Apr 03, 2025"
+    },
+    {
+        "book_id": "217182552-say-you-ll-remember-me",
+        "raw_title": "Say You'll Remember Me",
+        "author": "Jimenez, Abby",
+        "author_id": "18446724.Abby_Jimenez",
+        "stars": 4,
+        "avg_rating": 4.02,
+        "rating_count": 384163,
+        "dates_read": [
+            "Jun 16, 2025"
+        ],
+        "date_added": "Apr 04, 2025"
+    },
+    {
+        "book_id": "40944965-binding-13",
+        "raw_title": "Binding 13\n               \n                (Boys of Tommen, #1)",
+        "author": "Walsh, Chloe",
+        "author_id": "7858234.Chloe_Walsh",
+        "stars": 3,
+        "avg_rating": 4.45,
+        "rating_count": 494805,
+        "dates_read": [
+            "Apr 13, 2025"
+        ],
+        "date_added": "Apr 06, 2025"
+    },
+    {
+        "book_id": "60811826-i-who-have-never-known-men",
+        "raw_title": "I Who Have Never Known Men",
+        "author": "Harpman, Jacqueline",
+        "author_id": "7620.Jacqueline_Harpman",
+        "stars": 4,
+        "avg_rating": 4.13,
+        "rating_count": 369745,
+        "dates_read": [
+            "Apr 29, 2025"
+        ],
+        "date_added": "Apr 29, 2025"
+    },
+    {
+        "book_id": "203578775-what-it-s-like-in-words",
+        "raw_title": "What It's Like in Words",
+        "author": "Moss, Eliza",
+        "author_id": "47314431.Eliza_Moss",
+        "stars": 3,
+        "avg_rating": 3.64,
+        "rating_count": 1858,
+        "dates_read": [
+            "Apr 29, 2025"
+        ],
+        "date_added": "Apr 29, 2025"
+    },
+    {
+        "book_id": "44593125-the-score",
+        "raw_title": "The Score\n               \n                (Off-Campus, #3)",
+        "author": "Kennedy, Elle",
+        "author_id": "1935000.Elle_Kennedy",
+        "stars": 3,
+        "avg_rating": 4.15,
+        "rating_count": 479595,
+        "dates_read": [
+            "May 06, 2025"
+        ],
+        "date_added": "May 03, 2025"
+    },
+    {
+        "book_id": "32315591-the-goal",
+        "raw_title": "The Goal\n               \n                (Off-Campus, #4)",
+        "author": "Kennedy, Elle",
+        "author_id": "1935000.Elle_Kennedy",
+        "stars": 3,
+        "avg_rating": 3.88,
+        "rating_count": 340712,
+        "dates_read": [
+            "May 12, 2025"
+        ],
+        "date_added": "May 07, 2025"
+    },
+    {
+        "book_id": "217163697-my-friends",
+        "raw_title": "My Friends",
+        "author": "Backman, Fredrik",
+        "author_id": "6485178.Fredrik_Backman",
+        "stars": 5,
+        "avg_rating": 4.44,
+        "rating_count": 192408,
+        "dates_read": [
+            "Jul 12, 2025"
+        ],
+        "date_added": "May 11, 2025"
+    },
+    {
+        "book_id": "182108722-henry-henry",
+        "raw_title": "Henry Henry",
+        "author": "Bratton, Allen",
+        "author_id": "40767470.Allen_Bratton",
+        "stars": 0,
+        "avg_rating": 3.59,
+        "rating_count": 2293,
+        "dates_read": [],
+        "date_added": "May 11, 2025"
+    },
+    {
+        "book_id": "219876684-the-answer-is-no",
+        "raw_title": "The Answer Is No",
+        "author": "Backman, Fredrik",
+        "author_id": "6485178.Fredrik_Backman",
+        "stars": 3,
+        "avg_rating": 3.92,
+        "rating_count": 102603,
+        "dates_read": [
+            "May 26, 2025"
+        ],
+        "date_added": "May 25, 2025"
+    },
+    {
+        "book_id": "57233514-summer-sisters",
+        "raw_title": "Summer Sisters",
+        "author": "Blume, Judy",
+        "author_id": "12942.Judy_Blume",
+        "stars": 3,
+        "avg_rating": 3.85,
+        "rating_count": 128748,
+        "dates_read": [
+            "Jun 10, 2025"
+        ],
+        "date_added": "May 26, 2025"
+    },
+    {
+        "book_id": "26030734-the-wild-robot",
+        "raw_title": "The Wild Robot\n               \n                (The Wild Robot, #1)",
+        "author": "Brown, Peter",
+        "author_id": "3092248.Peter_Brown",
+        "stars": 0,
+        "avg_rating": 4.21,
+        "rating_count": 112887,
+        "dates_read": [],
+        "date_added": "Jun 01, 2025"
+    },
+    {
+        "book_id": "41715227-evidence-of-the-affair",
+        "raw_title": "Evidence of the Affair",
+        "author": "Reid, Taylor Jenkins",
+        "author_id": "6572605.Taylor_Jenkins_Reid",
+        "stars": 3,
+        "avg_rating": 3.86,
+        "rating_count": 210885,
+        "dates_read": [
+            "Jun 11, 2025"
+        ],
+        "date_added": "Jun 10, 2025"
+    },
+    {
+        "book_id": "214331246-sunrise-on-the-reaping",
+        "raw_title": "Sunrise on the Reaping\n               \n                (The Hunger Games, #0.5)",
+        "author": "Collins, Suzanne",
+        "author_id": "153394.Suzanne_Collins",
+        "stars": 3,
+        "avg_rating": 4.52,
+        "rating_count": 880552,
+        "dates_read": [
+            "Jun 16, 2025"
+        ],
+        "date_added": "Jun 11, 2025"
+    },
+    {
+        "book_id": "37743.Forever_",
+        "raw_title": "Forever...",
+        "author": "Blume, Judy",
+        "author_id": "12942.Judy_Blume",
+        "stars": 3,
+        "avg_rating": 3.62,
+        "rating_count": 66826,
+        "dates_read": [
+            "Jun 18, 2025"
+        ],
+        "date_added": "Jun 16, 2025"
+    },
+    {
+        "book_id": "200028726-sandwich",
+        "raw_title": "Sandwich",
+        "author": "Newman, Catherine",
+        "author_id": "103300.Catherine_Newman",
+        "stars": 4,
+        "avg_rating": 3.57,
+        "rating_count": 164835,
+        "dates_read": [
+            "Jun 20, 2025"
+        ],
+        "date_added": "Jun 20, 2025"
+    },
+    {
+        "book_id": "220818107-atmosphere",
+        "raw_title": "Atmosphere",
+        "author": "Reid, Taylor Jenkins",
+        "author_id": "6572605.Taylor_Jenkins_Reid",
+        "stars": 3,
+        "avg_rating": 4.36,
+        "rating_count": 400254,
+        "dates_read": [
+            "Jul 28, 2025"
+        ],
+        "date_added": "Jun 21, 2025"
+    },
+    {
+        "book_id": "45885495-his-hers",
+        "raw_title": "His & Hers",
+        "author": "Feeney, Alice",
+        "author_id": "15904689.Alice_Feeney",
+        "stars": 4,
+        "avg_rating": 4.06,
+        "rating_count": 240259,
+        "dates_read": [
+            "Jul 03, 2025"
+        ],
+        "date_added": "Jun 27, 2025"
+    },
+    {
+        "book_id": "218559595-great-big-beautiful-life",
+        "raw_title": "Great Big Beautiful Life",
+        "author": "Henry, Emily",
+        "author_id": "13905555.Emily_Henry",
+        "stars": 3,
+        "avg_rating": 3.98,
+        "rating_count": 534252,
+        "dates_read": [
+            "Jul 06, 2025"
+        ],
+        "date_added": "Jul 03, 2025"
+    },
+    {
+        "book_id": "219520677-the-girls-who-grew-big",
+        "raw_title": "The Girls Who Grew Big",
+        "author": "Mottley, Leila",
+        "author_id": "18332460.Leila_Mottley",
+        "stars": 5,
+        "avg_rating": 4.05,
+        "rating_count": 8836,
+        "dates_read": [
+            "Aug 18, 2025"
+        ],
+        "date_added": "Jul 03, 2025"
+    },
+    {
+        "book_id": "35504431-turtles-all-the-way-down",
+        "raw_title": "Turtles All the Way Down",
+        "author": "Green, John",
+        "author_id": "1406384.John_Green",
+        "stars": 4,
+        "avg_rating": 3.88,
+        "rating_count": 632996,
+        "dates_read": [
+            "Jul 08, 2025"
+        ],
+        "date_added": "Jul 06, 2025"
+    },
+    {
+        "book_id": "25856606-the-fault-in-our-stars",
+        "raw_title": "The Fault in Our Stars",
+        "author": "Green, John",
+        "author_id": "1406384.John_Green",
+        "stars": 3,
+        "avg_rating": 4.12,
+        "rating_count": 5631888,
+        "dates_read": [
+            "Jul 13, 2025"
+        ],
+        "date_added": "Jul 12, 2025"
+    },
+    {
+        "book_id": "198530925-slow-dance",
+        "raw_title": "Slow Dance",
+        "author": "Rowell, Rainbow",
+        "author_id": "4208569.Rainbow_Rowell",
+        "stars": 2,
+        "avg_rating": 3.66,
+        "rating_count": 64086,
+        "dates_read": [
+            "Jul 17, 2025"
+        ],
+        "date_added": "Jul 14, 2025"
+    },
+    {
+        "book_id": "195474144-table-for-two",
+        "raw_title": "Table for Two",
+        "author": "Towles, Amor",
+        "author_id": "4536964.Amor_Towles",
+        "stars": 3,
+        "avg_rating": 4.2,
+        "rating_count": 64989,
+        "dates_read": [
+            "Jul 16, 2025"
+        ],
+        "date_added": "Jul 17, 2025"
+    },
+    {
+        "book_id": "52219386-almond",
+        "raw_title": "Almond",
+        "author": "Sohn Won-Pyung",
+        "author_id": "19252185.Sohn_Won_Pyung",
+        "stars": 4,
+        "avg_rating": 4.14,
+        "rating_count": 168985,
+        "dates_read": [
+            "Jul 30, 2025"
+        ],
+        "date_added": "Jul 29, 2025"
+    },
+    {
+        "book_id": "218460347-the-road-to-tender-hearts",
+        "raw_title": "The Road to Tender Hearts",
+        "author": "Hartnett, Annie",
+        "author_id": "15565382.Annie_Hartnett",
+        "stars": 4,
+        "avg_rating": 4.38,
+        "rating_count": 19503,
+        "dates_read": [
+            "Aug 09, 2025"
+        ],
+        "date_added": "Aug 01, 2025"
+    },
+    {
+        "book_id": "3636.The_Giver",
+        "raw_title": "The Giver\n               \n                (The Giver, #1)",
+        "author": "Lowry, Lois",
+        "author_id": "2493.Lois_Lowry",
+        "stars": 5,
+        "avg_rating": 4.12,
+        "rating_count": 2759747,
+        "dates_read": [
+            "Aug 03, 2025",
+            "not set"
+        ],
+        "date_added": "Aug 03, 2025"
+    },
+    {
+        "book_id": "214152244-the-three-lives-of-cate-kay",
+        "raw_title": "The Three Lives of Cate Kay",
+        "author": "Fagan, Kate",
+        "author_id": "738442.Kate_Fagan",
+        "stars": 2,
+        "avg_rating": 3.75,
+        "rating_count": 70997,
+        "dates_read": [
+            "Aug 16, 2025"
+        ],
+        "date_added": "Aug 09, 2025"
+    },
+    {
+        "book_id": "214152211-the-bright-years",
+        "raw_title": "The Bright Years",
+        "author": "Damoff, Sarah",
+        "author_id": "18630759.Sarah_Damoff",
+        "stars": 0,
+        "avg_rating": 4.24,
+        "rating_count": 39714,
+        "dates_read": [],
+        "date_added": "Aug 16, 2025"
+    },
+    {
+        "book_id": "220160814-don-t-let-him-in",
+        "raw_title": "Don't Let Him In",
+        "author": "Jewell, Lisa",
+        "author_id": "93504.Lisa_Jewell",
+        "stars": 3,
+        "avg_rating": 3.77,
+        "rating_count": 97535,
+        "dates_read": [
+            "Sep 04, 2025"
+        ],
+        "date_added": "Aug 18, 2025"
+    },
+    {
+        "book_id": "210223811-katabasis",
+        "raw_title": "Katabasis",
+        "author": "Kuang, R.F.",
+        "author_id": "16820001.R_F_Kuang",
+        "stars": 0,
+        "avg_rating": 3.92,
+        "rating_count": 41282,
+        "dates_read": [],
+        "date_added": "Sep 04, 2025"
+    },
+    {
+        "book_id": "5821978-the-summer-i-turned-pretty",
+        "raw_title": "The Summer I Turned Pretty\n               \n                (Summer, #1)",
+        "author": "Han, Jenny",
+        "author_id": "151371.Jenny_Han",
+        "stars": 2,
+        "avg_rating": 3.74,
+        "rating_count": 1077713,
+        "dates_read": [
+            "Sep 05, 2025"
+        ],
+        "date_added": "Sep 05, 2025"
+    },
+    {
+        "book_id": "61842212-soldier-sailor",
+        "raw_title": "Soldier Sailor",
+        "author": "Kilroy, Claire",
+        "author_id": "241480.Claire_Kilroy",
+        "stars": 4,
+        "avg_rating": 4.05,
+        "rating_count": 10453,
+        "dates_read": [
+            "Sep 07, 2025"
+        ],
+        "date_added": "Sep 06, 2025"
+    },
+    {
+        "book_id": "23341607-the-rumor",
+        "raw_title": "The Rumor",
+        "author": "Hilderbrand, Elin",
+        "author_id": "88301.Elin_Hilderbrand",
+        "stars": 4,
+        "avg_rating": 3.76,
+        "rating_count": 108407,
+        "dates_read": [
+            "Sep 14, 2025"
+        ],
+        "date_added": "Sep 11, 2025"
+    },
+    {
+        "book_id": "34454589-the-handmaid-s-tale",
+        "raw_title": "The Handmaid's Tale",
+        "author": "Atwood, Margaret",
+        "author_id": "3472.Margaret_Atwood",
+        "stars": 4,
+        "avg_rating": 4.15,
+        "rating_count": 2360967,
+        "dates_read": [
+            "Sep 19, 2025"
+        ],
+        "date_added": "Sep 14, 2025"
+    },
+    {
+        "book_id": "42975172-the-testaments",
+        "raw_title": "The Testaments\n               \n                (The Handmaid's Tale, #2)",
+        "author": "Atwood, Margaret",
+        "author_id": "3472.Margaret_Atwood",
+        "stars": 4,
+        "avg_rating": 4.2,
+        "rating_count": 411508,
+        "dates_read": [
+            "Sep 24, 2025"
+        ],
+        "date_added": "Sep 19, 2025"
+    },
+    {
+        "book_id": "55628983-survive-the-night",
+        "raw_title": "Survive the Night",
+        "author": "Sager, Riley",
+        "author_id": "15263414.Riley_Sager",
+        "stars": 0,
+        "avg_rating": 3.52,
+        "rating_count": 177098,
+        "dates_read": [
+            "not set"
+        ],
+        "date_added": "Oct 05, 2025"
+    }
+]

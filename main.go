@@ -29,24 +29,43 @@ func main() {
 	}
 
 	if userId == "" {
-		flag.PrintDefaults()
-		logg.Fatal("must provide the user arg")
+		userId, _ = os.LookupEnv("USER_ID")
 	}
-
-	_, quotes := scrapeGoodreads(userId, options)
 
 	// Create a Gin router with default middleware (logger and recovery)
 	r := gin.Default()
 
-	// r.LoadHTMLGlob("views/*")
-	r.Static("/game", "views")
+	r.SetTrustedProxies(nil)
 
-	// r.GET("/", func(c *gin.Context) {
-	// 	c.HTML(http.StatusOK, "index.html", nil)
-	// })
+	r.LoadHTMLGlob("views/templates/*")
+	r.Static("/css", "./views/css")
+	r.Static("/js", "./views/js")
 
-	r.GET("/quotes", func(c *gin.Context) {
-		c.JSON(http.StatusOK, quotes)
+	r.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.html", nil)
+	})
+	r.GET("/game", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "game.html", nil)
+	})
+	r.GET("/start", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "start.html", nil)
+	})
+
+	r.GET("/scrape/:id", func(c *gin.Context) {
+		userId = c.Param("id")
+		if userId == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Must provide user param"})
+			return
+		}
+		books, quotes, err := scrapeGoodreads(userId, options)
+		res := gin.H{
+			"books":  books,
+			"quotes": quotes,
+		}
+		if err != nil {
+			res["error"] = err.Error()
+		}
+		c.JSON(http.StatusOK, res)
 	})
 
 	logg.Fatal(r.Run(":8000"))

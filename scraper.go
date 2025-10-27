@@ -22,13 +22,16 @@ type ScrapeOptions struct {
 
 var scrapeOptions ScrapeOptions
 
-func scrapeGoodreads(userId string, options ScrapeOptions) ([]Book, []Quote) {
+func scrapeGoodreads(userId string, options ScrapeOptions) ([]Book, []Quote, error) {
 	scrapeOptions = options
 
-	books := scrapeBooks(userId, options)
+	books, err := scrapeBooks(userId, options)
+	if err != nil {
+		return books, nil, err
+	}
 
 	readCount := 0
-	quotes := make([]Quote, 0, 10000)
+	quotes := make([]Quote, 0, 100)
 
 	var wg sync.WaitGroup
 	var mutex sync.Mutex
@@ -42,10 +45,15 @@ func scrapeGoodreads(userId string, options ScrapeOptions) ([]Book, []Quote) {
 			defer wg.Done()
 
 			url := "https://" + book.getQuoteUrl()
-			bookQuotes := scrapeQuotes(url, options)
+			bookQuotes, err := scrapeQuotes(url, options)
+			if err != nil {
+				logg.Error(err)
+				return
+			}
+
 			mutex.Lock()
 			defer mutex.Unlock()
-			logg.Infof("Scraped %d Quotes from %s", len(bookQuotes), book.Title)
+			// logg.Infof("Scraped %d Quotes from %s", len(bookQuotes), book.Title)
 			quotes = append(quotes, bookQuotes...)
 		}()
 	}
@@ -55,7 +63,7 @@ func scrapeGoodreads(userId string, options ScrapeOptions) ([]Book, []Quote) {
 	logg.Printf("Total Book Count: %d", len(books))
 	logg.Printf("Read Book Count: %d", readCount)
 
-	return books, quotes
+	return books, quotes, err
 }
 
 func scrapeForNextPage(e *colly.HTMLElement) string {
@@ -88,7 +96,7 @@ func parseId(href string) string {
 	return ""
 }
 
-func scrapeBooks(userId string, options ScrapeOptions) []Book {
+func scrapeBooks(userId string, options ScrapeOptions) ([]Book, error) {
 	bookCollector := colly.NewCollector(
 		defaultCollectorOptions(options),
 	)
@@ -110,26 +118,27 @@ func scrapeBooks(userId string, options ScrapeOptions) []Book {
 		}
 	})
 
-	lastCount := 0
-	pageCount := 0
-
-	// triggered once scraping is done (e.g., write the data to a CSV file)
-	bookCollector.OnScraped(func(r *colly.Response) {
-		grew := len(books) - lastCount
-		logg.Infof("scraped %d books from %v", grew, r.Request.URL)
-		for i := lastCount; i < len(books); i += 1 {
-			logg.Infof("\t%s: %+v", books[i].Title, books[i])
-		}
-		lastCount = len(books)
-		pageCount += 1
-	})
+	// lastCount := 0
+	// pageCount := 0
+	//
+	// // triggered once scraping is done (e.g., write the data to a CSV file)
+	// bookCollector.OnScraped(func(r *colly.Response) {
+	// 	// grew := len(books) - lastCount
+	// 	// logg.Infof("scraped %d books from %v", grew, r.Request.URL)
+	// 	// for i := lastCount; i < len(books); i += 1 {
+	// 	// 	logg.Infof("\t%s: %+v", books[i].Title, books[i])
+	// 	// }
+	// 	lastCount = len(books)
+	// 	pageCount += 1
+	// })
 
 	url := "https://" + domain + "/review/list/" + userId
 	if err := bookCollector.Visit(url); err != nil {
 		logg.Error(err)
+		return books, err
 	}
-	logg.Printf("scraped %d books on %d pages", len(books), pageCount)
-	return books
+	// logg.Printf("scraped %d books on %d pages", len(books), pageCount)
+	return books, nil
 }
 
 func defaultCollectorOptions(options ScrapeOptions) func(*colly.Collector) {
@@ -209,7 +218,7 @@ func scrapeBook(bookElem *colly.HTMLElement) (Book, error) {
 	return book, fmt.Errorf("Failed to scrape the book")
 }
 
-func scrapeQuotes(url string, options ScrapeOptions) []Quote {
+func scrapeQuotes(url string, options ScrapeOptions) ([]Quote, error) {
 	quoteCollector := colly.NewCollector(
 		defaultCollectorOptions(options),
 	)
@@ -256,9 +265,9 @@ func scrapeQuotes(url string, options ScrapeOptions) []Quote {
 	quoteCollector.OnHTML("a.next_page", tryVisitNextPage)
 
 	if err := quoteCollector.Visit(url); err != nil {
-		logg.Error(err)
+		return quotes, err
 	}
-	return quotes
+	return quotes, nil
 }
 
 func scrapeQuote(quoteElem *colly.HTMLElement) (Quote, error) {
