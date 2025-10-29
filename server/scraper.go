@@ -7,6 +7,7 @@ import (
 	"strings"
 	"sync"
 
+	. "libble/shared"
 	"github.com/gocolly/colly"
 )
 
@@ -36,7 +37,7 @@ func scrapeGoodreads(userId string, options ScrapeOptions) ([]Book, []Quote, err
 	var wg sync.WaitGroup
 	var mutex sync.Mutex
 	for _, book := range books {
-		if !book.isRead() {
+		if !book.IsRead() {
 			continue
 		}
 		readCount += 1
@@ -44,7 +45,7 @@ func scrapeGoodreads(userId string, options ScrapeOptions) ([]Book, []Quote, err
 		go func() {
 			defer wg.Done()
 
-			url := "https://" + book.getQuoteUrl()
+			url := "https://" + domain + "/book/quotes/" + book.BookId
 			bookQuotes, err := scrapeQuotes(url, options)
 			if err != nil {
 				logg.Error(err)

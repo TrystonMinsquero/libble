@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"net/http"
 	"os"
 
@@ -51,6 +50,14 @@ func main() {
 		c.HTML(http.StatusOK, "start.html", nil)
 	})
 
+	r.GET("/daily/:id", func(c *gin.Context) {
+		userId = c.Param("id")
+		if userId == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Must provide user param"})
+			return
+		}
+	})
+
 	r.GET("/scrape/:id", func(c *gin.Context) {
 		userId = c.Param("id")
 		if userId == "" {
@@ -69,33 +76,4 @@ func main() {
 	})
 
 	logg.Fatal(r.Run(":8000"))
-}
-
-type Book struct {
-	BookId      string   `json:"book_id"`
-	Title       string   `json:"title"`
-	Author      string   `json:"author"`
-	AuthorId    string   `json:"author_id"`
-	Stars       uint     `json:"stars"`
-	AvgRating   float32  `json:"avg_rating"`
-	RatingCount uint     `json:"rating_count"`
-	DatesRead   []string `json:"dates_read"`
-	DateAdded   string   `json:"date_added"`
-}
-
-type Quote struct {
-	QuoteId string `json:"quote_id"`
-	Likes   uint   `json:"likes"`
-	Text    string `json:"text"`
-
-	BookId   string `json:"book_id"`
-	AuthorId string `json:"author_id"`
-}
-
-func (b Book) getQuoteUrl() string {
-	return fmt.Sprintf("%s/book/quotes/%s", domain, b.BookId)
-}
-
-func (b Book) isRead() bool {
-	return b.Stars > 0
 }
