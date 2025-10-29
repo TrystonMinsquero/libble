@@ -7,8 +7,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/gocolly/colly"
 	. "libble/shared"
+
+	"github.com/gocolly/colly"
 )
 
 const (
@@ -23,10 +24,10 @@ type ScrapeOptions struct {
 
 var scrapeOptions ScrapeOptions
 
-func scrapeGoodreads(userId string, options ScrapeOptions) ([]Book, []Quote, error) {
+func scrapeGoodreads(userGRID string, options ScrapeOptions) ([]UserBook, []Quote, error) {
 	scrapeOptions = options
 
-	books, err := scrapeBooks(userId, options)
+	books, err := scrapeBooks(userGRID, options)
 	if err != nil {
 		return books, nil, err
 	}
@@ -36,16 +37,19 @@ func scrapeGoodreads(userId string, options ScrapeOptions) ([]Book, []Quote, err
 
 	var wg sync.WaitGroup
 	var mutex sync.Mutex
-	for _, book := range books {
-		if !book.ShouldScrape() {
+	for _, userBook := range books {
+		if !userBook.UserData.ShouldScrape() {
 			continue
 		}
+
+		book := userBook.Book
+
 		readCount += 1
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
 
-			url := "https://" + domain + "/book/quotes/" + book.BookId
+			url := "https://" + domain + "/book/quotes/" + book.BookGRID
 			bookQuotes, err := scrapeQuotes(url, options)
 			if err != nil {
 				logg.Error(err)
@@ -89,7 +93,7 @@ func tryVisitNextPage(nextPageElem *colly.HTMLElement) {
 	}
 }
 
-func parseId(href string) string {
+func parseGRID(href string) string {
 	index := strings.LastIndexByte(href, '/')
 	if index >= 0 && len(href) > 0 {
 		return href[index+1:]
@@ -97,7 +101,7 @@ func parseId(href string) string {
 	return ""
 }
 
-func scrapeBooks(userId string, options ScrapeOptions) ([]Book, error) {
+func scrapeBooks(userGRID string, options ScrapeOptions) ([]UserBook, error) {
 	bookCollector := colly.NewCollector(
 		defaultCollectorOptions(options),
 	)
@@ -108,7 +112,7 @@ func scrapeBooks(userId string, options ScrapeOptions) ([]Book, error) {
 
 	bookCollector.OnHTML("a.next_page", tryVisitNextPage)
 
-	books := make([]Book, 0, 20)
+	books := make([]UserBook, 0, 20)
 
 	bookCollector.OnHTML("tr.bookalike", func(bookElem *colly.HTMLElement) {
 		book, err := scrapeBook(bookElem)
@@ -119,7 +123,7 @@ func scrapeBooks(userId string, options ScrapeOptions) ([]Book, error) {
 		}
 	})
 
-	url := "https://" + domain + "/review/list/" + userId
+	url := "https://" + domain + "/review/list/" + userGRID
 	if err := bookCollector.Visit(url); err != nil {
 		logg.Error(err)
 		return books, err
@@ -137,8 +141,9 @@ func defaultCollectorOptions(options ScrapeOptions) func(*colly.Collector) {
 	}
 }
 
-func scrapeBook(bookElem *colly.HTMLElement) (Book, error) {
+func scrapeBook(bookElem *colly.HTMLElement) (UserBook, error) {
 	var book Book
+	var userData UserBookData
 	bookElem.ForEach("td.field", func(_ int, fieldElem *colly.HTMLElement) {
 		class := fieldElem.Attr("class")
 		class = strings.ReplaceAll(class, "field", "")
@@ -150,10 +155,11 @@ func scrapeBook(bookElem *colly.HTMLElement) (Book, error) {
 		switch class {
 		case "title":
 			book.Title = fieldElem.ChildAttr("a", "title")
-			book.BookId = parseId(fieldElem.ChildAttr("a", "href"))
+			book.BookGRID = parseGRID(fieldElem.ChildAttr("a", "href"))
+			userData.BookGRID = book.BookGRID
 		case "author":
 			book.Author = fieldElem.ChildText("a")
-			book.AuthorId = parseId(fieldElem.ChildAttr("a", "href"))
+			book.AuthorGRID = parseGRID(fieldElem.ChildAttr("a", "href"))
 		case "avg_rating":
 			avgRating, err := strconv.ParseFloat(fieldElem.ChildText("div.value"), 32)
 			if err == nil {
@@ -174,34 +180,35 @@ func scrapeBook(bookElem *colly.HTMLElement) (Book, error) {
 			valueText := fieldElem.ChildText("div.value")
 			switch valueText {
 			case "did not like it":
-				book.Stars = 1
+				userData.Stars = 1
 			case "it was ok":
-				book.Stars = 2
+				userData.Stars = 2
 			case "liked it":
-				book.Stars = 3
+				userData.Stars = 3
 			case "really liked it":
-				book.Stars = 4
+				userData.Stars = 4
 			case "it was amazing":
-				book.Stars = 5
+				userData.Stars = 5
 			case "":
-				book.Stars = 0 // Not rated
+				userData.Stars = 0 // Not rated
 			default:
 				logg.Error("Was unable to translate '%s' to star count for %s",
 					valueText, book.Title)
 			}
 		case "date_read":
 			fieldElem.ForEach("div.date_row", func(_ int, dateElem *colly.HTMLElement) {
-				book.DatesRead = append(book.DatesRead, strings.TrimSpace(dateElem.Text))
+				userData.DatesRead = append(userData.DatesRead, strings.TrimSpace(dateElem.Text))
 			})
 		case "date_added":
-			book.DateAdded = fieldElem.ChildText("div.value")
+			userData.DateAdded = fieldElem.ChildText("div.value")
 		}
 	})
 
-	if book.BookId != "" {
-		return book, nil
+	userBook := UserBook{Book: book, UserData: userData}
+	if book.BookGRID != "" {
+		return userBook, nil
 	}
-	return book, fmt.Errorf("Failed to scrape the book")
+	return userBook, fmt.Errorf("Failed to scrape the book")
 }
 
 func scrapeQuotes(url string, options ScrapeOptions) ([]Quote, error) {
@@ -215,14 +222,14 @@ func scrapeQuotes(url string, options ScrapeOptions) ([]Quote, error) {
 		logg.Errorf("Error when collecting quote at %v\n%v", r.Request.URL, err)
 	})
 
-	var bookId string
-	var authorId string
+	var bookGRID string
+	var authorGRID string
 	quoteCollector.OnHTML("a.bookTitle", func(h *colly.HTMLElement) {
-		bookId = parseId(h.Attr("href"))
+		bookGRID = parseGRID(h.Attr("href"))
 		quoteCollector.OnHTMLDetach("a.bookTitle")
 	})
 	quoteCollector.OnHTML("a.authorName", func(h *colly.HTMLElement) {
-		authorId = parseId(h.Attr("href"))
+		authorGRID = parseGRID(h.Attr("href"))
 		quoteCollector.OnHTMLDetach("a.authorName")
 	})
 
@@ -230,8 +237,8 @@ func scrapeQuotes(url string, options ScrapeOptions) ([]Quote, error) {
 		quote, err := scrapeQuote(quoteElem)
 		if err == nil {
 			if quote.Likes >= minQuoteLikes {
-				quote.BookId = bookId
-				quote.AuthorId = authorId
+				quote.BookGRID = bookGRID
+				quote.AuthorGRID = authorGRID
 				quotes = append(quotes, quote)
 			} else {
 				quoteCollector.OnHTMLDetach("a.next_page")
@@ -277,9 +284,9 @@ func scrapeQuote(quoteElem *colly.HTMLElement) (Quote, error) {
 		quote.Likes = uint(likes)
 	}
 
-	quote.QuoteId = parseId(rightElem.ChildAttr("a", "href"))
+	quote.QuoteGRID = parseGRID(rightElem.ChildAttr("a", "href"))
 
-	if quote.QuoteId != "" {
+	if quote.QuoteGRID != "" {
 		return quote, nil
 	}
 	return quote, fmt.Errorf("Failed to scrape the quote")

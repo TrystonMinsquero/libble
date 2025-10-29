@@ -7,6 +7,7 @@ import (
 
 	"github.com/charmbracelet/log"
 	"github.com/gin-gonic/gin"
+	. "libble/shared"
 )
 
 var (
@@ -16,9 +17,9 @@ var (
 )
 
 func main() {
-	var userId string
+	var userGRID string
 	var cache bool
-	flag.StringVar(&userId, "user", "", "The user id found in the url")
+	flag.StringVar(&userGRID, "user", "", "The user id found in the url")
 	flag.BoolVar(&cache, "cache", true, "Will cache the requests")
 
 	flag.Parse()
@@ -27,8 +28,8 @@ func main() {
 		cache: cache,
 	}
 
-	if userId == "" {
-		userId, _ = os.LookupEnv("USER_ID")
+	if userGRID == "" {
+		userGRID, _ = os.LookupEnv("USER_GRID")
 	}
 
 	// Create a Gin router with default middleware (logger and recovery)
@@ -51,20 +52,37 @@ func main() {
 	})
 
 	r.GET("/daily/:id", func(c *gin.Context) {
-		userId = c.Param("id")
-		if userId == "" {
+		userGRID = c.Param("id")
+
+		// TODO: replace with database id and retrieve data
+		if userGRID == "" {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Must provide user param"})
 			return
 		}
+
+		books, quotes, err := scrapeGoodreads(userGRID, options)
+		dailyQuoteIndex := PickDailyQuote(UserData{}, books, quotes)
+		dailyData := DailyData{
+			User:       UserData{UserGRID: userGRID},
+			Books:      books,
+			Quotes:     quotes,
+			DailyQuote: dailyQuoteIndex,
+		}
+
+		if err != nil {
+			c.Header("error", err.Error())
+		}
+		c.JSON(http.StatusOK, dailyData)
 	})
 
 	r.GET("/scrape/:id", func(c *gin.Context) {
-		userId = c.Param("id")
-		if userId == "" {
+		userGRID = c.Param("id")
+		if userGRID == "" {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Must provide user param"})
 			return
 		}
-		books, quotes, err := scrapeGoodreads(userId, options)
+		books, quotes, err := scrapeGoodreads(userGRID, options)
+
 		res := gin.H{
 			"books":  books,
 			"quotes": quotes,
