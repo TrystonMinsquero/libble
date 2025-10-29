@@ -7,8 +7,8 @@ import (
 	"strings"
 	"sync"
 
-	. "libble/shared"
 	"github.com/gocolly/colly"
+	. "libble/shared"
 )
 
 const (
@@ -37,7 +37,7 @@ func scrapeGoodreads(userId string, options ScrapeOptions) ([]Book, []Quote, err
 	var wg sync.WaitGroup
 	var mutex sync.Mutex
 	for _, book := range books {
-		if !book.IsRead() {
+		if !book.ShouldScrape() {
 			continue
 		}
 		readCount += 1
@@ -54,7 +54,7 @@ func scrapeGoodreads(userId string, options ScrapeOptions) ([]Book, []Quote, err
 
 			mutex.Lock()
 			defer mutex.Unlock()
-			// logg.Infof("Scraped %d Quotes from %s", len(bookQuotes), book.Title)
+			logg.Infof("Scraped %d Quotes from %s", len(bookQuotes), book.Title)
 			quotes = append(quotes, bookQuotes...)
 		}()
 	}
@@ -119,26 +119,11 @@ func scrapeBooks(userId string, options ScrapeOptions) ([]Book, error) {
 		}
 	})
 
-	// lastCount := 0
-	// pageCount := 0
-	//
-	// // triggered once scraping is done (e.g., write the data to a CSV file)
-	// bookCollector.OnScraped(func(r *colly.Response) {
-	// 	// grew := len(books) - lastCount
-	// 	// logg.Infof("scraped %d books from %v", grew, r.Request.URL)
-	// 	// for i := lastCount; i < len(books); i += 1 {
-	// 	// 	logg.Infof("\t%s: %+v", books[i].Title, books[i])
-	// 	// }
-	// 	lastCount = len(books)
-	// 	pageCount += 1
-	// })
-
 	url := "https://" + domain + "/review/list/" + userId
 	if err := bookCollector.Visit(url); err != nil {
 		logg.Error(err)
 		return books, err
 	}
-	// logg.Printf("scraped %d books on %d pages", len(books), pageCount)
 	return books, nil
 }
 
@@ -242,25 +227,19 @@ func scrapeQuotes(url string, options ScrapeOptions) ([]Quote, error) {
 	})
 
 	quoteCollector.OnHTML("div.quote", func(quoteElem *colly.HTMLElement) {
-		// brokeEarly := false
-		// quotesElem.ForEachWithBreak("div.quote", func(_ int, quoteElem *colly.HTMLElement) bool {
 		quote, err := scrapeQuote(quoteElem)
 		if err == nil {
 			if quote.Likes >= minQuoteLikes {
 				quote.BookId = bookId
 				quote.AuthorId = authorId
 				quotes = append(quotes, quote)
-				// return false
-				// logg.Printf("Quote: %+v", quote)
+			} else {
+				quoteCollector.OnHTMLDetach("a.next_page")
+				quoteCollector.OnHTMLDetach("div.quote")
 			}
 		} else {
 			logg.Error(err)
 		}
-		// brokeEarly = true
-		// return true
-		// })
-		quoteCollector.OnHTMLDetach("a.next_page")
-		quoteCollector.OnHTMLDetach("div.quote")
 	})
 
 	quoteCollector.OnHTML("a.next_page", tryVisitNextPage)

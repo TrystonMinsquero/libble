@@ -2,6 +2,6 @@
 
 cd "$(dirname "$0")"
 GOOS="js" GOARCH="wasm" go build -o ./views/js/main.wasm ./wasm
-go build -o ./tmp/main ./server
+go build -o ./main ./server
 
 

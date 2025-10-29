@@ -34,7 +34,9 @@ type Quote struct {
 	AuthorId string `json:"author_gr_id"`
 }
 
-
+func (b Book) ShouldScrape() bool {
+	return b.Stars >= 4
+}
 func (b Book) IsRead() bool {
 	return b.Stars > 0
 }
