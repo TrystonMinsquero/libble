@@ -1,11 +1,9 @@
 package main
 
 import (
-	// "compress/gzip"
 	"encoding/json"
 	"fmt"
 	"io"
-	. "libble/shared"
 	"net/http"
 	"net/url"
 	"syscall/js"
@@ -13,7 +11,7 @@ import (
 
 func saveData(key string, value string) {
 	localStorage := js.Global().Get("localStorage")
-	localStorage.Call("setItem", "book", value)
+	localStorage.Call("setItem", key, value)
 	fmt.Printf("Stored %s: %s\n", key, value)
 }
 
@@ -39,7 +37,7 @@ func loadJson(key string, data any) {
 	savedString := loadData(key)
 	err := json.Unmarshal([]byte(savedString), data)
 	if err != nil {
-		fmt.Printf("Faild to unmarshal stored json: %v", err)
+		fmt.Printf("Failed to unmarshal stored json: %v", err)
 		return
 	}
 }
@@ -69,45 +67,4 @@ func fetch(path string, data any) error {
 	}
 
 	return nil
-}
-
-func fetchDaily(userID string) (int, error) {
-	origin := js.Global().Get("window").Get("location").Get("origin").String()
-	res, err := http.Get(origin + "/daily/" + userID)
-	if err != nil {
-		return -1, fmt.Errorf("Failed fetching daily data for %s: %v", userID, err)
-	}
-	if err := res.Header.Get("error"); err != "" {
-		return -1, fmt.Errorf("Error in header: %v", err)
-	}
-
-	bodyString, err := io.ReadAll(res.Body)
-	if err != nil {
-		return -1, fmt.Errorf("Error reading response body for Daily request: %v", err)
-	}
-
-	var dailyData DailyData
-	if err = json.Unmarshal(bodyString, &dailyData); err != nil {
-		return -1, fmt.Errorf("Error unmarshalling daily json: %v", err)
-	}
-
-	// TODO: Sync Data
-
-	return dailyData.DailyQuote, nil
-}
-
-func main() {
-	fmt.Println("Hello from Wasm!!")
-
-	userID := loadData("userId")
-	if userID != "" {
-		if dailyQuoteIndex, err := fetchDaily(userID); err != nil {
-			// TODO: Fallback to localStorage
-			fmt.Println(err)
-		} else {
-			fmt.Printf("Daily quote index: %d\n", dailyQuoteIndex)
-		}
-	}
-
-	<-make(chan bool) // Prevents "Uncaught Error: Go program has already exited"
 }

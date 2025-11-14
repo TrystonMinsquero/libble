@@ -10,6 +10,14 @@ import (
 
 type DBID int64
 
+const NilID = 0
+
+type SaveData struct {
+	User   UserData   `json:"user_data"`
+	Books  []UserBook `json:"books"`
+	Quotes []Quote    `json:"quotes"`
+}
+
 type UserData struct {
 	ID         DBID   `json:"libble_id"`
 	UserGRID   string `json:"user_gr_id"`
@@ -23,8 +31,10 @@ type UserBook struct {
 }
 
 type UserBookData struct {
+	// Would have one or the other
 	ID     DBID `json:"libble_id"`
 	UserID DBID `json:"user_id"`
+
 	BookID DBID `json:"book_id"`
 
 	UserGRID string `json:"user_gr_id"`
@@ -86,16 +96,22 @@ type DailyData struct {
 
 // Returns index from `availableQuotes`
 func PickDailyQuote(user UserData, books []UserBook, availableQuotes []Quote) int {
-	now := time.Now()
+
+	quoteCount := len(availableQuotes)
+	if quoteCount <= 0 {
+		return -1
+	}
+
+	now := time.Now().UTC()
 	seed := now.Year() + now.YearDay()
 	rng := rand.New(rand.NewSource(int64(seed)))
 
-	triedIndexes := make([]bool, len(availableQuotes))
+	triedIndexes := make([]bool, quoteCount)
 	triedIndexCount := 0
 	collisions := 0
 
-	for triedIndexCount < len(availableQuotes) && collisions < len(availableQuotes)*2 {
-		quoteIndex := rng.Intn(len(availableQuotes))
+	for triedIndexCount < quoteCount && collisions < quoteCount*2 {
+		quoteIndex := rng.Intn(quoteCount)
 		if triedIndexes[quoteIndex] {
 			collisions += 1
 			continue
@@ -111,7 +127,7 @@ func PickDailyQuote(user UserData, books []UserBook, availableQuotes []Quote) in
 		return quoteIndex
 	}
 
-	fmt.Println("Warning: Recycling quote")
-	quoteIndex := rng.Intn(len(availableQuotes))
+	fmt.Printf("Warning: Recycling quote for %s\n", user.UserGRID)
+	quoteIndex := rng.Intn(quoteCount)
 	return quoteIndex
 }
