@@ -18,7 +18,7 @@
 	<body>
 		<div class="container">
 			<h1>📖 Libble</h1>
-			<p class="subtitle">Guess the book and author from a quote</p>
+			<p class="subtitle">Guess the book from a quote</p>
 
 			<div class="quote-box" id="quoteBox">
 				<p id="quote">"It is a truth universally acknowledged..."</p>
@@ -44,23 +44,11 @@
 						<ul id="titleSuggestions" class="suggestions"></ul>
 					</div>
 
-					<div class="input-group">
-						<label for="author">Author:</label>
-						<input type="text"
-						       id="author"
-						       name="author"
-						       required
-						       autocomplete="off"
-						>
-						<ul id="authorSuggestions" class="suggestions"></ul>
-					</div>
-
 					<button type="submit" class="submit-btn">Submit Guess</button>
 				</div>
 			</form>
 
 			<div class="feedback" id="feedbackBox"></div>
 		</div>
-		<script src="js/game.js"></script>
 	</body>
 </html>

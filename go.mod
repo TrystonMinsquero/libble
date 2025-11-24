@@ -68,4 +68,5 @@ require (
 	golang.org/x/tools v0.38.0 // indirect
 	google.golang.org/appengine v1.6.8 // indirect
 	google.golang.org/protobuf v1.36.10 // indirect
+	honnef.co/go/js/dom/v2 v2.0.0-20250304181735-b5e52f05e89d // indirect
 )

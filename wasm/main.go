@@ -1,112 +1,92 @@
 package main
 
 import (
-	// "compress/gzip"
-	"encoding/json"
 	"fmt"
-	"io"
-	. "libble/shared"
-	"net/http"
-	"net/url"
+	"reflect"
 	"syscall/js"
 )
 
-func saveData(key string, value string) {
-	localStorage := js.Global().Get("localStorage")
-	localStorage.Call("setItem", "book", value)
-	fmt.Printf("Stored %s: %s\n", key, value)
-}
+// func fetchDaily(userID string) (int, error) {
+// 	origin := js.Global().Get("window").Get("location").Get("origin").String()
+// 	res, err := http.Get(origin + "/daily/" + userID)
+// 	if err != nil {
+// 		return -1, fmt.Errorf("Failed fetching daily data for %s: %v", userID, err)
+// 	}
+// 	if err := res.Header.Get("error"); err != "" {
+// 		return -1, fmt.Errorf("Error in header: %v", err)
+// 	}
+//
+// 	bodyString, err := io.ReadAll(res.Body)
+// 	if err != nil {
+// 		return -1, fmt.Errorf("Error reading response body for Daily request: %v", err)
+// 	}
+//
+// 	var dailyData DailyData
+// 	if err = json.Unmarshal(bodyString, &dailyData); err != nil {
+// 		return -1, fmt.Errorf("Error unmarshalling daily json: %v", err)
+// 	}
+//
+// 	// TODO: Sync Data
+//
+// 	return dailyData.DailyQuote, nil
+// }
 
-func saveJson(key string, data any) {
-	bytes, err := json.MarshalIndent(data, "", "\t")
-	if err != nil {
-		fmt.Printf("Failed to marshal %s: %v", key, err)
-		return
-	}
-	saveData(key, string(bytes))
-}
+func structToMap(obj interface{}) map[string]interface{} {
+	result := make(map[string]interface{})
+	val := reflect.ValueOf(obj)
 
-func loadData(key string) string {
-	localStorage := js.Global().Get("localStorage")
-	value := localStorage.Call("getItem", key)
-	if value.Type() == js.TypeString {
-		return value.String()
-	}
-	return ""
-}
-
-func loadJson(key string, data any) {
-	savedString := loadData(key)
-	err := json.Unmarshal([]byte(savedString), data)
-	if err != nil {
-		fmt.Printf("Faild to unmarshal stored json: %v", err)
-		return
-	}
-}
-
-func fetch(path string, data any) error {
-	origin := js.Global().Get("window").Get("location").Get("origin").String()
-	url, err := url.JoinPath(origin, path)
-	if err != nil {
-		return fmt.Errorf("Failed parsing path")
+	// Handle pointers if the input is a pointer to a struct
+	if val.Kind() == reflect.Ptr {
+		val = val.Elem()
 	}
 
-	res, err := http.Get(url)
-	if err != nil {
-		return fmt.Errorf("Failed fetching data for %s: %v", url, err)
-	}
-	if err := res.Header.Get("error"); err != "" {
-		return fmt.Errorf("Error in header for %s: %v", path, err)
+	// Ensure it's a struct
+	if val.Kind() != reflect.Struct {
+		return nil // Or handle error appropriately
 	}
 
-	bodyString, err := io.ReadAll(res.Body)
-	if err != nil {
-		return fmt.Errorf("Error reading response body for Daily request: %v", err)
+	typ := val.Type()
+	for i := 0; i < val.NumField(); i++ {
+		field := typ.Field(i)
+		fieldValue := val.Field(i)
+
+		// Use the JSON tag name if available, otherwise use the field name
+		fieldName := field.Name
+		if jsonTag := field.Tag.Get("json"); jsonTag != "" {
+			fieldName = jsonTag
+		}
+
+		result[fieldName] = fieldValue.Interface()
 	}
-
-	if err = json.Unmarshal(bodyString, data); err != nil {
-		return fmt.Errorf("Error unmarshalling json: %v", err)
-	}
-
-	return nil
-}
-
-func fetchDaily(userID string) (int, error) {
-	origin := js.Global().Get("window").Get("location").Get("origin").String()
-	res, err := http.Get(origin + "/daily/" + userID)
-	if err != nil {
-		return -1, fmt.Errorf("Failed fetching daily data for %s: %v", userID, err)
-	}
-	if err := res.Header.Get("error"); err != "" {
-		return -1, fmt.Errorf("Error in header: %v", err)
-	}
-
-	bodyString, err := io.ReadAll(res.Body)
-	if err != nil {
-		return -1, fmt.Errorf("Error reading response body for Daily request: %v", err)
-	}
-
-	var dailyData DailyData
-	if err = json.Unmarshal(bodyString, &dailyData); err != nil {
-		return -1, fmt.Errorf("Error unmarshalling daily json: %v", err)
-	}
-
-	// TODO: Sync Data
-
-	return dailyData.DailyQuote, nil
+	return result
 }
 
 func main() {
 	fmt.Println("Hello from Wasm!!")
 
-	userID := loadData("userId")
-	if userID != "" {
-		if dailyQuoteIndex, err := fetchDaily(userID); err != nil {
-			// TODO: Fallback to localStorage
-			fmt.Println(err)
-		} else {
-			fmt.Printf("Daily quote index: %d\n", dailyQuoteIndex)
+	handlePage()
+
+	// Wait for DOM to be ready, then initialize the game
+	doc := js.Global().Get("document")
+	if doc.Get("readyState").String() == "complete" {
+		fmt.Println("Ready state")
+		if isPage(PageGame) {
+			initGame()
+		} else if isPage(PageStart) {
+			initStart()
 		}
+	} else {
+		fmt.Println("Listening for DOMContentLoaded")
+		js.Global().Call("addEventListener", "DOMContentLoaded",
+			js.FuncOf(func(this js.Value, args []js.Value) interface{} {
+				fmt.Println("DOMContentLoaded")
+				if isPage(PageGame) {
+					initGame()
+				} else if isPage(PageStart) {
+					initStart()
+				}
+				return nil
+			}))
 	}
 
 	<-make(chan bool) // Prevents "Uncaught Error: Go program has already exited"

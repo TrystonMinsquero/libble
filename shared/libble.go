@@ -4,25 +4,29 @@ import (
 	"fmt"
 	"math/rand"
 	"slices"
+	"strings"
 	"time"
-	// "slices"
 )
 
-type DBID int64
+type DBID uint64
+
+type QuoteId DBID
+type BookId DBID
 
 const NilID = 0
 
 type SaveData struct {
-	User   UserData   `json:"user_data"`
-	Books  []UserBook `json:"books"`
-	Quotes []Quote    `json:"quotes"`
+	User   UserData            `json:"user_data"`
+	Books  map[BookId]UserBook `json:"books"`
+	Quotes map[QuoteId]Quote   `json:"quotes"`
+
+	SeenQuotes []QuoteId `json:"seen_quote_ids"`
+	Games      []Game    `json:"game"`
 }
 
 type UserData struct {
-	ID         DBID   `json:"libble_id"`
-	UserGRID   string `json:"user_gr_id"`
-	SeenQuotes []DBID `json:"seen_quote_ids"`
-	Games      []DBID `json:"game_ids"`
+	ID       DBID   `json:"libble_id"`
+	UserGRID string `json:"user_gr_id"`
 }
 
 type UserBook struct {
@@ -31,28 +35,19 @@ type UserBook struct {
 }
 
 type UserBookData struct {
-	// Would have one or the other
-	ID     DBID `json:"libble_id"`
-	UserID DBID `json:"user_id"`
-
-	BookID DBID `json:"book_id"`
-
-	UserGRID string `json:"user_gr_id"`
-	BookGRID string `json:"book_gr_id"`
-
 	Stars     uint     `json:"stars"`
 	DatesRead []string `json:"dates_read"`
 	DateAdded string   `json:"date_added"`
 }
 
 type Game struct {
-	ID      DBID   `json:"libble_id"`
-	QuoteID DBID   `json:"quote_id"`
-	Guesses []DBID `json:"guesses"` // book IDs
+	QuoteID   QuoteId   `json:"quote_id"`
+	Date      time.Time `json:"date_started"`
+	Completed bool      `json:"completed"`
+	Guesses   []BookId  `json:"guesses"`
 }
 
 type Book struct {
-	ID          DBID    `json:"libble_id"`
 	BookGRID    string  `json:"book_gr_id"`
 	Title       string  `json:"title"`
 	Author      string  `json:"author"`
@@ -61,14 +56,17 @@ type Book struct {
 	RatingCount uint    `json:"rating_count"`
 }
 
+func (b Book) CleanTitle() string {
+	return strings.TrimSpace(strings.Join(strings.Fields(b.Title), " "))
+}
+
 type Quote struct {
-	ID        DBID   `json:"libble_id"`
 	QuoteGRID string `json:"quote_gr_id"`
 	Likes     uint   `json:"likes"`
 	Text      string `json:"text"`
 
-	BookGRID   string `json:"book_gr_id"`
-	AuthorGRID string `json:"author_gr_id"`
+	BookId   BookId `json:"book_id"`
+	BookGRID string `json:"book_gr_id"`
 }
 
 func (b UserBookData) ShouldScrape() bool {
@@ -87,47 +85,106 @@ func (b UserBookData) IsRead() bool {
 	return false
 }
 
-type DailyData struct {
-	User       UserData   `json:"user"`
-	Books      []UserBook `json:"books"`
-	Quotes     []Quote    `json:"quotes"`
-	DailyQuote int        `json:"daily_quote_index"`
+type weightedQuote struct {
+	quote QuoteId
+	tries uint8
 }
 
-// Returns index from `availableQuotes`
-func PickDailyQuote(user UserData, books []UserBook, availableQuotes []Quote) int {
-
-	quoteCount := len(availableQuotes)
+func (s SaveData) PickDailyQuote() (QuoteId, error) {
+	var quoteId QuoteId
+	quoteCount := len(s.Quotes)
 	if quoteCount <= 0 {
-		return -1
+		return quoteId, fmt.Errorf("User has no quotes")
 	}
 
 	now := time.Now().UTC()
 	seed := now.Year() + now.YearDay()
 	rng := rand.New(rand.NewSource(int64(seed)))
 
-	triedIndexes := make([]bool, quoteCount)
-	triedIndexCount := 0
+	quotes := make([]weightedQuote, quoteCount)
+	triedCount := 0
 	collisions := 0
 
-	for triedIndexCount < quoteCount && collisions < quoteCount*2 {
-		quoteIndex := rng.Intn(quoteCount)
-		if triedIndexes[quoteIndex] {
-			collisions += 1
-			continue
-		}
-
-		triedIndexes[quoteIndex] = true
-		triedIndexCount += 1
-
-		quote := availableQuotes[quoteIndex]
-		if slices.Contains(user.SeenQuotes, quote.ID) {
-			continue
-		}
-		return quoteIndex
+	quoteIndex := 0
+	for id, _ := range s.Quotes {
+		quotes[quoteIndex].quote = id
+		quoteIndex++
 	}
 
-	fmt.Printf("Warning: Recycling quote for %s\n", user.UserGRID)
-	quoteIndex := rng.Intn(quoteCount)
-	return quoteIndex
+	for triedCount < quoteCount && collisions < quoteCount*2 {
+		quoteIndex := rng.Intn(quoteCount)
+
+		quoteId := quotes[quoteIndex].quote
+		tries := quotes[quoteIndex].tries
+		if tries > 0 {
+			collisions += 1
+			if tries == 100 {
+				panic("Too many tries")
+			}
+			quotes[quoteIndex].tries += 1
+			continue
+		}
+
+		triedCount += 1
+		if slices.Contains(s.SeenQuotes, quoteId) {
+			continue
+		}
+
+		// Check if book is read
+		quote, found := s.Quotes[quoteId]
+		if !found {
+			panic("Couldn't get quote back")
+		}
+		book, found := s.Books[quote.BookId]
+		if !found {
+			fmt.Printf("Couldn't find book with id %d for quote %d\n", quote.BookId, quoteId)
+			continue
+		}
+		if !book.UserData.IsRead() {
+			continue
+		}
+		return quoteId, nil
+	}
+
+	fmt.Printf("Warning: Recycling quote for %s\n", s.User.UserGRID)
+	quoteIndex = rng.Intn(quoteCount)
+	return quotes[quoteIndex].quote, nil
 }
+
+// Returns index from `availableQuotes`
+// func PickDailyQuote(user UserData, books []UserBook, availableQuotes []Quote) int {
+//
+// 	quoteCount := len(availableQuotes)
+// 	if quoteCount <= 0 {
+// 		return -1
+// 	}
+//
+// 	now := time.Now().UTC()
+// 	seed := now.Year() + now.YearDay()
+// 	rng := rand.New(rand.NewSource(int64(seed)))
+//
+// 	triedIndexes := make([]bool, quoteCount)
+// 	triedIndexCount := 0
+// 	collisions := 0
+//
+// 	for triedIndexCount < quoteCount && collisions < quoteCount*2 {
+// 		quoteIndex := rng.Intn(quoteCount)
+// 		if triedIndexes[quoteIndex] {
+// 			collisions += 1
+// 			continue
+// 		}
+//
+// 		triedIndexes[quoteIndex] = true
+// 		triedIndexCount += 1
+//
+// 		quote := availableQuotes[quoteIndex]
+// 		if slices.Contains(user.SeenQuotes, quote.ID) {
+// 			continue
+// 		}
+// 		return quoteIndex
+// 	}
+//
+// 	fmt.Printf("Warning: Recycling quote for %s\n", user.UserGRID)
+// 	quoteIndex := rng.Intn(quoteCount)
+// 	return quoteIndex
+// }

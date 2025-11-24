@@ -82,7 +82,33 @@
 			.help-text a:hover {
 				text-decoration: underline;
 			}
+			
+			.error-message {
+				margin-top: 20px;
+				padding: 12px 16px;
+				background-color: #fee;
+				color: #c33;
+				border: 1px solid #fcc;
+				border-radius: 8px;
+				display: none;
+			}
+			
+			.error-message.visible {
+				display: block;
+			}
+			
+			.goodreads-form button:disabled {
+				background-color: #ccc;
+				cursor: not-allowed;
+			}
 		</style>
+		<script src="js/wasm_exec.js"></script>
+		<script>
+			const go = new Go();
+			WebAssembly.instantiateStreaming(fetch("js/main.wasm"), go.importObject).then((result) => {
+				go.run(result.instance);
+				});
+		</script>
 	</head>
 	<body>
 		<div class="landing-container">
@@ -101,6 +127,7 @@
 				       title="Please enter a valid numeric Goodreads User ID"
 				>
 				<button id="submit-button" type="submit">Start Playing</button>
+				<div id="error-message" class="error-message"></div>
 			</form>
 
 			<div class="help-text">
@@ -111,6 +138,6 @@
 				<p>Your User ID is the number in your profile URL: goodreads.com/user/show/<strong>12345678</strong></p>
 			</div>
 		</div>
-		<script src="js/start.js"></script>
+		<!-- <script src="js/start.js"></script> -->
 	</body>
 </html>

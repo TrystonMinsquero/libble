@@ -15,7 +15,7 @@ import (
 const (
 	domain        = "www.goodreads.com"
 	requestCache  = "./.request_cache"
-	minQuoteLikes = 5
+	minQuoteLikes = 100
 )
 
 type ScrapeOptions struct {
@@ -50,7 +50,7 @@ func scrapeGoodreads(userGRID string, options ScrapeOptions) ([]UserBook, []Quot
 			defer wg.Done()
 
 			url := "https://" + domain + "/book/quotes/" + book.BookGRID
-			bookQuotes, err := scrapeQuotes(url, options)
+			bookQuotes, err := scrapeQuotes(url, book.BookGRID, options)
 			if err != nil {
 				logg.Error(err)
 				return
@@ -156,7 +156,6 @@ func scrapeBook(bookElem *colly.HTMLElement) (UserBook, error) {
 		case "title":
 			book.Title = fieldElem.ChildAttr("a", "title")
 			book.BookGRID = parseGRID(fieldElem.ChildAttr("a", "href"))
-			userData.BookGRID = book.BookGRID
 		case "author":
 			book.Author = fieldElem.ChildText("a")
 			book.AuthorGRID = parseGRID(fieldElem.ChildAttr("a", "href"))
@@ -211,7 +210,7 @@ func scrapeBook(bookElem *colly.HTMLElement) (UserBook, error) {
 	return userBook, fmt.Errorf("Failed to scrape the book")
 }
 
-func scrapeQuotes(url string, options ScrapeOptions) ([]Quote, error) {
+func scrapeQuotes(url string, bookGRID string, options ScrapeOptions) ([]Quote, error) {
 	quoteCollector := colly.NewCollector(
 		defaultCollectorOptions(options),
 	)
@@ -222,23 +221,11 @@ func scrapeQuotes(url string, options ScrapeOptions) ([]Quote, error) {
 		logg.Errorf("Error when collecting quote at %v\n%v", r.Request.URL, err)
 	})
 
-	var bookGRID string
-	var authorGRID string
-	quoteCollector.OnHTML("a.bookTitle", func(h *colly.HTMLElement) {
-		bookGRID = parseGRID(h.Attr("href"))
-		quoteCollector.OnHTMLDetach("a.bookTitle")
-	})
-	quoteCollector.OnHTML("a.authorName", func(h *colly.HTMLElement) {
-		authorGRID = parseGRID(h.Attr("href"))
-		quoteCollector.OnHTMLDetach("a.authorName")
-	})
-
 	quoteCollector.OnHTML("div.quote", func(quoteElem *colly.HTMLElement) {
 		quote, err := scrapeQuote(quoteElem)
 		if err == nil {
 			if quote.Likes >= minQuoteLikes {
 				quote.BookGRID = bookGRID
-				quote.AuthorGRID = authorGRID
 				quotes = append(quotes, quote)
 			} else {
 				quoteCollector.OnHTMLDetach("a.next_page")
