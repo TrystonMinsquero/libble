@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	// . "libble/shared"
+	libble "libble/shared"
 
 	"honnef.co/go/js/dom/v2"
 )
@@ -51,6 +51,7 @@ func initStart() {
 				submitButton.SetTextContent(submitText)
 			}()
 
+			var data libble.SaveData
 			if err := fetch("/user/"+userGrid, &data, http.MethodPost); err != nil {
 				log(err, "Unabled to create user data")
 				showError(err.Error())
