@@ -19,7 +19,7 @@ func isPage(page string) bool {
 }
 
 func handlePage() string {
-	userId := loadData("userId")
+	userId, _ := loadData("userId")
 
 	redirect := func(page string) string {
 		curr := currPage()

@@ -11,6 +11,8 @@ import (
 	"honnef.co/go/js/dom/v2"
 )
 
+const userIdKey = "userId"
+
 func initStart() {
 	doc := dom.GetWindow().Document()
 	form := doc.GetElementByID("goodreads-user-form")
@@ -59,11 +61,11 @@ func initStart() {
 			}
 
 			fmt.Println("Successfully created new user:")
-			userId := strconv.FormatUint(uint64(data.User.ID), 10)
+			userId := strconv.FormatUint(uint64(data.Player.ID), 10)
 
 			if userId != "" {
-				saveData("userId", userId)
-				if err := saveJson("saveData", data); err != nil {
+				saveData(userIdKey, userId)
+				if err := saveAllData(data); err != nil {
 					log(err, "Failed to save data for creating user")
 				}
 				fmt.Println(data)

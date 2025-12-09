@@ -1,15 +1,15 @@
 
 Website TO-DO:
-- [] Remove hints temporarily
-- [] Have up and down arrows "scroll" as you go down
+- [x] Remove hints temporarily
 - [] Make submit work
     - [] Make lives system
     - [] Make enter in input work
     - [] Figure out wight it sets the title on submit (it's probably the html)
-- [] Make share button
 - [] Add skip button (and make sure it's disabled after first guess, tooltip?)
+- [] Make share button
+- [] Have up and down arrows "scroll" as you go down
 - [] Actually host the website and server
-    - [] Put website on GitHub pages
+    - [] Put website on GitHub pages (Need to make sure WASM works!)
     - [] Put server somewhere with something like api.libble.you
 ---------- BOTTOM LINE --------------------------------------------------------
 - [] Implement Hints
@@ -19,4 +19,4 @@ Website TO-DO:
 - [] Highlight selected text that was hit during search
 
 
-Holy shit this is a lot. I gotta start griding ASAP (Dec 5)
+Holy shit this is a lot. I gotta start grinding ASAP (Dec 5)

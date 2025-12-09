@@ -105,7 +105,7 @@ func main() {
 			return
 		}
 
-		userGRID := saveData.User.UserGRID
+		userGRID := saveData.Player.UserGRID
 		_, _, err = scrapeGoodreads(userGRID, options)
 		if err != nil {
 			errorMsg := fmt.Sprintf("Error scraping goodreads with id %s: %v", userGRID, err)
@@ -140,7 +140,7 @@ func saveFileName(userID DBID) string {
 }
 
 func saveUserData(save SaveData) error {
-	fileName := saveFileName(save.User.ID)
+	fileName := saveFileName(save.Player.ID)
 	file, err := os.OpenFile(path.Join(saveDir, fileName), os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		return fmt.Errorf("Failed opening save file: %v", err)
@@ -200,8 +200,8 @@ func loadUserData(userID DBID) (SaveData, error) {
 
 func createUserData(userGRID string, books []UserBook, quotes []Quote) SaveData {
 	var data SaveData
-	data.User.UserGRID = userGRID
-	data.User.ID = DBID(rand.Uint64())
+	data.Player.UserGRID = userGRID
+	data.Player.ID = DBID(rand.Uint64())
 
 	// Initialize maps
 	data.Books = make(map[BookId]UserBook)
@@ -253,8 +253,8 @@ func createUserData(userGRID string, books []UserBook, quotes []Quote) SaveData 
 	}
 
 	// Initialize empty slices
-	data.SeenQuotes = []QuoteId{}
-	data.Games = []Game{}
+	data.Player.SeenQuotes = []QuoteId{}
+	data.Player.Games = []Game{}
 
 	if err := saveUserData(data); err != nil {
 		logg.Errorf("Unabled to save new user data: %v", err)

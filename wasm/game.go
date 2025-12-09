@@ -1,9 +1,13 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"math"
+	"reflect"
+	"slices"
 	"strings"
+	"time"
 
 	. "libble/shared"
 
@@ -11,53 +15,280 @@ import (
 	dom "honnef.co/go/js/dom/v2"
 )
 
+func saveKey(jsonName string) string {
+	return "libble." + jsonName
+}
+
+type FieldPredicate func(string) bool
+
+func saveAllDataFiltered(data SaveData, filter FieldPredicate) error {
+	v := reflect.ValueOf(data)
+	t := v.Type()
+	var err error
+	err = nil
+	for i := range t.NumField() {
+		field := t.Field(i)
+		jsonName := field.Tag.Get("json")
+		if jsonName != "" && filter(jsonName) {
+			err = errors.Join(err, saveJson(saveKey(jsonName), v.Field(i).Interface()))
+		}
+	}
+	return err
+}
+
+func saveAllData(data SaveData) error {
+	return saveAllDataFiltered(data, func(s string) bool { return true })
+}
+
+func saveNonStaticData(data SaveData) error {
+	return saveAllDataFiltered(data, func(s string) bool { return !IsStaticSaveDataField(s) })
+}
+
+func loadAllData(data *SaveData) error {
+	pv := reflect.ValueOf(data)
+	v := pv.Elem()
+	t := v.Type()
+	var err error
+	err = nil
+	for i := range t.NumField() {
+		fieldType := t.Field(i)
+		jsonName := fieldType.Tag.Get("json")
+		field := v.Field(i).Addr().Interface()
+		if jsonName != "" {
+			err = errors.Join(err, loadJson(saveKey(jsonName), field))
+		}
+	}
+	return err
+}
+
 func initGame() {
 	fmt.Println("Starting game...")
 	var data SaveData
 	// Load save data from local storage
-	if err := loadJson("saveData", &data); err != nil {
+	if err := loadAllData(&data); err != nil {
 		log(err, "Failed loading data when starting game")
 	}
 
-	// Pick the daily quote
-	quoteId, err := data.PickDailyQuote()
-	if err != nil {
-		log(err, "Failed to pick daily quote")
-		return
-	}
-
-	// Get the quote from the map
-	quote, found := data.Quotes[quoteId]
-	if !found {
-		logErr("Daily quote not found in quotes map")
-		return
-	}
-	dailyQuote := quote
-
-	// Update the DOM with the quote
-	doc := dom.GetWindow().Document()
-	quoteElement := doc.GetElementByID("quote")
-	if quoteElement != nil {
-		quoteElement.SetTextContent(dailyQuote.Text)
+	if _, err := initTodaysGame(&data); err != nil {
+		log(err, "Failed initializing today's game")
 	}
 
 	fmt.Println("Setting update autocomplete")
 
+	// convert book map to slice
 	bookCount := len(data.Books)
 	allBooks := make([]Book, 0, bookCount)
 	for _, book := range data.Books {
 		allBooks = append(allBooks, book.Book)
 	}
 
-	// Set up autocomplete for title input
-	setupAutocomplete("title", "titleSuggestions", allBooks)
+	setupHTML(&data, allBooks)
+}
+func toDate(t time.Time) time.Time {
+	return t.Truncate(24 * time.Hour)
 }
 
-func setupAutocomplete(inputID string, suggestionsID string, allBooks Books /* available books */) {
+func todaysDate() time.Time {
+	return time.Now().Truncate(24 * time.Hour)
+}
+
+func todaysGame(data *SaveData) *Game {
+	player := &data.Player
+	if len(player.Games) > 0 {
+		lastGame := &player.Games[len(player.Games)-1]
+		if todaysDate().Equal(toDate(lastGame.Date)) {
+			return lastGame
+		}
+	}
+	return nil
+}
+
+func initTodaysGame(data *SaveData) (game *Game, err error) {
+	if game = todaysGame(data); game != nil {
+		err = game.Init(*data)
+		return game, err
+	}
+
+	dailyQuoteId, err := data.PickDailyQuote()
+	if err != nil {
+		return game, fmt.Errorf("Failed to pick daily quote when making new game:\n%v", err)
+	}
+
+	player := &data.Player
+	player.Games = append(player.Games, Game{
+		QuoteID: dailyQuoteId,
+		Date:    todaysDate(),
+		Guesses: make([]BookId, 0),
+	})
+	game = &player.Games[len(player.Games)-1]
+	err = game.Init(*data)
+	return game, err
+}
+
+func setupHTML(data *SaveData, allBooks Books) {
 	doc := dom.GetWindow().Document()
 
-	input := doc.GetElementByID(inputID).(*dom.HTMLInputElement)
-	suggestionsParent := doc.GetElementByID(suggestionsID).(dom.HTMLElement)
+	game := todaysGame(data)
+
+	defer func() {
+		if r := recover(); r != nil {
+			logErr(fmt.Sprintf("Recovered from panic setting up html:\n%v", r))
+		}
+	}()
+
+	quoteElement := doc.GetElementByID("quote")
+	if quoteElement != nil {
+		quoteElement.SetTextContent(game.Quote.Text)
+	}
+
+	input := doc.GetElementByID("title").(*dom.HTMLInputElement)
+	suggestions := doc.GetElementByID("titleSuggestions").(dom.HTMLElement)
+	guessForm := doc.GetElementByID("guessForm")
+
+	feedback, feedbackOk := doc.GetElementByID("feedbackBox").(dom.HTMLElement)
+	if !feedbackOk {
+		logErr("Failed to get html element with id 'feedbackBox'")
+	}
+	setFeedback := func(msg string, status string) {
+		if feedbackOk {
+			setFeedbackElem(feedback, msg, status)
+		}
+	}
+
+	statusBox, statusBoxOk := doc.GetElementByID("statusBox").(dom.HTMLElement)
+	if !statusBoxOk {
+		logErr("Failed to get html element with id 'statusBox'")
+	}
+	setStatus := func(msg string, status string) {
+		if statusBoxOk {
+			setFeedbackElem(statusBox, msg, status)
+			setFeedback("", "")
+		}
+	}
+
+	inputs := doc.GetElementsByClassName("game-input")
+	setInputsEnabled := func(enabled bool) {
+		defer func() {
+			if r := recover(); r != nil {
+				logErr("Failed to disable inputs")
+			}
+		}()
+		for _, e := range inputs {
+			e.Underlying().Set("disabled", !enabled)
+		}
+	}
+
+	if game.Attempts() > 0 {
+		if game.AttemptsLeft() <= 0 {
+			feedback.SetTextContent("You al")
+
+		}
+		msg := fmt.Sprintf("Welcome back! You have %d guesses remaining", game.AttemptsLeft())
+		setStatus(msg, "")
+	}
+
+	handleRevist := func() bool {
+		if !game.Completed() {
+			return true
+		}
+		if game.Won() {
+			setStatus("Congrats! You've already won for today, \ncome back tomorrow to play again.", SuccessFBStatus)
+		} else {
+			setStatus("Looks like you didn't get it this time :(\nCome back tomorrow and try again!", "")
+		}
+		return false
+	}
+	ongoing := handleRevist()
+	setInputsEnabled(ongoing)
+
+	// setup submit
+	guessForm.AddEventListener("submit", false, func(e dom.Event) {
+		e.PreventDefault()
+		if handleRevist() {
+			completed := onSubmit(input, data, setFeedback)
+			setInputsEnabled(!completed)
+		}
+	})
+
+	setupAutocomplete(input, suggestions, allBooks)
+}
+
+const (
+	// Feedback statuses
+	SuccessFBStatus = "successs"
+	ErrorFBStatus   = "error"
+	WarnFBStatus    = "warning"
+)
+
+func setFeedbackElem(e dom.HTMLElement, message string, status string) {
+	emoji := ""
+	switch status {
+	case ErrorFBStatus:
+		emoji = "❌"
+	case SuccessFBStatus:
+		emoji = "🎉"
+	case WarnFBStatus:
+		emoji = "⚠️"
+	}
+
+	if emoji != "" {
+		e.SetTextContent(emoji + " " + message)
+	} else {
+		e.SetTextContent(message)
+	}
+	e.Class().SetString("feedback " + status)
+}
+
+func onSubmit(
+	input *dom.HTMLInputElement,
+	data *SaveData,
+	setFeedback func(msg string, status string),
+) bool {
+
+	query := strings.ToLower(strings.TrimSpace(input.Value()))
+	game := todaysGame(data)
+	target := strings.ToLower(game.Book.Book.CleanTitle())
+
+	defer saveNonStaticData(*data)
+
+	if query == target {
+		game.Guesses = append(game.Guesses, game.Quote.BookId)
+		attempts := len(game.Guesses)
+		s := ""
+		if attempts > 1 {
+			s = "s"
+		}
+		message := fmt.Sprintf("Correct! You got it in %d attempt%s", attempts, s)
+		setFeedback(message, SuccessFBStatus)
+		return true
+	} else if bookId := data.FindBookId(query); bookId != NilID {
+		if slices.Contains(game.Guesses, bookId) {
+			setFeedback("You already tried that guess!", WarnFBStatus)
+		} else {
+			game.Guesses = append(game.Guesses, bookId)
+
+			if len(game.Guesses) == MaxGuesses {
+				msg := fmt.Sprintf("Failed! The answer was \"%s\"", game.Book.Book.CleanTitle())
+				setFeedback(msg, ErrorFBStatus)
+				return true
+			} else {
+				msg := fmt.Sprintf("Nope! Try again (%d attempts remaining)",
+					MaxGuesses-len(game.Guesses))
+				setFeedback(msg, ErrorFBStatus)
+			}
+		}
+	} else {
+		setFeedback("That book is not in your library!", WarnFBStatus)
+	}
+	return false
+}
+
+func setupAutocomplete(
+	input *dom.HTMLInputElement,
+	suggestionsParent dom.HTMLElement,
+	allBooks Books /* available books */) {
+
+	doc := dom.GetWindow().Document()
 
 	type Suggestion struct {
 		bookIndex  int
@@ -105,7 +336,6 @@ func setupAutocomplete(inputID string, suggestionsID string, allBooks Books /* a
 			return
 		}
 
-		// TODO: Make this
 		for i, suggestion := range suggestions {
 			li := doc.CreateElement("li")
 
@@ -185,8 +415,6 @@ func setupAutocomplete(inputID string, suggestionsID string, allBooks Books /* a
 			resetSuggestions()
 		}
 	})
-
-	fmt.Printf("Autocomplete setup for %s %s", inputID, suggestionsID)
 }
 
 // func fuzzyScore(query, ) {
@@ -245,7 +473,11 @@ func LevenshteinDistanceNorm(s1, s2 string) float64 {
 type Books []Book
 
 func (b Books) String(i int) string {
-	return b[i].CleanTitle()
+	if i >= 0 && i < len(b) {
+		return b[i].CleanTitle()
+	}
+	logErr(fmt.Sprintf("Fuzzy search is trying to use index %d", i))
+	return ""
 }
 
 func (b Books) Len() int {
