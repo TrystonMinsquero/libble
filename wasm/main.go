@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"reflect"
 	"syscall/js"
+	"time"
 )
 
 // func fetchDaily(userID string) (int, error) {
@@ -68,25 +69,15 @@ func main() {
 
 	// Wait for DOM to be ready, then initialize the game
 	doc := js.Global().Get("document")
-	if doc.Get("readyState").String() == "complete" {
-		fmt.Println("Ready state")
-		if isPage(PageGame) {
-			initGame()
-		} else if isPage(PageStart) {
-			initStart()
-		}
-	} else {
-		fmt.Println("Listening for DOMContentLoaded")
-		js.Global().Call("addEventListener", "DOMContentLoaded",
-			js.FuncOf(func(this js.Value, args []js.Value) interface{} {
-				fmt.Println("DOMContentLoaded")
-				if isPage(PageGame) {
-					initGame()
-				} else if isPage(PageStart) {
-					initStart()
-				}
-				return nil
-			}))
+	// I tried using onLoaded handler but it didn't work, so I just did this instead
+	for doc.Get("readyState").String() != "complete" {
+		fmt.Println("Waiting for page to complete...")
+		time.Sleep(time.Millisecond * 1)
+	}
+	if isPage(PageGame) {
+		initGame()
+	} else if isPage(PageStart) {
+		initStart()
 	}
 
 	<-make(chan bool) // Prevents "Uncaught Error: Go program has already exited"
