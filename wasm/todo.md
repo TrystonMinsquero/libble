@@ -15,9 +15,7 @@ Website TO-DO:
     - [] Hide Characters in quotes (can scrape from goodreads!)
 - [] Add Cloud save support
 - [] Have up and down arrows "scroll" as you go down
-- [] Make pretty, maybe get some input from Rik
+- [] Make pretty, maybe get some input from others
 - [] Make tab in input work
 - [] Highlight selected text that was hit during search
 
-
-Holy shit this is a lot. I gotta start grinding ASAP (Dec 5)
