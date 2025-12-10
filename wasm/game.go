@@ -95,9 +95,13 @@ func todaysDate() time.Time {
 func todaysGame(data *SaveData) *Game {
 	player := &data.Player
 	if len(player.Games) > 0 {
-		lastGame := &player.Games[len(player.Games)-1]
-		if todaysDate().Equal(toDate(lastGame.Date)) {
-			return lastGame
+		MaxLookback := 5
+		lastValidIndex := max(len(player.Games)-MaxLookback-1, 0)
+		for i := len(player.Games) - 1; i >= lastValidIndex; i-- {
+			game := &player.Games[i]
+			if todaysDate().Equal(toDate(game.Date)) {
+				return game
+			}
 		}
 	}
 	return nil
@@ -117,7 +121,7 @@ func initTodaysGame(data *SaveData) (game *Game, err error) {
 	player := &data.Player
 	player.Games = append(player.Games, Game{
 		QuoteID: dailyQuoteId,
-		Date:    todaysDate(),
+		Date:    time.Now(),
 		Guesses: make([]BookId, 0),
 	})
 	game = &player.Games[len(player.Games)-1]
@@ -166,29 +170,24 @@ func setupHTML(data *SaveData, allBooks Books) {
 		}
 	}
 
-	inputs := doc.GetElementsByClassName("game-input")
-	setInputsEnabled := func(enabled bool) {
+	gameInputs := doc.GetElementsByClassName("game-input")
+	skipBtn := doc.GetElementByID("skipBtn")
+	updateInputStates := func() {
 		defer func() {
 			if r := recover(); r != nil {
-				logErr("Failed to disable inputs")
+				logErr("Failed to update inputs")
 			}
 		}()
-		for _, e := range inputs {
-			e.Underlying().Set("disabled", !enabled)
+		disabled := game.Completed()
+		for _, e := range gameInputs {
+			e.Underlying().Set("disabled", disabled)
 		}
-	}
-
-	if game.Attempts() > 0 {
-		if game.AttemptsLeft() <= 0 {
-			feedback.SetTextContent("You al")
-
-		}
-		msg := fmt.Sprintf("Welcome back! You have %d guesses remaining", game.AttemptsLeft())
-		setStatus(msg, "")
+		skipBtn.Underlying().Set("disabled", game.Started())
 	}
 
 	handleRevist := func() bool {
 		if !game.Completed() {
+			setStatus("", "")
 			return true
 		}
 		if game.Won() {
@@ -198,15 +197,28 @@ func setupHTML(data *SaveData, allBooks Books) {
 		}
 		return false
 	}
-	ongoing := handleRevist()
-	setInputsEnabled(ongoing)
+
+	handleRevist()
+	updateInputStates()
 
 	// setup submit
 	guessForm.AddEventListener("submit", false, func(e dom.Event) {
 		e.PreventDefault()
 		if handleRevist() {
-			completed := onSubmit(input, data, setFeedback)
-			setInputsEnabled(!completed)
+			onSubmit(input, data, setFeedback)
+			updateInputStates()
+		}
+	})
+
+	// setup skip button
+	skipBtn.AddEventListener("click", false, func(e dom.Event) {
+		e.PreventDefault()
+		if game.Attempts() <= 0 && handleRevist() {
+			err := onSkip(data, setStatus)
+			log(err, "Failed skipping current quote")
+
+			quoteElement.SetTextContent(game.Quote.Text)
+			updateInputStates()
 		}
 	})
 
@@ -281,6 +293,37 @@ func onSubmit(
 		setFeedback("That book is not in your library!", WarnFBStatus)
 	}
 	return false
+}
+
+func onSkip(
+	data *SaveData,
+	setFeedback func(msg string, status string),
+) error {
+	game := todaysGame(data)
+
+	if game.Started() {
+		return fmt.Errorf("Trying to skip after the game already started")
+	}
+
+	defer saveNonStaticData(*data)
+	// Mark quote as seen so it won't appear again
+	if !slices.Contains(data.Player.SeenQuotes, game.QuoteID) {
+		data.Player.SeenQuotes = append(data.Player.SeenQuotes, game.QuoteID)
+	}
+
+	msg := fmt.Sprintf("Skipped! The answer was \"%s\"", game.Book.Book.CleanTitle())
+	setFeedback(msg, ErrorFBStatus)
+
+	dailyQuoteId, err := data.PickDailyQuote()
+	if err != nil {
+		return fmt.Errorf("Failed to pick daily quote when skipping:\n%v", err)
+	}
+	game.QuoteID = dailyQuoteId
+	game.Date = time.Now()
+	if err := game.Init(*data); err != nil {
+		return err
+	}
+	return nil
 }
 
 func setupAutocomplete(

@@ -1,9 +1,9 @@
 
 Website TO-DO:
 - [x] Remove hints temporarily
-- [] Make submit work
-    - [] Make lives system
-    - [] Make enter in input work
+- [~] Make submit work
+    - [x] Make lives system
+    - [x] Make enter in input work
     - [] Figure out wight it sets the title on submit (it's probably the html)
 - [] Add skip button (and make sure it's disabled after first guess, tooltip?)
 - [] Make share button
@@ -13,6 +13,7 @@ Website TO-DO:
     - [] Put server somewhere with something like api.libble.you
 ---------- BOTTOM LINE --------------------------------------------------------
 - [] Implement Hints
+    - [] Hide Characters in quotes (can scrape from goodreads!)
 - [] Add Cloud save support
 - [] Make pretty, maybe get some input from Rik
 - [] Make tab in input work

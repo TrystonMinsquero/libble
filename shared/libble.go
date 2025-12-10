@@ -93,6 +93,10 @@ func (g *Game) Init(data SaveData) error {
 	return nil
 }
 
+func (g Game) Started() bool {
+	return g.Attempts() > 0 // NOTE: add hints here later
+}
+
 func (g Game) Attempts() int {
 	return len(g.Guesses)
 }

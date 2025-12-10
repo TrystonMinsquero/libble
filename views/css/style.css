@@ -141,6 +141,27 @@ input[type="text"]:disabled {
   opacity: 0.5;
 }
 
+.skip-btn {
+  padding: 0.5rem 1rem;
+  margin: 0.25rem;
+  background-color: #3d3d3d;
+  color: #fff;
+  border: 1px solid #64ffda;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.skip-btn:hover:not(:disabled) {
+  background-color: #64ffda;
+  color: #000;
+}
+
+.skip-btn:disabled {
+  display: none;
+}
+
 .feedback {
   margin-top: 1.5rem;
   font-size: 1.1rem;
