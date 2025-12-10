@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"encoding/json"
-	"flag"
 	"fmt"
 	"math/rand/v2"
 	"net/http"
@@ -28,14 +27,15 @@ var (
 const saveDir = "saves/"
 
 func main() {
-	var cache bool
-	flag.BoolVar(&cache, "cache", true, "Will cache the requests")
 
-	flag.Parse()
-
-	options := ScrapeOptions{
-		cache: cache,
+	// Run in release mode by default
+	if ginMode := os.Getenv(gin.EnvGinMode); ginMode != "" {
+		gin.SetMode(ginMode)
+	} else {
+		gin.SetMode(gin.ReleaseMode)
 	}
+
+	isDebug := gin.Mode() == gin.DebugMode
 
 	// Create a Gin router with default middleware (logger and recovery)
 	r := gin.Default()
@@ -44,32 +44,29 @@ func main() {
 
 	r.SetTrustedProxies(nil)
 
-	const siteDir = "./site"
-	if entries, err := os.ReadDir(siteDir); err == nil {
-		for _, entry := range entries {
-			name := entry.Name()
-			if entry.IsDir() {
-				r.Static("/"+name, path.Join(siteDir, name))
-			} else {
-				r.StaticFile(name, path.Join(siteDir, name))
+	// Host the site as well when debugging
+	if isDebug {
+		const siteDir = "./site"
+		if entries, err := os.ReadDir(siteDir); err == nil {
+			for _, entry := range entries {
+				name := entry.Name()
+				if entry.IsDir() {
+					r.Static("/"+name, path.Join(siteDir, name))
+				} else {
+					r.StaticFile(name, path.Join(siteDir, name))
+				}
 			}
+		} else {
+			logg.Errorf("Failed reading from %s:\n%v", siteDir, err)
 		}
-	} else {
-		logg.Errorf("Failed reading from %s:\n%v", siteDir, err)
 	}
-
-	r.GET("/", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index.html", nil)
-	})
-	r.GET("/game", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "game.html", nil)
-	})
-	r.GET("/start", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "start.html", nil)
-	})
 
 	if err := os.MkdirAll(saveDir, os.ModePerm); err != nil {
 		logg.Errorf("Failed making save dir: %v", err)
+	}
+
+	options := ScrapeOptions{
+		cache: isDebug,
 	}
 
 	r.POST("/user/:GRID", func(c *gin.Context) {
