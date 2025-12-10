@@ -47,6 +47,7 @@ func main() {
 	r.LoadHTMLGlob("views/templates/*")
 	r.Static("/css", "./views/css")
 	r.Static("/js", "./views/js")
+	r.StaticFile("favicon.ico", "./views/favicon.ico")
 
 	r.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", nil)
