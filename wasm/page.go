@@ -7,8 +7,8 @@ import (
 	"honnef.co/go/js/dom/v2"
 )
 
-const PageGame = "/game"
-const PageStart = "/start"
+const PageGame = "/game.html"
+const PageStart = "/start.html"
 
 func location() *dom.URLUtils {
 	return dom.GetWindow().Location().URLUtils

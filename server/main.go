@@ -44,10 +44,19 @@ func main() {
 
 	r.SetTrustedProxies(nil)
 
-	r.LoadHTMLGlob("views/templates/*")
-	r.Static("/css", "./views/css")
-	r.Static("/js", "./views/js")
-	r.StaticFile("favicon.ico", "./views/favicon.ico")
+	const siteDir = "./site"
+	if entries, err := os.ReadDir(siteDir); err == nil {
+		for _, entry := range entries {
+			name := entry.Name()
+			if entry.IsDir() {
+				r.Static("/"+name, path.Join(siteDir, name))
+			} else {
+				r.StaticFile(name, path.Join(siteDir, name))
+			}
+		}
+	} else {
+		logg.Errorf("Failed reading from %s:\n%v", siteDir, err)
+	}
 
 	r.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", nil)
