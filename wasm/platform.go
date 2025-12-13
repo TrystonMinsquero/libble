@@ -104,7 +104,7 @@ func loadJson(key string, data any) error {
 }
 
 func fetch(path string, data any, method string) error {
-	origin := "https://api.libble.you/"
+	origin := "https://libble.onrender.com/"
 	url, err := url.JoinPath(origin, path)
 	if err != nil {
 		return fmt.Errorf("Failed parsing path '%s'", path)
