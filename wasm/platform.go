@@ -104,8 +104,7 @@ func loadJson(key string, data any) error {
 }
 
 func fetch(path string, data any, method string) error {
-	// NOTE: This will probably change once the server lives somewhere else
-	origin := js.Global().Get("window").Get("location").Get("origin").String()
+	origin := "https://api.libble.you/"
 	url, err := url.JoinPath(origin, path)
 	if err != nil {
 		return fmt.Errorf("Failed parsing path '%s'", path)
