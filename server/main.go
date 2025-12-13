@@ -14,6 +14,7 @@ import (
 	. "libble/shared"
 
 	"github.com/charmbracelet/log"
+	"github.com/gin-contrib/cors"
 	ginzip "github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
 )
@@ -40,7 +41,16 @@ func main() {
 	// Create a Gin router with default middleware (logger and recovery)
 	r := gin.Default()
 
-	r.Use(ginzip.Gzip(ginzip.DefaultCompression))
+	corsConf := cors.DefaultConfig()
+	corsConf.AllowOrigins = []string{"https://libble.you"}
+	if isDebug {
+		corsConf.AllowAllOrigins = true
+	}
+
+	r.Use(
+		ginzip.Gzip(ginzip.DefaultCompression),
+		cors.New(corsConf),
+	)
 
 	r.SetTrustedProxies(nil)
 
