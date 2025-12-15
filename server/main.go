@@ -42,9 +42,10 @@ func main() {
 	r := gin.Default()
 
 	corsConf := cors.DefaultConfig()
-	corsConf.AllowOrigins = []string{"https://libble.you"}
-	if isDebug {
+	if !isDebug {
 		corsConf.AllowAllOrigins = true
+	} else {
+		corsConf.AllowOrigins = []string{"https://libble.you"}
 	}
 
 	r.Use(
@@ -60,10 +61,14 @@ func main() {
 		if entries, err := os.ReadDir(siteDir); err == nil {
 			for _, entry := range entries {
 				name := entry.Name()
+				filePath := path.Join(siteDir, name)
 				if entry.IsDir() {
-					r.Static("/"+name, path.Join(siteDir, name))
+					r.Static("/"+name, filePath)
 				} else {
-					r.StaticFile(name, path.Join(siteDir, name))
+					r.StaticFile(name, filePath)
+				}
+				if name == "index.html" {
+					r.StaticFile("/", filePath)
 				}
 			}
 		} else {
