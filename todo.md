@@ -9,26 +9,26 @@
 - [x] Actually host the website and server
     - [x] Put website on GitHub pages (Need to make sure WASM works!)
     - [x] Put server somewhere with something like api.libble.you
-- [] Make share button
----------- BOTTOM LINE --------------------------------------------------------
-- [] Clean up the quote text to make sure punctuation and spacing is correct
-- [] Hide characters in quotes (can scrape from Goodreads!)
-- [] Implement Hints
-    - [] Show when you read the book
-    - [] Show how popular the book is likes/reads etc
-    - [] Unhide the characters mentioned
-- [] Have user/settings page
-    - [] Can see stats
-    - [] Can configure how quotes are selected (default of minimum likes of 5 can be higher or lower)
-    - [] Can sync data across devices
-        - [] Need to figure this out. Current options are:
+- [ ] Make share button
+## --------BOTTOM LINE --------------------------------------------------------
+- [ ] Clean up the quote text to make sure punctuation and spacing is correct
+- [ ] Hide characters in quotes (can scrape from Goodreads!)
+- [ ] Implement Hints
+    - [ ] Show when you read the book
+    - [ ] Show how popular the book is likes/reads etc
+    - [ ] Unhide the characters mentioned
+- [ ] Have user/settings page
+    - [ ] Can see stats
+    - [ ] Can configure how quotes are selected (default of minimum likes of 5 can be higher or lower)
+    - [ ] Can sync data across devices
+        - [ ] Need to figure this out. Current options are:
             - Have other device for code to sync, only need to do once.
             - Or could have account, with cloud saves
-- [] Stream scraping the website so it's not one big payload and makes it feel like the site isn't working
-- [] Should probably use a database instead of raw save json files.
-    - [] also saves the books by id so not saving duplicate scraped data.
-- [] Have up and down arrows "scroll" as you go down the options
-- [] Make pretty, maybe get some input from others
+- [ ] Stream scraping the website so it's not one big payload and makes it feel like the site isn't working
+- [ ] Should probably use a database instead of raw save json files.
+    - [ ] also saves the books by id so not saving duplicate scraped data.
+- [ ] Have up and down arrows "scroll" as you go down the options
+- [ ] Make pretty, maybe get some input from others
     - Should maybe port to react/TypeScript.
-- [] Make tab in input work
-- [] Highlight selected text that was hit during search
+- [ ] Make tab in input work
+- [ ] Highlight selected text that was hit during search
