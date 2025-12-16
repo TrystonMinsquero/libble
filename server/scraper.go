@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"time"
 
 	. "libble/shared"
 
@@ -13,20 +14,11 @@ import (
 )
 
 const (
-	domain        = "www.goodreads.com"
-	requestCache  = "./.request_cache"
-	minQuoteLikes = 100
+	domain       = "www.goodreads.com"
+	requestCache = "./.request_cache"
 )
 
-type ScrapeOptions struct {
-	cache bool
-}
-
-var scrapeOptions ScrapeOptions
-
 func scrapeGoodreads(userGRID string, options ScrapeOptions) ([]UserBook, []Quote, error) {
-	scrapeOptions = options
-
 	books, err := scrapeBooks(userGRID, options)
 	if err != nil {
 		return books, nil, err
@@ -34,11 +26,12 @@ func scrapeGoodreads(userGRID string, options ScrapeOptions) ([]UserBook, []Quot
 
 	readCount := 0
 	quotes := make([]Quote, 0, 100)
+	startTime := time.Now()
 
 	var wg sync.WaitGroup
 	var mutex sync.Mutex
 	for _, userBook := range books {
-		if !userBook.UserData.ShouldScrape() {
+		if options.ShouldScrapeQuotes(userBook) {
 			continue
 		}
 
@@ -58,15 +51,16 @@ func scrapeGoodreads(userGRID string, options ScrapeOptions) ([]UserBook, []Quot
 
 			mutex.Lock()
 			defer mutex.Unlock()
-			logg.Infof("Scraped %d Quotes from %s", len(bookQuotes), book.Title)
+			logg.Debugf("Scraped %d Quotes from %s", len(bookQuotes), book.Title)
 			quotes = append(quotes, bookQuotes...)
 		}()
 	}
 
 	wg.Wait()
-	logg.Printf("Total Quote Count: %d", len(quotes))
-	logg.Printf("Total Book Count: %d", len(books))
-	logg.Printf("Read Book Count: %d", readCount)
+	elapsed := time.Since(startTime)
+
+	logg.Infof("Scraped goodreads with '%s' for %d quotes (%d/%d books) in %v",
+		userGRID, len(quotes), readCount, len(books), elapsed)
 
 	return books, quotes, err
 }
@@ -133,7 +127,7 @@ func scrapeBooks(userGRID string, options ScrapeOptions) ([]UserBook, error) {
 
 func defaultCollectorOptions(options ScrapeOptions) func(*colly.Collector) {
 	return func(c *colly.Collector) {
-		if options.cache {
+		if isDebugBuild {
 			c.CacheDir = requestCache
 		}
 		colly.AllowedDomains(domain)
@@ -191,7 +185,7 @@ func scrapeBook(bookElem *colly.HTMLElement) (UserBook, error) {
 			case "":
 				userData.Stars = 0 // Not rated
 			default:
-				logg.Error("Was unable to translate '%s' to star count for %s",
+				logg.Errorf("Was unable to translate '%s' to star count for %s",
 					valueText, book.Title)
 			}
 		case "date_read":
@@ -221,15 +215,22 @@ func scrapeQuotes(url string, bookGRID string, options ScrapeOptions) ([]Quote, 
 		logg.Errorf("Error when collecting quote at %v\n%v", r.Request.URL, err)
 	})
 
+	stopCollecting := func() {
+		quoteCollector.OnHTMLDetach("a.next_page")
+		quoteCollector.OnHTMLDetach("div.quote")
+	}
+
 	quoteCollector.OnHTML("div.quote", func(quoteElem *colly.HTMLElement) {
 		quote, err := scrapeQuote(quoteElem)
 		if err == nil {
-			if quote.Likes >= minQuoteLikes {
+			if quote.Likes >= options.MinQuoteLikes {
 				quote.BookGRID = bookGRID
 				quotes = append(quotes, quote)
+				if len(quotes) >= int(options.MaxQuoteForBook) {
+					stopCollecting()
+				}
 			} else {
-				quoteCollector.OnHTMLDetach("a.next_page")
-				quoteCollector.OnHTMLDetach("div.quote")
+				stopCollecting()
 			}
 		} else {
 			logg.Error(err)

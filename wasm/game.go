@@ -129,6 +129,36 @@ func initTodaysGame(data *SaveData) (game *Game, err error) {
 	return game, err
 }
 
+func getElemByID(doc dom.Document, ID string) dom.Element {
+	elem := doc.GetElementByID(ID)
+	if elem == nil {
+		logErr("Failed to find %s in the dom", ID)
+	}
+	return elem
+}
+
+func getElemByIDAs[T any](doc dom.Document, ID string) T {
+	var empty T
+	if elem := getElemByID(doc, ID); elem != nil {
+		if result, ok := elem.(T); ok {
+			return result
+		}
+		logErr("Failed to cast %s to %T", ID, empty)
+	}
+	return empty
+}
+
+func setVisible(elem dom.HTMLElement, visible bool) {
+	if elem == nil {
+		return
+	}
+	if visible {
+		elem.Style().SetProperty("display", "block", "")
+	} else {
+		elem.Style().SetProperty("display", "none", "")
+	}
+}
+
 func setupHTML(data *SaveData, allBooks Books) {
 	doc := dom.GetWindow().Document()
 
@@ -136,65 +166,72 @@ func setupHTML(data *SaveData, allBooks Books) {
 
 	defer func() {
 		if r := recover(); r != nil {
-			logErr(fmt.Sprintf("Recovered from panic setting up html:\n%v", r))
+			logErr("Recovered from panic setting up html:\n%v", r)
 		}
 	}()
 
-	quoteElement := doc.GetElementByID("quote")
+	quoteElement := getElemByID(doc, "quote")
 	if quoteElement != nil {
 		quoteElement.SetTextContent(game.Quote.Text)
 	}
 
-	input := doc.GetElementByID("title").(*dom.HTMLInputElement)
-	suggestions := doc.GetElementByID("titleSuggestions").(dom.HTMLElement)
-	guessForm := doc.GetElementByID("guessForm")
+	input := getElemByIDAs[*dom.HTMLInputElement](doc, "title")
+	suggestions := getElemByIDAs[dom.HTMLElement](doc, "titleSuggestions")
+	guessForm := getElemByID(doc, "guessForm")
 
-	feedback, feedbackOk := doc.GetElementByID("feedbackBox").(dom.HTMLElement)
-	if !feedbackOk {
-		logErr("Failed to get html element with id 'feedbackBox'")
-	}
+	feedback := getElemByIDAs[dom.HTMLElement](doc, "feedbackBox")
 	setFeedback := func(msg string, status string) {
-		if feedbackOk {
+		if feedback != nil {
 			setFeedbackElem(feedback, msg, status)
 		}
 	}
 
-	statusBox, statusBoxOk := doc.GetElementByID("statusBox").(dom.HTMLElement)
-	if !statusBoxOk {
-		logErr("Failed to get html element with id 'statusBox'")
-	}
+	statusBox := getElemByIDAs[dom.HTMLElement](doc, "statusBox")
 	setStatus := func(msg string, status string) {
-		if statusBoxOk {
+		if statusBox != nil {
 			setFeedbackElem(statusBox, msg, status)
 			setFeedback("", "")
 		}
 	}
 
 	gameInputs := doc.GetElementsByClassName("game-input")
-	skipBtn := doc.GetElementByID("skipBtn")
+	skipBtn := getElemByIDAs[*dom.HTMLButtonElement](doc, "skipBtn")
+	submitBtn := getElemByIDAs[*dom.HTMLButtonElement](doc, "submitBtn")
+	shareContainer := getElemByIDAs[dom.HTMLElement](doc, "shareContainer")
+	shareBtn := getElemByIDAs[*dom.HTMLButtonElement](doc, "shareBtn")
+
 	updateInputStates := func() {
 		defer func() {
 			if r := recover(); r != nil {
 				logErr("Failed to update inputs")
 			}
 		}()
-		disabled := game.Completed()
+		completed := game.Completed()
+		disabled := completed
 		for _, e := range gameInputs {
 			e.Underlying().Set("disabled", disabled)
 		}
-		skipBtn.Underlying().Set("disabled", game.Started())
+
+		skipBtn.SetDisabled(game.Started())
+
+		setVisible(submitBtn, !completed)
+		setVisible(shareContainer, completed)
 	}
 
 	handleRevist := func() bool {
 		if !game.Completed() {
 			setStatus("", "")
+			setVisible(submitBtn, true)
 			return true
 		}
 		if game.Won() {
-			setStatus("Congrats! You've already won for today, \ncome back tomorrow to play again.", SuccessFBStatus)
+			setStatus("Congrats! You've already won for today,\ncome back tomorrow to play again.", SuccessFBStatus)
 		} else {
 			setStatus("Looks like you didn't get it this time :(\nCome back tomorrow and try again!", "")
 		}
+		input.SetPlaceholder(game.Book.Book.CleanTitle())
+		setVisible(submitBtn, false)
+
 		return false
 	}
 
@@ -222,6 +259,14 @@ func setupHTML(data *SaveData, allBooks Books) {
 		}
 	})
 
+	// setup share button
+	shareBtn.AddEventListener("click", false, func(e dom.Event) {
+		e.PreventDefault()
+		if game.Completed() {
+			shareResults(game, data)
+		}
+	})
+
 	setupAutocomplete(input, suggestions, allBooks)
 }
 
@@ -233,6 +278,9 @@ const (
 )
 
 func setFeedbackElem(e dom.HTMLElement, message string, status string) {
+	if e == nil {
+		return
+	}
 	emoji := ""
 	switch status {
 	case ErrorFBStatus:
@@ -279,13 +327,13 @@ func onSubmit(
 		} else {
 			game.Guesses = append(game.Guesses, bookId)
 
-			if len(game.Guesses) == MaxGuesses {
+			if len(game.Guesses) >= game.Settings.MaxGuesses {
 				msg := fmt.Sprintf("Failed! The answer was \"%s\"", game.Book.Book.CleanTitle())
 				setFeedback(msg, ErrorFBStatus)
 				return true
 			} else {
 				msg := fmt.Sprintf("Nope! Try again (%d attempts remaining)",
-					MaxGuesses-len(game.Guesses))
+					game.Settings.MaxGuesses-len(game.Guesses))
 				setFeedback(msg, ErrorFBStatus)
 			}
 		}
@@ -324,6 +372,45 @@ func onSkip(
 		return err
 	}
 	return nil
+}
+
+func shareResults(game *Game, data *SaveData) {
+	// Create shareable text
+	var shareText strings.Builder
+	shareText.WriteString("📖 Libble - ")
+
+	// Format date
+	dateStr := game.Date.Format("Jan 2 2006")
+	shareText.WriteString(dateStr)
+	shareText.WriteString("\n\n")
+	shareText.WriteString(game.Quote.Text)
+	shareText.WriteString("\n\n")
+	// Add result
+	// if game.Won() {
+	// 	shareText.WriteString(fmt.Sprintf("✅ %d/%d\n", len(game.Guesses), game.Settings.MaxGuesses))
+	// } else {
+	// 	shareText.WriteString(fmt.Sprintf("❌ X/%d\n", game.Settings.MaxGuesses))
+	// }
+
+	// Add visual representation of guesses
+	for i := 0; i < game.Settings.MaxGuesses; i++ {
+		if i < len(game.Guesses) {
+			if i == len(game.Guesses)-1 && game.Won() {
+				shareText.WriteString("🟩")
+			} else {
+				shareText.WriteString("🟥")
+			}
+		} else {
+			shareText.WriteString("⬜")
+		}
+		if i < game.Settings.MaxGuesses-1 {
+			shareText.WriteString(" ")
+		}
+	}
+
+	// Copy to clipboard
+	text := shareText.String()
+	copyToClipboard(text)
 }
 
 func setupAutocomplete(
@@ -519,7 +606,7 @@ func (b Books) String(i int) string {
 	if i >= 0 && i < len(b) {
 		return b[i].CleanTitle()
 	}
-	logErr(fmt.Sprintf("Fuzzy search is trying to use index %d", i))
+	logErr("Fuzzy search is trying to use index %d", i)
 	return ""
 }
 

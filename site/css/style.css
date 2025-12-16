@@ -223,3 +223,26 @@ input[type="text"]:disabled {
   background: #3d3d3d;
 }
 
+.share-btn {
+  padding: 0.75rem 1.5rem;
+  background-color: #64ffda;
+  color: #000;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(100, 255, 218, 0.2);
+}
+
+.share-btn:hover {
+  background-color: #1de9b6;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(100, 255, 218, 0.3);
+}
+
+.share-btn:active {
+  transform: translateY(0);
+}
+

@@ -19,13 +19,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var (
-	logg = log.NewWithOptions(os.Stderr, log.Options{
-		ReportTimestamp: false,
-	})
-)
-
 const saveDir = "saves/"
+
+var isDebugBuild = os.Getenv(gin.EnvGinMode) == gin.DebugMode
+var logg = logger()
 
 func main() {
 
@@ -36,13 +33,11 @@ func main() {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
-	isDebug := gin.Mode() == gin.DebugMode
-
 	// Create a Gin router with default middleware (logger and recovery)
 	r := gin.Default()
 
 	corsConf := cors.DefaultConfig()
-	if !isDebug {
+	if !isDebugBuild {
 		corsConf.AllowAllOrigins = true
 	} else {
 		corsConf.AllowOrigins = []string{"https://libble.you"}
@@ -56,7 +51,7 @@ func main() {
 	r.SetTrustedProxies(nil)
 
 	// Host the site as well when debugging
-	if isDebug {
+	if isDebugBuild {
 		const siteDir = "./site"
 		if entries, err := os.ReadDir(siteDir); err == nil {
 			for _, entry := range entries {
@@ -80,10 +75,6 @@ func main() {
 		logg.Errorf("Failed making save dir: %v", err)
 	}
 
-	options := ScrapeOptions{
-		cache: isDebug,
-	}
-
 	r.POST("/user/:GRID", func(c *gin.Context) {
 		userGRID := c.Param("GRID")
 		if userGRID == "" {
@@ -92,8 +83,8 @@ func main() {
 		}
 
 		// TODO: Maybe limit to 3 per user?
-
-		books, quotes, err := scrapeGoodreads(userGRID, options)
+		scrapeOptions := DefaultScrapeOptions()
+		books, quotes, err := scrapeGoodreads(userGRID, scrapeOptions)
 		if err != nil {
 			errorMsg := fmt.Sprintf("Error scraping goodreads with id %s: %v", userGRID, err)
 			c.JSON(http.StatusFailedDependency, gin.H{"error": errorMsg})
@@ -128,6 +119,7 @@ func main() {
 		}
 
 		userGRID := saveData.Player.UserGRID
+		options := saveData.Player.Settings.ScrapeOptions
 		_, _, err = scrapeGoodreads(userGRID, options)
 		if err != nil {
 			errorMsg := fmt.Sprintf("Error scraping goodreads with id %s: %v", userGRID, err)
@@ -136,12 +128,13 @@ func main() {
 		}
 	})
 
-	r.GET("/scrape/:id", func(c *gin.Context) {
-		userGRID := c.Param("id")
+	r.GET("/scrape/:GRID", func(c *gin.Context) {
+		userGRID := c.Param("GRID")
 		if userGRID == "" {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Must provide user param"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Must provide GRID param (goodreads ID)"})
 			return
 		}
+		options := DefaultScrapeOptions()
 		books, quotes, err := scrapeGoodreads(userGRID, options)
 
 		res := gin.H{
@@ -155,6 +148,19 @@ func main() {
 	})
 
 	logg.Fatal(r.Run())
+}
+
+func logger() *log.Logger {
+	level := log.WarnLevel
+	if isDebugBuild {
+		level = log.DebugLevel
+	}
+
+	return log.NewWithOptions(os.Stderr, log.Options{
+		ReportTimestamp: false,
+		Level:           level,
+	})
+
 }
 
 func saveFileName(userID DBID) string {
@@ -224,6 +230,7 @@ func createUserData(userGRID string, books []UserBook, quotes []Quote) SaveData 
 	var data SaveData
 	data.Player.UserGRID = userGRID
 	data.Player.ID = DBID(rand.Uint64())
+	data.Player.Settings = DefaultPlayerSettings()
 
 	// Initialize maps
 	data.Books = make(map[BookId]UserBook)
@@ -277,6 +284,8 @@ func createUserData(userGRID string, books []UserBook, quotes []Quote) SaveData 
 	// Initialize empty slices
 	data.Player.SeenQuotes = []QuoteId{}
 	data.Player.Games = []Game{}
+
+	logg.Debug("Created new user %s from GRID '%s'", data.Player.ID, userGRID)
 
 	if err := saveUserData(data); err != nil {
 		logg.Errorf("Unabled to save new user data: %v", err)

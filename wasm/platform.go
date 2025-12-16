@@ -10,12 +10,15 @@ import (
 	"net/http"
 	"net/url"
 	"syscall/js"
+
+	"honnef.co/go/js/dom/v2"
 )
 
-func logErr(context string) {
+func logErr(contextFmt string, args ...any) {
+	context := fmt.Sprintf(contextFmt, args...)
+	fmt.Printf("Error: %v\n", context)
 	console := js.Global().Get("console")
 	console.Call("error", context)
-	fmt.Printf("Error: %v\n", context)
 }
 
 func log(err error, context string) {
@@ -104,7 +107,7 @@ func loadJson(key string, data any) error {
 }
 
 func fetch(path string, data any, method string) error {
-	origin := "https://libble.onrender.com/"
+	origin := dom.GetWindow().Location().Origin()
 	url, err := url.JoinPath(origin, path)
 	if err != nil {
 		return fmt.Errorf("Failed parsing path '%s'", path)
@@ -144,4 +147,29 @@ func fetch(path string, data any, method string) error {
 	}
 
 	return nil
+}
+
+func copyToClipboard(text string) {
+	navigator := js.Global().Get("navigator")
+	clipboard := navigator.Get("clipboard")
+
+	// Create a promise callback
+	promise := clipboard.Call("writeText", text)
+
+	// Handle success
+	promise.Call("then", js.FuncOf(func(this js.Value, args []js.Value) interface{} {
+		console := js.Global().Get("console")
+		console.Call("log", "Copied to clipboard!")
+
+		// Show user feedback
+		js.Global().Call("alert", "Results copied to clipboard!")
+		return nil
+	}))
+
+	// Handle error
+	promise.Call("catch", js.FuncOf(func(this js.Value, args []js.Value) interface{} {
+		logErr("Failed to copy to clipboard")
+		js.Global().Call("alert", "Failed to copy to clipboard. Please try again.")
+		return nil
+	}))
 }

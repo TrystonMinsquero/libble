@@ -16,8 +16,9 @@ type BookId DBID
 const NilID = 0
 
 type Player struct {
-	ID       DBID   `json:"libble_id"`
-	UserGRID string `json:"user_gr_id"`
+	ID       DBID           `json:"libble_id"`
+	UserGRID string         `json:"user_gr_id"`
+	Settings PlayerSettings `json:"settings"`
 
 	SeenQuotes []QuoteId `json:"seen_quote_ids"`
 	Games      []Game    `json:"games"`
@@ -63,19 +64,73 @@ type UserBookData struct {
 	DateAdded string   `json:"date_added"`
 }
 
-const MaxGuesses = 5
+type PlayerSettings struct {
+	GameSettings  GameSettings  `json:"game_settings"`
+	ScrapeOptions ScrapeOptions `json:"scrape_options"`
+}
+
+func DefaultPlayerSettings() PlayerSettings {
+	return PlayerSettings{
+		GameSettings:  DefaultGameSettings(),
+		ScrapeOptions: DefaultScrapeOptions(),
+	}
+}
+
+type ScrapeOptions struct {
+	MinPersonalStars uint
+	MinQuoteLikes    uint
+	MaxQuoteForBook  uint
+}
+
+func DefaultScrapeOptions() ScrapeOptions {
+	return ScrapeOptions{
+		MinPersonalStars: 4,
+		MinQuoteLikes:    10,
+		MaxQuoteForBook:  50,
+	}
+}
+
+func (o ScrapeOptions) ShouldScrapeQuotes(userBook UserBook) bool {
+	if !userBook.UserData.IsRead() {
+		return false
+	}
+	if o.MinPersonalStars > userBook.UserData.Stars {
+		return false
+	}
+	return true
+}
+
+type GameSettings struct {
+	MaxGuesses int  `json:"max_guesses"`
+	AllowHints bool `json:"allowed_hints"`
+}
+
+func DefaultGameSettings() GameSettings {
+	return GameSettings{
+		MaxGuesses: 5,
+		AllowHints: true,
+	}
+}
 
 type Game struct {
 	QuoteID QuoteId   `json:"quote_id"`
 	Date    time.Time `json:"date_started"`
 	Guesses []BookId  `json:"guesses"`
 
-	Quote  Quote
-	BookId BookId
-	Book   UserBook
+	// Runtime data
+	Quote    Quote        `json:"-"`
+	BookId   BookId       `json:"-"`
+	Book     UserBook     `json:"-"`
+	Settings GameSettings `json:"-"`
 }
 
 func (g *Game) Init(data SaveData) error {
+	g.Settings = data.Player.Settings.GameSettings
+	if g.Settings.MaxGuesses < 1 {
+		// This should never happen, but just in case they can at least play
+		g.Settings.MaxGuesses = 1
+	}
+
 	// Get the quote from the map
 	quote, found := data.Quotes[g.QuoteID]
 	if !found {
@@ -101,7 +156,7 @@ func (g Game) Attempts() int {
 	return len(g.Guesses)
 }
 func (g Game) AttemptsLeft() int {
-	return max(MaxGuesses-len(g.Guesses), 0)
+	return max(g.Settings.MaxGuesses-len(g.Guesses), 0)
 }
 func (g Game) Completed() bool {
 	return g.AttemptsLeft() <= 0 || g.Won()
@@ -133,10 +188,6 @@ type Quote struct {
 
 	BookId   BookId `json:"book_id"`
 	BookGRID string `json:"book_gr_id"`
-}
-
-func (b UserBookData) ShouldScrape() bool {
-	return b.IsRead()
 }
 
 func (b UserBookData) IsRead() bool {
