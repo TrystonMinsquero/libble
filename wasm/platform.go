@@ -10,8 +10,6 @@ import (
 	"net/http"
 	"net/url"
 	"syscall/js"
-
-	"honnef.co/go/js/dom/v2"
 )
 
 func logErr(contextFmt string, args ...any) {
@@ -25,7 +23,7 @@ func log(err error, context string) {
 	if err == nil {
 		return
 	}
-	logErr(context + "\n" + err.Error())
+	logErr("%s\n%v", context, err)
 }
 
 func saveData(key string, value string) (err error) {
@@ -106,9 +104,11 @@ func loadJson(key string, data any) error {
 	return nil
 }
 
+var APIOrigin string // set with ldflags in build
+
 func fetch(path string, data any, method string) error {
-	origin := dom.GetWindow().Location().Origin()
-	url, err := url.JoinPath(origin, path)
+	fmt.Println("Origin: ", APIOrigin)
+	url, err := url.JoinPath(APIOrigin, path)
 	if err != nil {
 		return fmt.Errorf("Failed parsing path '%s'", path)
 	}

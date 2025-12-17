@@ -285,7 +285,7 @@ func createUserData(userGRID string, books []UserBook, quotes []Quote) SaveData 
 	data.Player.SeenQuotes = []QuoteId{}
 	data.Player.Games = []Game{}
 
-	logg.Debug("Created new user %s from GRID '%s'", data.Player.ID, userGRID)
+	logg.Debugf("Created new user %d from GRID '%s'", data.Player.ID, userGRID)
 
 	if err := saveUserData(data); err != nil {
 		logg.Errorf("Unabled to save new user data: %v", err)
