@@ -1,5 +1,5 @@
 # Libble
-A Wordle inspired game where you guess the quotes from the books you read.
+A Wordle inspired game where you guess the quotes from the books you've read.
 Play at [libble.you](https://libble.you)!
 
 ## Contributing
