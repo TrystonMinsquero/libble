@@ -6,12 +6,20 @@ import (
 	"slices"
 	"strings"
 	"time"
+
+	"github.com/charmbracelet/log"
 )
 
 type DBID uint64
 
 type QuoteId DBID
 type BookId DBID
+
+var logg *log.Logger = log.Default()
+
+func SetSharedLogger(logger *log.Logger) {
+	logg = logger
+}
 
 const NilID = 0
 
@@ -211,62 +219,71 @@ func (s SaveData) PickDailyQuote() (QuoteId, error) {
 
 	now := time.Now().UTC()
 	seed := now.Year() + now.YearDay()
-	fmt.Printf("Random Seed: %d\n", seed)
+	log.Debugf("Random Seed: %d\n", seed)
 	rng := rand.New(rand.NewSource(int64(seed)))
 
-	type weightedQuote struct {
-		quote QuoteId
+	// TODO: actually use weights for meta data like how many times the book was played
+	type QuoteMetaData struct {
 		tries uint8
 	}
 
-	quotes := make([]weightedQuote, quoteCount)
+	quotesMetaData := make(map[QuoteId]QuoteMetaData, quoteCount)
+
+	quotes := make([]QuoteId, quoteCount)
 	triedCount := 0
 	collisions := 0
 
 	quoteIndex := 0
-	for id, _ := range s.Quotes {
-		quotes[quoteIndex].quote = id
+	for id := range s.Quotes {
+		quotes[quoteIndex] = id
 		quoteIndex++
 	}
+	slices.Sort(quotes) // needed to make the picking determinstic
 
 	for triedCount < quoteCount && collisions < quoteCount*2 {
 		quoteIndex := rng.Intn(quoteCount)
+		logg.Debugf("Quote Index: %d is %d\n", quoteIndex, quotes[quoteIndex])
 
-		quoteId := quotes[quoteIndex].quote
-		tries := quotes[quoteIndex].tries
-		if tries > 0 {
+		quoteId := quotes[quoteIndex]
+		metaData, found := quotesMetaData[quoteId]
+		if found && metaData.tries > 0 {
 			collisions += 1
-			if tries == 100 {
-				panic("Too many tries")
+			if metaData.tries >= 100 {
+				logg.Errorf("Too many tries on quote %d", quoteId)
+				break
 			}
-			quotes[quoteIndex].tries += 1
+			metaData.tries += 1
+			quotesMetaData[quoteId] = metaData
 			continue
 		}
 
 		triedCount += 1
 		if slices.Contains(s.Player.SeenQuotes, quoteId) {
+			logg.Errorf("Skipping quote %d because it's seen\n", quoteId)
 			continue
 		}
 
 		// Check if book is read
 		quote, found := s.Quotes[quoteId]
 		if !found {
-			panic("Couldn't get quote back")
+			logg.Errorf("Couldn't get quote %d back from map", quoteId)
+			continue
 		}
 		book, found := s.Books[quote.BookId]
 		if !found {
-			fmt.Printf("Couldn't find book with id %d for quote %d\n", quote.BookId, quoteId)
+			logg.Errorf("Couldn't find book with id %d for quote %d\n", quote.BookId, quoteId)
 			continue
 		}
 		if !book.UserData.IsRead() {
+			logg.Debugf("Skipping quote %d because it's not read\n", quoteId)
 			continue
 		}
 		return quoteId, nil
 	}
 
-	fmt.Printf("Warning: Recycling quote for %s\n", s.Player.UserGRID)
+	logg.Warnf("Recycling quote for %s\n", s.Player.UserGRID)
 	quoteIndex = rng.Intn(quoteCount)
-	return quotes[quoteIndex].quote, nil
+	return quotes[quoteIndex], nil
 }
 
 // Returns index from `availableQuotes`
