@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/url"
 
 	"honnef.co/go/js/dom/v2"
@@ -24,7 +23,7 @@ func handlePage() string {
 	redirect := func(page string) string {
 		curr := currPage()
 		if curr != page {
-			fmt.Printf("redirect %s -> %s\n", curr, page)
+			logg.Debugf("redirect %s -> %s\n", curr, page)
 			location().SetHref(page)
 			return page
 		}

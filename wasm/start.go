@@ -30,7 +30,6 @@ func initStart() {
 	form.AddEventListener("submit", false, func(e dom.Event) {
 		e.PreventDefault()
 		hideError()
-		fmt.Println("Pressed Submit")
 
 		doc = dom.GetWindow().Document()
 		submitButton, ok := doc.GetElementByID("submit-button").(*dom.HTMLButtonElement)
@@ -60,15 +59,14 @@ func initStart() {
 				return
 			}
 
-			fmt.Println("Successfully created new user:")
 			userId := strconv.FormatUint(uint64(data.Player.ID), 10)
+			logg.Infof("Successfully created new user: %s", userId)
 
 			if userId != "" {
 				saveData(userIdKey, userId)
 				if err := saveAllData(data); err != nil {
 					log(err, "Failed to save data for creating user")
 				}
-				fmt.Println(data)
 				location().SetHref(PageGame)
 			} else {
 				log(fmt.Errorf("UserId is empty"), "Failed to create user")

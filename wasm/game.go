@@ -62,7 +62,7 @@ func loadAllData(data *SaveData) error {
 }
 
 func initGame() {
-	fmt.Println("Starting game...")
+	logg.Debug("Starting game...")
 	var data SaveData
 	// Load save data from local storage
 	if err := loadAllData(&data); err != nil {
@@ -73,7 +73,7 @@ func initGame() {
 		log(err, "Failed initializing today's game")
 	}
 
-	fmt.Println("Setting update autocomplete")
+	logg.Debug("Setting update autocomplete")
 
 	// convert book map to slice
 	bookCount := len(data.Books)
@@ -127,36 +127,6 @@ func initTodaysGame(data *SaveData) (game *Game, err error) {
 	game = &player.Games[len(player.Games)-1]
 	err = game.Init(*data)
 	return game, err
-}
-
-func getElemByID(doc dom.Document, ID string) dom.Element {
-	elem := doc.GetElementByID(ID)
-	if elem == nil {
-		logErr("Failed to find %s in the dom", ID)
-	}
-	return elem
-}
-
-func getElemByIDAs[T any](doc dom.Document, ID string) T {
-	var empty T
-	if elem := getElemByID(doc, ID); elem != nil {
-		if result, ok := elem.(T); ok {
-			return result
-		}
-		logErr("Failed to cast %s to %T", ID, empty)
-	}
-	return empty
-}
-
-func setVisible(elem dom.HTMLElement, visible bool) {
-	if elem == nil {
-		return
-	}
-	if visible {
-		elem.Style().SetProperty("display", "block", "")
-	} else {
-		elem.Style().SetProperty("display", "none", "")
-	}
 }
 
 func setupHTML(data *SaveData, allBooks Books) {
@@ -263,7 +233,22 @@ func setupHTML(data *SaveData, allBooks Books) {
 	shareBtn.AddEventListener("click", false, func(e dom.Event) {
 		e.PreventDefault()
 		if game.Completed() {
-			shareResults(game, data)
+			results := generateResultsString(game)
+			err := copyToClipboard(results)
+			prevText := shareBtn.TextContent()
+			if err != nil {
+				shareBtn.SetTextContent("📋 Copied!")
+			} else {
+				log(err, "Failed to share")
+				shareBtn.SetTextContent("Sorry, failed to copy")
+			}
+
+			go func() {
+				time.Sleep(time.Second * 3)
+				shareBtn.SetTextContent(prevText)
+			}()
+		} else {
+			logErr("How did you click this?")
 		}
 	})
 
@@ -374,7 +359,7 @@ func onSkip(
 	return nil
 }
 
-func shareResults(game *Game, data *SaveData) {
+func generateResultsString(game *Game) string {
 	// Create shareable text
 	var shareText strings.Builder
 	shareText.WriteString("📖 Libble - ")
@@ -385,12 +370,6 @@ func shareResults(game *Game, data *SaveData) {
 	shareText.WriteString("\n\n")
 	shareText.WriteString(game.Quote.Text)
 	shareText.WriteString("\n\n")
-	// Add result
-	// if game.Won() {
-	// 	shareText.WriteString(fmt.Sprintf("✅ %d/%d\n", len(game.Guesses), game.Settings.MaxGuesses))
-	// } else {
-	// 	shareText.WriteString(fmt.Sprintf("❌ X/%d\n", game.Settings.MaxGuesses))
-	// }
 
 	// Add visual representation of guesses
 	for i := 0; i < game.Settings.MaxGuesses; i++ {
@@ -409,8 +388,7 @@ func shareResults(game *Game, data *SaveData) {
 	}
 
 	// Copy to clipboard
-	text := shareText.String()
-	copyToClipboard(text)
+	return shareText.String()
 }
 
 func setupAutocomplete(
@@ -460,7 +438,6 @@ func setupAutocomplete(
 			suggestionsParent.Style().SetProperty("display", val, "important")
 		}
 
-		fmt.Printf("Updating suggestions\n")
 		if len(suggestions) == 0 {
 			setDisplay("none")
 			return
@@ -489,7 +466,6 @@ func setupAutocomplete(
 
 	input.AddEventListener("input", false, func(e dom.Event) {
 		query := strings.TrimSpace(input.Value())
-		fmt.Println("Input callback")
 
 		matches := fuzzy.FindFrom(query, allBooks)
 		count := min(len(matches), int(80))
@@ -535,7 +511,6 @@ func setupAutocomplete(
 		case "Escape":
 			resetSuggestions()
 		}
-		fmt.Println("Current:", currentSelection)
 	})
 
 	// Hide suggestions when clicking outside
@@ -631,7 +606,7 @@ func (b Books) Len() int {
 // 	// 	}
 // 	//
 // 	// 	score := LevenshteinDistance(query, title)
-// 	// 	fmt.Printf("%s has score %d with %s\n", title, score, query)
+// 	// 	logg.Debugf("%s has score %d with %s\n", title, score, query)
 // 	// 	if score > 0 {
 // 	// 		matches = append(matches, Match{
 // 	// 			book:  book,

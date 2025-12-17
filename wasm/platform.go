@@ -12,19 +12,11 @@ import (
 	"syscall/js"
 )
 
-func logErr(contextFmt string, args ...any) {
-	context := fmt.Sprintf(contextFmt, args...)
-	fmt.Printf("Error: %v\n", context)
-	console := js.Global().Get("console")
-	console.Call("error", context)
-}
+// Set from ldflags during build
+var mode string
+var APIOrigin string
 
-func log(err error, context string) {
-	if err == nil {
-		return
-	}
-	logErr("%s\n%v", context, err)
-}
+var isDebug = mode == "debug"
 
 func saveData(key string, value string) (err error) {
 	defer func() {
@@ -35,7 +27,7 @@ func saveData(key string, value string) (err error) {
 	err = nil
 	localStorage := js.Global().Get("localStorage")
 	localStorage.Call("setItem", key, value)
-	fmt.Printf("Stored %s: %s\n", key, value)
+	logg.Debugf("Stored %s: %s\n", key, value)
 	return err
 }
 
@@ -104,10 +96,7 @@ func loadJson(key string, data any) error {
 	return nil
 }
 
-var APIOrigin string // set with ldflags in build
-
 func fetch(path string, data any, method string) error {
-	fmt.Println("Origin: ", APIOrigin)
 	url, err := url.JoinPath(APIOrigin, path)
 	if err != nil {
 		return fmt.Errorf("Failed parsing path '%s'", path)
@@ -149,7 +138,13 @@ func fetch(path string, data any, method string) error {
 	return nil
 }
 
-func copyToClipboard(text string) {
+func copyToClipboard(text string) (err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			err = fmt.Errorf("Failed to copy to clipboard: %v\n", r)
+		}
+	}()
+
 	navigator := js.Global().Get("navigator")
 	clipboard := navigator.Get("clipboard")
 
@@ -158,18 +153,14 @@ func copyToClipboard(text string) {
 
 	// Handle success
 	promise.Call("then", js.FuncOf(func(this js.Value, args []js.Value) interface{} {
-		console := js.Global().Get("console")
-		console.Call("log", "Copied to clipboard!")
-
-		// Show user feedback
-		js.Global().Call("alert", "Results copied to clipboard!")
 		return nil
 	}))
 
 	// Handle error
 	promise.Call("catch", js.FuncOf(func(this js.Value, args []js.Value) interface{} {
-		logErr("Failed to copy to clipboard")
-		js.Global().Call("alert", "Failed to copy to clipboard. Please try again.")
+		err = fmt.Errorf("Failed to copy to clipboard")
 		return nil
 	}))
+
+	return err
 }

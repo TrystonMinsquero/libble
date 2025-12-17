@@ -5,10 +5,12 @@ cd "$(dirname "$0")"
 build_wasm() {
     if [[ $GIN_MODE == "debug" ]]; then
         API_ORIGIN=""
+        MODE="debug"
     else
         API_ORIGIN="https://api.libble.you"
+        MODE="release"
     fi
-    GOOS="js" GOARCH="wasm" go build -ldflags "-X main.APIOrigin=$API_ORIGIN" -o ./site/js/main.wasm ./wasm 
+    GOOS="js" GOARCH="wasm" go build -ldflags "-X main.APIOrigin=$API_ORIGIN -X main.mode=$MODE" -o ./site/js/main.wasm ./wasm 
 }
 
 build_server() {
