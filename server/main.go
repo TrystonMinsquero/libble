@@ -21,7 +21,7 @@ import (
 
 const saveDir = "saves/"
 
-var isDebugBuild = os.Getenv(gin.EnvGinMode) == gin.DebugMode
+var isDebug = os.Getenv(gin.EnvGinMode) == gin.DebugMode
 var logg = logger()
 
 func main() {
@@ -37,7 +37,7 @@ func main() {
 	r := gin.Default()
 
 	corsConf := cors.DefaultConfig()
-	if !isDebugBuild {
+	if !isDebug {
 		corsConf.AllowAllOrigins = true
 	} else {
 		corsConf.AllowOrigins = []string{"https://libble.you"}
@@ -51,7 +51,7 @@ func main() {
 	r.SetTrustedProxies(nil)
 
 	// Host the site as well when debugging
-	if isDebugBuild {
+	if isDebug {
 		const siteDir = "./site"
 		if entries, err := os.ReadDir(siteDir); err == nil {
 			for _, entry := range entries {
@@ -152,15 +152,16 @@ func main() {
 
 func logger() *log.Logger {
 	level := log.WarnLevel
-	if isDebugBuild {
+	if isDebug {
 		level = log.DebugLevel
 	}
 
-	return log.NewWithOptions(os.Stderr, log.Options{
+	logger := log.NewWithOptions(os.Stderr, log.Options{
 		ReportTimestamp: false,
 		Level:           level,
 	})
-
+	SetSharedLogger(logger)
+	return logger
 }
 
 func saveFileName(userID DBID) string {

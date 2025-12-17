@@ -127,7 +127,7 @@ func scrapeBooks(userGRID string, options ScrapeOptions) ([]UserBook, error) {
 
 func defaultCollectorOptions(options ScrapeOptions) func(*colly.Collector) {
 	return func(c *colly.Collector) {
-		if isDebugBuild {
+		if isDebug {
 			c.CacheDir = requestCache
 		}
 		colly.AllowedDomains(domain)
