@@ -92,17 +92,14 @@ type ScrapeOptions struct {
 
 func DefaultScrapeOptions() ScrapeOptions {
 	return ScrapeOptions{
-		MinPersonalStars: 4,
+		MinPersonalStars: 3,
 		MinQuoteLikes:    10,
-		MaxQuoteForBook:  50,
+		MaxQuoteForBook:  150,
 	}
 }
 
 func (o ScrapeOptions) ShouldScrapeQuotes(userBook UserBook) bool {
-	if !userBook.UserData.IsRead() {
-		return false
-	}
-	if o.MinPersonalStars > userBook.UserData.Stars {
+	if userBook.UserData.Stars >= o.MinPersonalStars {
 		return false
 	}
 	return true
