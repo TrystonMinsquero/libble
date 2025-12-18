@@ -234,18 +234,25 @@ func setupHTML(data *SaveData, allBooks Books) {
 		e.PreventDefault()
 		if game.Completed() {
 			results := generateResultsString(game)
-			err := copyToClipboard(results)
+			err := shareText(results)
+			if err == nil {
+				return
+			}
+
+			err = copyToClipboard(results)
 			prevText := shareBtn.TextContent()
-			if err != nil {
+			if err == nil {
 				shareBtn.SetTextContent("📋 Copied!")
 			} else {
 				log(err, "Failed to share")
 				shareBtn.SetTextContent("Sorry, failed to copy")
+				shareBtn.SetDisabled(true)
 			}
 
 			go func() {
 				time.Sleep(time.Second * 3)
 				shareBtn.SetTextContent(prevText)
+				shareBtn.SetDisabled(false)
 			}()
 		} else {
 			logErr("How did you click this?")
@@ -407,9 +414,18 @@ func setupAutocomplete(
 	currentSelection := 0
 	const maxVisibleSuggestions = 8
 
-	getBook := func(suggestionIndex int) Book {
+	getBookTitle := func(suggestionIndex int) string {
+		if suggestionIndex >= len(suggestions) {
+			logErr("Trying to get suggestion index %d but only have %d",
+				suggestionIndex, len(suggestions))
+			return ""
+		}
 		suggestion := suggestions[suggestionIndex]
-		return allBooks[suggestion.bookIndex]
+		if suggestion.bookIndex >= len(allBooks) {
+			logErr("Book index %d is out of bounds of %d. How???", suggestion.bookIndex, len(allBooks))
+			return ""
+		}
+		return allBooks[suggestion.bookIndex].CleanTitle()
 	}
 
 	updateSuggestions := func() {}
@@ -421,14 +437,14 @@ func setupAutocomplete(
 	}
 
 	useSelection := func() {
-		input.SetValue(getBook(currentSelection).CleanTitle())
+		input.SetValue(getBookTitle(currentSelection))
 		resetSuggestions()
 	}
 
 	setSelection := func(selection int) {
 		currentSelection = selection
 		updateSuggestions()
-		input.SetValue(getBook(currentSelection).CleanTitle())
+		input.SetValue(getBookTitle(currentSelection))
 	}
 
 	updateSuggestions = func() {
@@ -507,7 +523,7 @@ func setupAutocomplete(
 			// TODO: submit game
 		case "Tab":
 			e.PreventDefault()
-			input.SetValue(getBook(currentSelection).CleanTitle())
+			input.SetValue(getBookTitle(currentSelection))
 		case "Escape":
 			resetSuggestions()
 		}

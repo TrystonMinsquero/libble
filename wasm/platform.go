@@ -9,6 +9,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"strings"
 	"syscall/js"
 )
 
@@ -138,6 +139,43 @@ func fetch(path string, data any, method string) error {
 	return nil
 }
 
+func shareText(text string) (err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			err = fmt.Errorf("Failed to share text: %v\n", r)
+		}
+	}()
+
+	navigator := js.Global().Get("navigator")
+
+	platform := navigator.Get("platform").String()
+	if strings.Contains(platform, "Win") {
+		return fmt.Errorf("Don't use share on windows, it's bad")
+	}
+
+	share := navigator.Get("share")
+	if !share.Truthy() {
+		return fmt.Errorf("navigator.share is not available")
+	}
+
+	content := js.ValueOf(map[string]interface{}{"text": text})
+
+	if !navigator.Call("canShare", content).Bool() {
+		return fmt.Errorf("Unable to share content %v", content)
+	}
+
+	promise := navigator.Call("share", content)
+
+	promise.Call("then", js.FuncOf(func(this js.Value, args []js.Value) any {
+		return nil
+	}))
+	promise.Call("catch", js.FuncOf(func(this js.Value, args []js.Value) any {
+		err = fmt.Errorf("Failed to share text")
+		return nil
+	}))
+	return err
+}
+
 func copyToClipboard(text string) (err error) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -161,6 +199,5 @@ func copyToClipboard(text string) (err error) {
 		err = fmt.Errorf("Failed to copy to clipboard")
 		return nil
 	}))
-
 	return err
 }
