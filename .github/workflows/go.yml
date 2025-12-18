@@ -22,4 +22,4 @@ jobs:
         go-version: '1.25'
 
     - name: Build
-      run: ./build.sh
+      run: ./build.sh wasm
