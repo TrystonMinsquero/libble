@@ -247,6 +247,24 @@ func scrapeQuotes(url string, bookGRID string, options ScrapeOptions) ([]Quote, 
 }
 
 func inferLineBreaks(text string) string {
+	shouldBreak := func(lastChar, nextChar rune) bool {
+		switch lastChar {
+		case '.':
+			if unicode.IsLetter(nextChar) || nextChar == '“' {
+				return true
+			}
+		case '”':
+			if !unicode.IsSpace(nextChar) {
+				return true
+			}
+		case '"':
+			if nextChar == '"' {
+				return true
+			}
+		}
+		return false
+	}
+
 	var sb strings.Builder
 	lastChar := ' '
 	for index, char := range text {
@@ -255,17 +273,10 @@ func inferLineBreaks(text string) string {
 			lastChar = char
 			continue
 		}
-
-		switch lastChar {
-		case '.':
-			if unicode.IsLetter(char) || char == '\n' {
-				sb.WriteRune('\n')
-			}
-		case '”':
-			if !unicode.IsSpace(char) {
-				sb.WriteRune('\n')
-			}
+		if shouldBreak(lastChar, char) {
+			sb.WriteRune('\n')
 		}
+
 		sb.WriteRune(char)
 		lastChar = char
 	}
