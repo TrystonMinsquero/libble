@@ -1,25 +1,18 @@
 package shared
 
 import (
+	"errors"
 	"fmt"
 	"math/rand"
 	"slices"
 	"strings"
 	"time"
-
-	"github.com/charmbracelet/log"
 )
 
 type DBID uint64
 
 type QuoteId DBID
 type BookId DBID
-
-var logg *log.Logger = log.Default()
-
-func SetSharedLogger(logger *log.Logger) {
-	logg = logger
-}
 
 const NilID = 0
 
@@ -207,8 +200,8 @@ func (b UserBookData) IsRead() bool {
 	return false
 }
 
-func (s SaveData) PickDailyQuote() (QuoteId, error) {
-	var quoteId QuoteId
+func (s SaveData) PickDailyQuote() (quoteId QuoteId, err error) {
+	quoteId = NilID
 	quoteCount := len(s.Quotes)
 	if quoteCount <= 0 {
 		return quoteId, fmt.Errorf("User has no quotes")
@@ -216,7 +209,6 @@ func (s SaveData) PickDailyQuote() (QuoteId, error) {
 
 	now := time.Now().UTC()
 	seed := now.Year() + now.YearDay()
-	log.Debugf("Random Seed: %d\n", seed)
 	rng := rand.New(rand.NewSource(int64(seed)))
 
 	// TODO: actually use weights for meta data like how many times the book was played
@@ -239,15 +231,13 @@ func (s SaveData) PickDailyQuote() (QuoteId, error) {
 
 	for triedCount < quoteCount && collisions < quoteCount*2 {
 		quoteIndex := rng.Intn(quoteCount)
-		logg.Debugf("Quote Index: %d is %d\n", quoteIndex, quotes[quoteIndex])
 
 		quoteId := quotes[quoteIndex]
 		metaData, found := quotesMetaData[quoteId]
 		if found && metaData.tries > 0 {
 			collisions += 1
 			if metaData.tries >= 100 {
-				logg.Errorf("Too many tries on quote %d", quoteId)
-				break
+				return quoteId, fmt.Errorf("Too many tries on quote %d", quoteId)
 			}
 			metaData.tries += 1
 			quotesMetaData[quoteId] = metaData
@@ -256,67 +246,27 @@ func (s SaveData) PickDailyQuote() (QuoteId, error) {
 
 		triedCount += 1
 		if slices.Contains(s.Player.SeenQuotes, quoteId) {
-			logg.Errorf("Skipping quote %d because it's seen\n", quoteId)
 			continue
 		}
 
 		// Check if book is read
 		quote, found := s.Quotes[quoteId]
 		if !found {
-			logg.Errorf("Couldn't get quote %d back from map", quoteId)
+			err = errors.Join(fmt.Errorf("Couldn't get quote %d back from map", quoteId))
 			continue
 		}
 		book, found := s.Books[quote.BookId]
 		if !found {
-			logg.Errorf("Couldn't find book with id %d for quote %d\n", quote.BookId, quoteId)
+			err = errors.Join(fmt.Errorf("Couldn't find book with id %d for quote %d\n", quote.BookId, quoteId))
 			continue
 		}
 		if !book.UserData.IsRead() {
-			logg.Debugf("Skipping quote %d because it's not read\n", quoteId)
 			continue
 		}
-		return quoteId, nil
+		return quoteId, err
 	}
 
-	logg.Warnf("Recycling quote for %s\n", s.Player.UserGRID)
+	err = errors.Join(fmt.Errorf("Recycling quote for %s\n", s.Player.UserGRID))
 	quoteIndex = rng.Intn(quoteCount)
-	return quotes[quoteIndex], nil
+	return quotes[quoteIndex], err
 }
-
-// Returns index from `availableQuotes`
-// func PickDailyQuote(user UserData, books []UserBook, availableQuotes []Quote) int {
-//
-// 	quoteCount := len(availableQuotes)
-// 	if quoteCount <= 0 {
-// 		return -1
-// 	}
-//
-// 	now := time.Now().UTC()
-// 	seed := now.Year() + now.YearDay()
-// 	rng := rand.New(rand.NewSource(int64(seed)))
-//
-// 	triedIndexes := make([]bool, quoteCount)
-// 	triedIndexCount := 0
-// 	collisions := 0
-//
-// 	for triedIndexCount < quoteCount && collisions < quoteCount*2 {
-// 		quoteIndex := rng.Intn(quoteCount)
-// 		if triedIndexes[quoteIndex] {
-// 			collisions += 1
-// 			continue
-// 		}
-//
-// 		triedIndexes[quoteIndex] = true
-// 		triedIndexCount += 1
-//
-// 		quote := availableQuotes[quoteIndex]
-// 		if slices.Contains(user.SeenQuotes, quote.ID) {
-// 			continue
-// 		}
-// 		return quoteIndex
-// 	}
-//
-// 	fmt.Printf("Warning: Recycling quote for %s\n", user.UserGRID)
-// 	quoteIndex := rng.Intn(quoteCount)
-// 	return quoteIndex
-// }

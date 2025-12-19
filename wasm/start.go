@@ -60,7 +60,7 @@ func initStart() {
 			}
 
 			userId := strconv.FormatUint(uint64(data.Player.ID), 10)
-			logg.Infof("Successfully created new user: %s", userId)
+			debugPrint("Successfully created new user: %s", userId)
 
 			if userId != "" {
 				saveData(userIdKey, userId)

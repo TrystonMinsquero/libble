@@ -2,31 +2,17 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"syscall/js"
-
-	clog "github.com/charmbracelet/log"
-	. "libble/shared"
 )
 
-var logg = logger()
-
-func logger() *clog.Logger {
-	level := clog.WarnLevel
+func debugPrint(format string, args ...any) {
 	if isDebug {
-		level = clog.DebugLevel
+		fmt.Printf(format+"\n", args...)
 	}
-	logger := clog.NewWithOptions(os.Stderr, clog.Options{
-		ReportTimestamp: false,
-		Level:           level,
-	})
-	SetSharedLogger(logger)
-	return logger
 }
 
 func logErr(contextFmt string, args ...any) {
 	context := fmt.Sprintf(contextFmt, args...)
-	logg.Error(context)
 	console := js.Global().Get("console")
 	console.Call("error", context)
 }

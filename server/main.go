@@ -160,7 +160,6 @@ func logger() *log.Logger {
 		ReportTimestamp: false,
 		Level:           level,
 	})
-	SetSharedLogger(logger)
 	return logger
 }
 

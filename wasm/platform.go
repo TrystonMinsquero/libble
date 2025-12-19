@@ -28,7 +28,7 @@ func saveData(key string, value string) (err error) {
 	err = nil
 	localStorage := js.Global().Get("localStorage")
 	localStorage.Call("setItem", key, value)
-	logg.Debugf("Stored %s: %s\n", key, value)
+	debugPrint("Stored %s: %s\n", key, value)
 	return err
 }
 

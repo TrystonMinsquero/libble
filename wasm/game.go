@@ -62,7 +62,7 @@ func loadAllData(data *SaveData) error {
 }
 
 func initGame() {
-	logg.Debug("Starting game...")
+	debugPrint("Starting game...")
 	var data SaveData
 	// Load save data from local storage
 	if err := loadAllData(&data); err != nil {
@@ -73,7 +73,7 @@ func initGame() {
 		log(err, "Failed initializing today's game")
 	}
 
-	logg.Debug("Setting update autocomplete")
+	debugPrint("Setting update autocomplete")
 
 	// convert book map to slice
 	bookCount := len(data.Books)
@@ -89,7 +89,7 @@ func toDate(t time.Time) time.Time {
 }
 
 func todaysDate() time.Time {
-	return time.Now().Truncate(24 * time.Hour)
+	return toDate(time.Now())
 }
 
 func todaysGame(data *SaveData) *Game {
@@ -114,9 +114,10 @@ func initTodaysGame(data *SaveData) (game *Game, err error) {
 	}
 
 	dailyQuoteId, err := data.PickDailyQuote()
-	if err != nil {
+	if dailyQuoteId == NilID {
 		return game, fmt.Errorf("Failed to pick daily quote when making new game:\n%v", err)
 	}
+	log(err, "Issue when picking daily quote when making new game")
 
 	player := &data.Player
 	player.Games = append(player.Games, Game{
@@ -355,9 +356,10 @@ func onSkip(
 	setFeedback(msg, ErrorFBStatus)
 
 	dailyQuoteId, err := data.PickDailyQuote()
-	if err != nil {
-		return fmt.Errorf("Failed to pick daily quote when skipping:\n%v", err)
+	if dailyQuoteId == NilID {
+		return fmt.Errorf("Failed to repick daily quote when skipping:\n%v", err)
 	}
+	log(err, "Issue when to repickng daily quote when skipping")
 	game.QuoteID = dailyQuoteId
 	game.Date = time.Now()
 	if err := game.Init(*data); err != nil {

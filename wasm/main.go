@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	logg.Debug("You're in debug mode from wasm!")
+	debugPrint("You're in debug mode from wasm!")
 
 	handlePage()
 	// Wait for DOM to be ready, then initialize the game

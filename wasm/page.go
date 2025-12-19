@@ -23,7 +23,7 @@ func handlePage() string {
 	redirect := func(page string) string {
 		curr := currPage()
 		if curr != page {
-			logg.Debugf("redirect %s -> %s\n", curr, page)
+			debugPrint("redirect %s -> %s\n", curr, page)
 			location().SetHref(page)
 			return page
 		}
