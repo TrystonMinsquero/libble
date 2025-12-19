@@ -7,6 +7,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"unicode"
 
 	. "libble/shared"
 
@@ -245,6 +246,32 @@ func scrapeQuotes(url string, bookGRID string, options ScrapeOptions) ([]Quote, 
 	return quotes, nil
 }
 
+func inferLineBreaks(text string) string {
+	var sb strings.Builder
+	lastChar := ' '
+	for index, char := range text {
+		if index == 0 {
+			sb.WriteRune(char)
+			lastChar = char
+			continue
+		}
+
+		switch lastChar {
+		case '.':
+			if unicode.IsLetter(char) || char == '\n' {
+				sb.WriteRune('\n')
+			}
+		case '”':
+			if !unicode.IsSpace(char) {
+				sb.WriteRune('\n')
+			}
+		}
+		sb.WriteRune(char)
+		lastChar = char
+	}
+	return sb.String()
+}
+
 func scrapeQuote(quoteElem *colly.HTMLElement) (Quote, error) {
 	var quote Quote
 
@@ -255,6 +282,7 @@ func scrapeQuote(quoteElem *colly.HTMLElement) (Quote, error) {
 		return quote, fmt.Errorf("Unable to find end char in quote")
 	}
 	quote.Text = strings.TrimSpace(quote.Text[:lastIndex])
+	quote.Text = inferLineBreaks(quote.Text)
 
 	var rightElem *colly.HTMLElement = nil
 	quoteElem.ForEachWithBreak("div.right", func(_ int, h *colly.HTMLElement) bool {
