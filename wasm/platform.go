@@ -126,7 +126,7 @@ func fetch(path string, data any, method string) error {
 			return fmt.Errorf("Error unmarshalling json for %s\n%v", url, err)
 		}
 	} else {
-		var errorResponse map[string]interface{}
+		var errorResponse map[string]any
 		reqErr := fmt.Errorf("Request to %s via %s failed with %d", url, method, status)
 		if json.Unmarshal(bodyBytes, &errorResponse) == nil {
 			if errStr, ok := errorResponse["error"].(string); ok {
@@ -158,7 +158,7 @@ func shareText(text string) (err error) {
 		return fmt.Errorf("navigator.share is not available")
 	}
 
-	content := js.ValueOf(map[string]interface{}{"text": text})
+	content := js.ValueOf(map[string]any{"text": text})
 
 	if !navigator.Call("canShare", content).Bool() {
 		return fmt.Errorf("Unable to share content %v", content)
@@ -190,12 +190,12 @@ func copyToClipboard(text string) (err error) {
 	promise := clipboard.Call("writeText", text)
 
 	// Handle success
-	promise.Call("then", js.FuncOf(func(this js.Value, args []js.Value) interface{} {
+	promise.Call("then", js.FuncOf(func(this js.Value, args []js.Value) any {
 		return nil
 	}))
 
 	// Handle error
-	promise.Call("catch", js.FuncOf(func(this js.Value, args []js.Value) interface{} {
+	promise.Call("catch", js.FuncOf(func(this js.Value, args []js.Value) any {
 		err = fmt.Errorf("Failed to copy to clipboard")
 		return nil
 	}))
