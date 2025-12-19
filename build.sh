@@ -2,16 +2,46 @@
 
 cd "$(dirname "$0")"
 
+optimize_wasm() {
+if command -v "wasm-opt" &> /dev/null; then
+    echo "Optimizing wasm size with wasm-opt..."
+    PREV=$(du ./site/js/main.wasm | cut -f1)
+    wasm-opt -Oz ./site/js/main.wasm -o ./site/js/main.wasm --enable-bulk-memory
+    echo "Compressed $PREV to $(du ./site/js/main.wasm | cut -f1)"
+    return
+else 
+    echo "You should have wasm-opt installed for release builds. 
+Install via one the following:
+    sudo apt install binaryen
+    brew install binaryen
+    cargo install wasm-opt --locked
+    npm install -g wasm-opt"
+    exit 1
+fi
+}
+
 build_wasm() {
     if [[ $GIN_MODE == "debug" ]]; then
         API_ORIGIN=""
         MODE="debug"
+        GO_COMPILER="go" # use regular compiler because it's much faster
+        cp $(go env GOROOT)/lib/wasm/wasm_exec.js ./site/js/wasm_exec.js
     else
         API_ORIGIN="https://api.libble.you"
         MODE="release"
+        ARGS="-no-debug"
+        GO_COMPILER="tinygo" # much smaller binary sizes
+        cp $(tinygo env TINYGOROOT)/targets/wasm_exec.js ./site/js/wasm_exec.js
     fi
-    GOOS="js" GOARCH="wasm" go build -ldflags "-X main.APIOrigin=$API_ORIGIN -X main.mode=$MODE" -o ./site/js/main.wasm ./wasm 
+
+    echo "Building with $GO_COMPILER..."
+    GOOS="js" GOARCH="wasm" $GO_COMPILER build -ldflags "-X main.APIOrigin=$API_ORIGIN -X main.mode=$MODE" $ARGS -o ./site/js/main.wasm ./wasm 
+
+    if [[ $MODE == "release" ]]; then
+        optimize_wasm # Not required, but saves page load time for bad networks
+    fi
 }
+
 
 build_server() {
     go build -o ./main ./server
