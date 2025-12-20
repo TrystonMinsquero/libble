@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"math/rand/v2"
 	"net/http"
 	"os"
 	"path"
@@ -98,52 +97,45 @@ func main() {
 	// TODO: update save data? I could just use the scrape request
 	// r.POST("/update/:id", func(c *gin.Context) {}
 
-	r.GET("/update/:id", func(c *gin.Context) {
-		userIDParam := c.Param("id")
-		if userIDParam == "" {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Must provide user id param"})
-			return
-		}
-
-		userID, err := strconv.ParseUint(userIDParam, 10, 64)
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Must provide valid user id param"})
-			return
-		}
-
-		saveData, err := loadUserData(DBID(userID))
-		if err != nil {
-			errMsg := fmt.Sprintf("Failed loading user data: %v", err)
-			c.JSON(http.StatusBadRequest, gin.H{"error": errMsg})
-			return
-		}
-
-		userGRID := saveData.Player.UserGRID
-		options := saveData.Player.Settings.ScrapeOptions
-		_, _, err = scrapeGoodreads(userGRID, options)
-		if err != nil {
-			errorMsg := fmt.Sprintf("Error scraping goodreads with id %s: %v", userGRID, err)
-			c.JSON(http.StatusFailedDependency, gin.H{"error": errorMsg})
-			return
-		}
-	})
-
-	r.GET("/scrape/:GRID", func(c *gin.Context) {
+	r.GET("/scrape/gr/user-books/:GRID", func(c *gin.Context) {
 		userGRID := c.Param("GRID")
 		if userGRID == "" {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Must provide GRID param (goodreads ID)"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Must provide GRID param (goodreads user ID)"})
 			return
 		}
+
+		// TODO: try to reads options from req body
 		options := DefaultScrapeOptions()
-		books, quotes, err := scrapeGoodreads(userGRID, options)
+		books, err := scrapeBooks(userGRID, options)
 
 		res := gin.H{
-			"books":  books,
+			"books": books,
+		}
+		if err != nil {
+			res["error"] = fmt.Sprintf("Failed to scrape books from user %s: \n%v", userGRID, err)
+		}
+
+		c.JSON(http.StatusOK, res)
+	})
+
+	r.GET("/scrape/gr/quotes/:GRID", func(c *gin.Context) {
+		userGRID := c.Param("GRID")
+		if userGRID == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Must provide GRID param (goodreads book ID)"})
+			return
+		}
+
+		// TODO: try to reads options from req body
+		options := DefaultScrapeOptions()
+		quotes, err := scrapeQuotes(userGRID, options)
+
+		res := gin.H{
 			"quotes": quotes,
 		}
 		if err != nil {
-			res["error"] = err.Error()
+			res["error"] = fmt.Sprintf("Failed to scrape books from user %s: \n%v", userGRID, err)
 		}
+
 		c.JSON(http.StatusOK, res)
 	})
 
@@ -227,64 +219,7 @@ func loadUserData(userID DBID) (SaveData, error) {
 }
 
 func createUserData(userGRID string, books []UserBook, quotes []Quote) SaveData {
-	var data SaveData
-	data.Player.UserGRID = userGRID
-	data.Player.ID = DBID(rand.Uint64())
-	data.Player.Settings = DefaultPlayerSettings()
-
-	// Initialize maps
-	data.Books = make(map[BookId]UserBook)
-	data.Quotes = make(map[QuoteId]Quote)
-
-	bookGRIDtoID := make(map[string]BookId)
-
-	// Populate books map
-	for _, book := range books {
-		bookID := BookId(rand.Uint64())
-		if _, exists := data.Books[bookID]; exists {
-			logg.Errorf("Generated unique book id that wasn't unique")
-		}
-		exists := func() bool {
-			_, found := data.Books[bookID]
-			return found
-		}
-		for exists() {
-			logg.Errorf("Generated unique quote id that wasn't unique")
-			bookID = BookId(rand.Uint64())
-		}
-
-		data.Books[bookID] = book
-		bookGRIDtoID[book.Book.BookGRID] = bookID
-	}
-
-	// Populate quotes map
-	for _, quote := range quotes {
-		quoteID := QuoteId(rand.Uint64())
-
-		exists := func() bool {
-			_, found := data.Quotes[quoteID]
-			return found
-		}
-		for exists() {
-			logg.Errorf("Generated unique quote id that wasn't unique")
-			quoteID = QuoteId(rand.Uint64())
-		}
-
-		if quote.BookGRID != "" {
-			if bookID, found := bookGRIDtoID[quote.BookGRID]; found {
-				quote.BookId = bookID
-			} else {
-				logg.Errorf("BookGRID %s exists on quote %d but wasn't found", quote.BookGRID, quoteID)
-			}
-		}
-
-		data.Quotes[quoteID] = quote
-	}
-
-	// Initialize empty slices
-	data.Player.SeenQuotes = []QuoteId{}
-	data.Player.Games = []Game{}
-
+	data := NewSaveData(userGRID, books, quotes)
 	logg.Debugf("Created new user %d from GRID '%s'", data.Player.ID, userGRID)
 
 	if err := saveUserData(data); err != nil {

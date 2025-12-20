@@ -18,8 +18,6 @@ func isPage(page string) bool {
 }
 
 func handlePage() string {
-	userId, _ := loadData("userId")
-
 	redirect := func(page string) string {
 		curr := currPage()
 		if curr != page {
@@ -30,7 +28,7 @@ func handlePage() string {
 		return curr
 	}
 
-	if userId != "" {
+	if canPlay() {
 		return redirect(PageGame)
 	} else {
 		return redirect(PageStart)

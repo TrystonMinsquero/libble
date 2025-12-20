@@ -25,7 +25,6 @@ func saveData(key string, value string) (err error) {
 	err = nil
 	localStorage := js.Global().Get("localStorage")
 	localStorage.Call("setItem", key, value)
-	debugPrint("Stored %s: %s\n", key, value)
 	return err
 }
 
@@ -94,9 +93,12 @@ func loadJson(key string, data any) error {
 	return nil
 }
 
-func fetch(path string, data any, method string) error {
-	url := strings.TrimSuffix(APIOrigin, "/") + "/" + strings.TrimPrefix(path, "/")
+func fetch(path string, data any) error {
+	return fetchMethod(path, data, "GET")
+}
 
+func fetchMethod(path string, data any, method string) error {
+	url := strings.TrimSuffix(APIOrigin, "/") + "/" + strings.TrimPrefix(path, "/")
 
 	// Call fetch
 	promise := js.Global().Call("fetch", url, map[string]any{

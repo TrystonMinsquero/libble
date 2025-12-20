@@ -32,6 +32,42 @@ type SaveData struct {
 	Quotes map[QuoteId]Quote   `json:"quotes"`
 }
 
+func NewSaveData(userGRID string, books []UserBook, quotes []Quote) SaveData {
+	var data SaveData
+	data.Player.UserGRID = userGRID
+	data.Player.ID = DBID(rand.Uint64())
+	data.Player.Settings = DefaultPlayerSettings()
+
+	// Initialize maps
+	data.Books = make(map[BookId]UserBook)
+	data.Quotes = make(map[QuoteId]Quote)
+
+	bookGRIDtoID := make(map[string]BookId)
+
+	// NOTE: I know this is stupid to make it I can just use an array
+	// This was supposed to be the database id but I'll do that later.
+	// Should probably still store the save data as array, the game doesn't
+	// need to fetch the id quickly
+
+	// Populate books map
+	for index, book := range books {
+		bookID := BookId(index)
+		data.Books[bookID] = book
+		bookGRIDtoID[book.Book.BookGRID] = bookID
+	}
+
+	// Populate quotes map
+	for index, quote := range quotes {
+		quoteID := QuoteId(index)
+		data.Quotes[quoteID] = quote
+	}
+
+	// Initialize empty slices
+	data.Player.SeenQuotes = []QuoteId{}
+	data.Player.Games = []Game{}
+	return data
+}
+
 func (s SaveData) FindBookId(query string) BookId {
 	query = strings.ToLower(strings.TrimSpace(query))
 	for bookId, book := range s.Books {

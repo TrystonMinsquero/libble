@@ -43,8 +43,7 @@ func scrapeGoodreads(userGRID string, options ScrapeOptions) ([]UserBook, []Quot
 		go func() {
 			defer wg.Done()
 
-			url := "https://" + domain + "/book/quotes/" + book.BookGRID
-			bookQuotes, err := scrapeQuotes(url, book.BookGRID, options)
+			bookQuotes, err := scrapeQuotes(book.BookGRID, options)
 			if err != nil {
 				logg.Error(err)
 				return
@@ -205,7 +204,8 @@ func scrapeBook(bookElem *colly.HTMLElement) (UserBook, error) {
 	return userBook, fmt.Errorf("Failed to scrape the book")
 }
 
-func scrapeQuotes(url string, bookGRID string, options ScrapeOptions) ([]Quote, error) {
+func scrapeQuotes(bookGRID string, options ScrapeOptions) ([]Quote, error) {
+	url := "https://" + domain + "/book/quotes/" + bookGRID
 	quoteCollector := colly.NewCollector(
 		defaultCollectorOptions(options),
 	)

@@ -44,6 +44,15 @@ func saveNonStaticData(data SaveData) error {
 	return saveAllDataFiltered(data, func(s string) bool { return !IsStaticSaveDataField(s) })
 }
 
+func canPlay() bool {
+	for _, key := range []string{"libble.player", "libble.quotes", "libble.books"} {
+		if data, err := loadData(key); data == "" || data == "{}" || err != nil {
+			return false
+		}
+	}
+	return true
+}
+
 func loadAllData(data *SaveData) error {
 	pv := reflect.ValueOf(data)
 	v := pv.Elem()
