@@ -28,8 +28,23 @@ type Player struct {
 type SaveData struct {
 	Player Player `json:"player"`
 
-	Books  map[BookId]UserBook `json:"books"`
-	Quotes map[QuoteId]Quote   `json:"quotes"`
+	Books  []UserBook `json:"books"`
+	Quotes []Quote    `json:"quotes"`
+
+	bookMap  map[BookId]int
+	quoteMap map[QuoteId]int
+}
+
+func (s *SaveData) PopulateLookups() {
+	s.bookMap = make(map[BookId]int)
+	for index, book := range s.Books {
+		s.bookMap[book.Book.BookId] = index
+	}
+
+	s.quoteMap = make(map[QuoteId]int)
+	for index, quote := range s.Quotes {
+		s.quoteMap[quote.QuoteId] = index
+	}
 }
 
 func NewSaveData(userGRID string, books []UserBook, quotes []Quote) SaveData {
@@ -39,28 +54,10 @@ func NewSaveData(userGRID string, books []UserBook, quotes []Quote) SaveData {
 	data.Player.Settings = DefaultPlayerSettings()
 
 	// Initialize maps
-	data.Books = make(map[BookId]UserBook)
-	data.Quotes = make(map[QuoteId]Quote)
+	data.Books = books
+	data.Quotes = quotes
 
-	bookGRIDtoID := make(map[string]BookId)
-
-	// NOTE: I know this is stupid to make it I can just use an array
-	// This was supposed to be the database id but I'll do that later.
-	// Should probably still store the save data as array, the game doesn't
-	// need to fetch the id quickly
-
-	// Populate books map
-	for index, book := range books {
-		bookID := BookId(index)
-		data.Books[bookID] = book
-		bookGRIDtoID[book.Book.BookGRID] = bookID
-	}
-
-	// Populate quotes map
-	for index, quote := range quotes {
-		quoteID := QuoteId(index)
-		data.Quotes[quoteID] = quote
-	}
+	data.PopulateLookups()
 
 	// Initialize empty slices
 	data.Player.SeenQuotes = []QuoteId{}
@@ -68,13 +65,35 @@ func NewSaveData(userGRID string, books []UserBook, quotes []Quote) SaveData {
 	return data
 }
 
+func (s SaveData) GetBook(ID BookId) (UserBook, error) {
+	index, ok := s.bookMap[ID]
+	if !ok {
+		return UserBook{}, fmt.Errorf("Book %v not in map", ID)
+	}
+	if index < 0 || index >= len(s.Books) {
+		return UserBook{}, fmt.Errorf("Book %v had index %d which is out of bounds ", ID, index)
+	}
+	return s.Books[index], nil
+}
+
+func (s SaveData) GetQuote(ID QuoteId) (Quote, error) {
+	index, ok := s.quoteMap[ID]
+	if !ok {
+		return Quote{}, fmt.Errorf("Quote %v not in map", ID)
+	}
+	if index < 0 || index >= len(s.Quotes) {
+		return Quote{}, fmt.Errorf("Quote %v had index %d which is out of bounds ", ID, index)
+	}
+	return s.Quotes[index], nil
+}
+
 func (s SaveData) FindBookId(query string) BookId {
 	query = strings.ToLower(strings.TrimSpace(query))
-	for bookId, book := range s.Books {
+	for _, book := range s.Books {
 		target := book.Book.CleanTitle()
 		target = strings.ToLower(strings.TrimSpace(target))
 		if target == query {
-			return bookId
+			return book.Book.BookId
 		}
 	}
 	return NilID
@@ -168,17 +187,18 @@ func (g *Game) Init(data SaveData) error {
 	}
 
 	// Get the quote from the map
-	quote, found := data.Quotes[g.QuoteID]
-	if !found {
-		return fmt.Errorf("Daily Quote not found in quotes map")
+
+	quote, err := data.GetQuote(g.QuoteID)
+	if err != nil {
+		return err
 	}
 	g.Quote = quote
 	g.BookId = quote.BookId
 
 	// Get the book from the map
-	book, found := data.Books[quote.BookId]
-	if !found {
-		return fmt.Errorf("Daily Quote's book Id was not found in books map")
+	book, err := data.GetBook(g.BookId)
+	if err != nil {
+		return fmt.Errorf("Daily Quote's book Id was not found in books map:\n%v", err)
 	}
 	g.Book = book
 	return nil
@@ -205,6 +225,7 @@ func (g Game) Won() bool {
 }
 
 type Book struct {
+	BookId      BookId  `json:"libble_id"`
 	BookGRID    string  `json:"book_gr_id"`
 	Title       string  `json:"title"`
 	Author      string  `json:"author"`
@@ -218,9 +239,10 @@ func (b Book) CleanTitle() string {
 }
 
 type Quote struct {
-	QuoteGRID string `json:"quote_gr_id"`
-	Likes     uint   `json:"likes"`
-	Text      string `json:"text"`
+	QuoteId   QuoteId `json:"libble_id"`
+	QuoteGRID string  `json:"quote_gr_id"`
+	Likes     uint    `json:"likes"`
+	Text      string  `json:"text"`
 
 	BookId   BookId `json:"book_id"`
 	BookGRID string `json:"book_gr_id"`
@@ -264,8 +286,8 @@ func (s SaveData) PickDailyQuote() (quoteId QuoteId, err error) {
 	collisions := 0
 
 	quoteIndex := 0
-	for id := range s.Quotes {
-		quotes[quoteIndex] = id
+	for _, quote := range s.Quotes {
+		quotes[quoteIndex] = quote.QuoteId
 		quoteIndex++
 	}
 	slices.Sort(quotes) // needed to make the picking determinstic
@@ -291,14 +313,14 @@ func (s SaveData) PickDailyQuote() (quoteId QuoteId, err error) {
 		}
 
 		// Check if book is read
-		quote, found := s.Quotes[quoteId]
-		if !found {
-			err = errors.Join(fmt.Errorf("Couldn't get quote %d back from map", quoteId))
+		quote, err := s.GetQuote(quoteId)
+		if err != nil {
+			err = errors.Join(err)
 			continue
 		}
-		book, found := s.Books[quote.BookId]
-		if !found {
-			err = errors.Join(fmt.Errorf("Couldn't find book with id %d for quote %d\n", quote.BookId, quoteId))
+		book, err := s.GetBook(quote.BookId)
+		if err != nil {
+			err = errors.Join(err)
 			continue
 		}
 		if !book.UserData.IsRead() {

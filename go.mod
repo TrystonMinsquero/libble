@@ -3,6 +3,7 @@ module libble
 go 1.24.0
 
 require (
+	github.com/bwmarrin/snowflake v0.3.0
 	github.com/charmbracelet/log v0.4.2
 	github.com/gin-contrib/cors v1.7.6
 	github.com/gin-contrib/gzip v1.2.5

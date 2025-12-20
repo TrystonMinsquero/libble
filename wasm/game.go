@@ -28,6 +28,9 @@ func saveAllDataFiltered(data SaveData, filter FieldPredicate) error {
 	err = nil
 	for i := range t.NumField() {
 		field := t.Field(i)
+		if !field.IsExported() {
+			continue
+		}
 		jsonName := field.Tag.Get("json")
 		if jsonName != "" && filter(jsonName) {
 			err = errors.Join(err, saveJson(saveKey(jsonName), v.Field(i).Interface()))
@@ -61,12 +64,16 @@ func loadAllData(data *SaveData) error {
 	err = nil
 	for i := range t.NumField() {
 		fieldType := t.Field(i)
+		if !fieldType.IsExported() {
+			continue
+		}
 		jsonName := fieldType.Tag.Get("json")
 		field := v.Field(i).Addr().Interface()
 		if jsonName != "" {
 			err = errors.Join(err, loadJson(saveKey(jsonName), field))
 		}
 	}
+	data.PopulateLookups()
 	return err
 }
 

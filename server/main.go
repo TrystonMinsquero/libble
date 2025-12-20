@@ -8,10 +8,12 @@ import (
 	"os"
 	"path"
 	"strconv"
+	"sync"
 
 	"compress/gzip"
 	. "libble/shared"
 
+	"github.com/bwmarrin/snowflake"
 	"github.com/charmbracelet/log"
 	"github.com/gin-contrib/cors"
 	ginzip "github.com/gin-contrib/gzip"
@@ -50,7 +52,7 @@ func main() {
 	r.SetTrustedProxies(nil)
 
 	// Host the site as well when debugging
-	if isDebug {
+	if true {
 		const siteDir = "./site"
 		if entries, err := os.ReadDir(siteDir); err == nil {
 			for _, entry := range entries {
@@ -74,28 +76,13 @@ func main() {
 		logg.Errorf("Failed making save dir: %v", err)
 	}
 
-	r.POST("/user/:GRID", func(c *gin.Context) {
-		userGRID := c.Param("GRID")
-		if userGRID == "" {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Must provide user param"})
-			return
-		}
+	// I really need to setup some kind of database
 
-		// TODO: Maybe limit to 3 per user?
-		scrapeOptions := DefaultScrapeOptions()
-		books, quotes, err := scrapeGoodreads(userGRID, scrapeOptions)
-		if err != nil {
-			errorMsg := fmt.Sprintf("Error scraping goodreads with id %s: %v", userGRID, err)
-			c.JSON(http.StatusFailedDependency, gin.H{"error": errorMsg})
-			return
-		}
-
-		saveData := createUserData(userGRID, books, quotes)
-		c.JSON(http.StatusOK, saveData)
-	})
-
-	// TODO: update save data? I could just use the scrape request
-	// r.POST("/update/:id", func(c *gin.Context) {}
+	var GRIDtoID sync.Map
+	node, err := snowflake.NewNode(1)
+	if err != nil {
+		logg.Fatal(err)
+	}
 
 	r.GET("/scrape/gr/user-books/:GRID", func(c *gin.Context) {
 		userGRID := c.Param("GRID")
@@ -107,6 +94,13 @@ func main() {
 		// TODO: try to reads options from req body
 		options := DefaultScrapeOptions()
 		books, err := scrapeBooks(userGRID, options)
+
+		// resolve ids
+		for index := range books {
+			ub := &books[index]
+			id, _ := GRIDtoID.LoadOrStore(ub.Book.BookGRID, node.Generate().Int64())
+			ub.Book.BookId = BookId(id.(int64))
+		}
 
 		res := gin.H{
 			"books": books,
@@ -128,6 +122,17 @@ func main() {
 		// TODO: try to reads options from req body
 		options := DefaultScrapeOptions()
 		quotes, err := scrapeQuotes(userGRID, options)
+
+		for index := range quotes {
+			quote := &quotes[index]
+			bookId, loaded := GRIDtoID.LoadOrStore(quote.BookGRID, node.Generate().Int64())
+			if !loaded {
+				logg.Warnf("Quote %s has book grid %s but it's not in the id map", quote.QuoteGRID, quote.BookGRID)
+			}
+			quote.BookId = BookId(bookId.(int64))
+			quoteId, _ := GRIDtoID.LoadOrStore(quote.QuoteGRID, node.Generate().Int64())
+			quote.QuoteId = QuoteId(quoteId.(int64))
+		}
 
 		res := gin.H{
 			"quotes": quotes,
