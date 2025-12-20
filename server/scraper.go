@@ -261,6 +261,10 @@ func inferLineBreaks(text string) string {
 			if nextChar == '"' {
 				return true
 			}
+		case '\'':
+			if nextChar == '\'' {
+				return true
+			}
 		}
 		return false
 	}
