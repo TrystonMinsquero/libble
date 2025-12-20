@@ -9,9 +9,9 @@
 - [x] Actually host the website and server
     - [x] Put website on GitHub pages (Need to make sure WASM works!)
     - [x] Put server somewhere with something like api.libble.you
-- [~] Make share button
+- [x] Make share button
 ## --------BOTTOM LINE --------------------------------------------------------
-- [ ] Clean up the quote text to make sure punctuation and spacing is correct
+- [x] Clean up the quote text to make sure punctuation and spacing is correct
 - [ ] Hide characters and title in quotes (can scrape from Goodreads!)
 - [ ] Implement Hints
     - [ ] Show when you read the book
@@ -30,7 +30,7 @@
         - [ ] Need to figure this out. Current options are:
             - Have other device for code to sync, only need to do once.
             - Or could have account, with cloud saves
-- [ ] Stream scraping the website so it's not one big payload and makes it feel like the site isn't working
+- [x] Stream scraping the website so it's not one big payload and makes it feel like the site isn't working
 - [ ] Cache html files by default, clearing out old caches every x time (probably 1 day)
 - [ ] Should probably use a database instead of raw save json files.
     - [ ] Also saves the books by id so not saving duplicate scraped data.
