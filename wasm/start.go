@@ -89,32 +89,53 @@ func initStart() {
 			books := booksResp.UserBooks
 			showStatus(fmt.Sprintf("Found %d books! Now fetching quotes...", len(books)))
 
-			// Step 2: Fetch quotes for each book
+			// Step 2: Fetch quotes for each book in parallel
 			type QuotesResponse struct {
 				Quotes []libble.Quote `json:"quotes"`
 				Error  string         `json:"error,omitempty"`
 			}
-			var allQuotes []libble.Quote
 
-			for i, userBook := range books {
-				book := userBook.Book
-				showProgress(i, len(books), len(allQuotes))
-
-				var quotesResp QuotesResponse
-				if err := fetch("/scrape/gr/quotes/"+book.BookGRID, &quotesResp); err != nil {
-					log(err, "Failed to fetch quotes for book "+book.CleanTitle())
-					continue
-				}
-
-				if quotesResp.Error != "" {
-					logErr("Error fetching quotes for book %s:\n%s", book.CleanTitle(), quotesResp.Error)
-					continue
-				}
-
-				allQuotes = append(allQuotes, quotesResp.Quotes...)
+			type bookResult struct {
+				quotes []libble.Quote
+				index  int
 			}
 
-			showProgress(len(books), len(books), len(allQuotes))
+			resultChan := make(chan bookResult, len(books))
+			completed := 0
+			var allQuotes []libble.Quote
+
+			// Launch goroutines for each book
+			for i, userBook := range books {
+				go func(idx int, ub libble.UserBook) {
+					book := ub.Book
+					var quotesResp QuotesResponse
+					if err := fetch("/scrape/gr/quotes/"+book.BookGRID, &quotesResp); err != nil {
+						log(err, "Failed to fetch quotes for book "+book.CleanTitle())
+						resultChan <- bookResult{quotes: nil, index: idx}
+						return
+					}
+
+					if quotesResp.Error != "" {
+						logErr("Error fetching quotes for book %s:\n%s", book.CleanTitle(), quotesResp.Error)
+						resultChan <- bookResult{quotes: nil, index: idx}
+						return
+					}
+
+					resultChan <- bookResult{quotes: quotesResp.Quotes, index: idx}
+				}(i, userBook)
+			}
+
+			// Collect results as they come in
+			for range books {
+				result := <-resultChan
+				completed++
+				if result.quotes != nil {
+					allQuotes = append(allQuotes, result.quotes...)
+				}
+				showProgress(completed, len(books), len(allQuotes))
+			}
+
+			close(resultChan)
 
 			showStatus(fmt.Sprintf("Successfully loaded %d quotes from %d books!", len(allQuotes), len(books)))
 
