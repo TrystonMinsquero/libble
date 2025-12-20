@@ -31,7 +31,8 @@
             - Have other device for code to sync, only need to do once.
             - Or could have account, with cloud saves
 - [x] Stream scraping the website so it's not one big payload and makes it feel like the site isn't working
-- [ ] Cache html files by default, clearing out old caches every x time (probably 1 day)
+- [x] Cache html files by default
+    - [ ] Reset cache periodically (probably once a day)
 - [ ] Should probably use a database instead of raw save json files.
     - [ ] Also saves the books by id so not saving duplicate scraped data.
 - [ ] Have up and down arrows "scroll" as you go down the options
