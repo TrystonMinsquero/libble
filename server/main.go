@@ -151,7 +151,7 @@ func main() {
 }
 
 func logger() *log.Logger {
-	level := log.WarnLevel
+	level := log.InfoLevel
 	if isDebug {
 		level = log.DebugLevel
 	}

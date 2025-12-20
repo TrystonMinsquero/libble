@@ -81,13 +81,15 @@ type ScrapeOptions struct {
 	MinPersonalStars uint
 	MinQuoteLikes    uint
 	MaxQuoteForBook  uint
+	UseCache         bool
 }
 
 func DefaultScrapeOptions() ScrapeOptions {
 	return ScrapeOptions{
-		MinPersonalStars: 3,
+		MinPersonalStars: 4,
 		MinQuoteLikes:    10,
-		MaxQuoteForBook:  150,
+		MaxQuoteForBook:  50,
+		UseCache:         true,
 	}
 }
 
