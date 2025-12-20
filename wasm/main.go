@@ -13,7 +13,7 @@ func main() {
 	doc := js.Global().Get("document")
 	// I tried using onLoaded handler but it didn't work, so I just did this instead
 	for doc.Get("readyState").String() != "complete" {
-		time.Sleep(time.Millisecond * 1)
+		time.Sleep(time.Microsecond * 1)
 	}
 	if isPage(PageGame) {
 		initGame()

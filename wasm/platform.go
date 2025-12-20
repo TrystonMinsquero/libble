@@ -6,9 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
-	"net/http"
-	"net/url"
 	"strings"
 	"syscall/js"
 )
@@ -98,45 +95,71 @@ func loadJson(key string, data any) error {
 }
 
 func fetch(path string, data any, method string) error {
-	url, err := url.JoinPath(APIOrigin, path)
-	if err != nil {
-		return fmt.Errorf("Failed parsing path '%s'", path)
-	}
+	url := strings.TrimSuffix(APIOrigin, "/") + "/" + strings.TrimPrefix(path, "/")
 
-	req, err := http.NewRequest(method, url, nil)
-	if err != nil {
-		return fmt.Errorf("Failed to create request for %s\n%v", url, err)
-	}
-	res, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return fmt.Errorf("Failed fetching data for %s\n%v", url, err)
-	}
-	if errStr := res.Header.Get("error"); errStr != "" {
-		return fmt.Errorf("Error in header for %s\n%s", url, errStr)
-	}
 
-	bodyBytes, err := io.ReadAll(res.Body)
-	if err != nil {
-		return fmt.Errorf("Error reading response body for %s\n%v", url, err)
-	}
+	// Call fetch
+	promise := js.Global().Call("fetch", url, map[string]any{
+		"method": method,
+	})
 
-	status := res.StatusCode
-	if status >= 200 && status < 300 {
-		if err = json.Unmarshal(bodyBytes, data); err != nil {
-			return fmt.Errorf("Error unmarshalling json for %s\n%v", url, err)
+	// Create channels for async response
+	resultChan := make(chan error, 1)
+
+	// Handle response
+	promise.Call("then", js.FuncOf(func(this js.Value, args []js.Value) any {
+		response := args[0]
+		status := response.Get("status").Int()
+
+		// Check for error header
+		headers := response.Get("headers")
+		errorHeader := headers.Call("get", "error")
+		if errorHeader.Truthy() {
+			resultChan <- fmt.Errorf("Error in header for %s\n%s", url, errorHeader.String())
+			return nil
 		}
-	} else {
-		var errorResponse map[string]any
-		reqErr := fmt.Errorf("Request to %s via %s failed with %d", url, method, status)
-		if json.Unmarshal(bodyBytes, &errorResponse) == nil {
-			if errStr, ok := errorResponse["error"].(string); ok {
-				return fmt.Errorf("%v\n%s", reqErr, errStr)
+
+		// Get response text
+		textPromise := response.Call("text")
+		textPromise.Call("then", js.FuncOf(func(this js.Value, args []js.Value) any {
+			bodyText := args[0].String()
+
+			if status >= 200 && status < 300 {
+				if err := json.Unmarshal([]byte(bodyText), data); err != nil {
+					resultChan <- fmt.Errorf("Error unmarshalling json for %s\n%v", url, err)
+					return nil
+				}
+				resultChan <- nil
+			} else {
+				var errorResponse map[string]any
+				reqErr := fmt.Errorf("Request to %s via %s failed with %d", url, method, status)
+				if json.Unmarshal([]byte(bodyText), &errorResponse) == nil {
+					if errStr, ok := errorResponse["error"].(string); ok {
+						resultChan <- fmt.Errorf("%v\n%s", reqErr, errStr)
+						return nil
+					}
+				}
+				resultChan <- reqErr
 			}
-		}
-		return reqErr
-	}
+			return nil
+		}))
 
-	return nil
+		textPromise.Call("catch", js.FuncOf(func(this js.Value, args []js.Value) any {
+			resultChan <- fmt.Errorf("Error reading response body for %s\n%v", url, args[0].String())
+			return nil
+		}))
+
+		return nil
+	}))
+
+	// Handle fetch error
+	promise.Call("catch", js.FuncOf(func(this js.Value, args []js.Value) any {
+		resultChan <- fmt.Errorf("Failed fetching data for %s\n%v", url, args[0].String())
+		return nil
+	}))
+
+	// Wait for result
+	return <-resultChan
 }
 
 func shareText(text string) (err error) {
