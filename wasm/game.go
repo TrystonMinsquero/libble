@@ -51,7 +51,7 @@ func canPlay() bool {
 	isEmptyJson := func(j string) bool {
 		return j == "" || j == "{}" || j == "[]"
 	}
-	for _, key := range []string{"libble.player", "libble.quotes", "libble.books"} {
+	for _, key := range []string{"libble.player"} {
 		if data, err := loadData(key); isEmptyJson(data) || err != nil {
 			return false
 		}
@@ -59,7 +59,7 @@ func canPlay() bool {
 	return true
 }
 
-func loadAllData(data *SaveData) error {
+func loadAllDataFiltered(data *SaveData, filter FieldPredicate) error {
 	pv := reflect.ValueOf(data)
 	v := pv.Elem()
 	t := v.Type()
@@ -72,12 +72,16 @@ func loadAllData(data *SaveData) error {
 		}
 		jsonName := fieldType.Tag.Get("json")
 		field := v.Field(i).Addr().Interface()
-		if jsonName != "" {
+		if jsonName != "" && filter(jsonName) {
 			err = errors.Join(err, loadJson(saveKey(jsonName), field))
 		}
 	}
 	data.PopulateLookups()
 	return err
+}
+
+func loadAllData(data *SaveData) error {
+	return loadAllDataFiltered(data, func(s string) bool { return true })
 }
 
 func initGame() {
