@@ -209,7 +209,10 @@ func (s SaveData) PickDailyQuote() (quoteId QuoteId, err error) {
 		return quoteId, fmt.Errorf("User has no quotes")
 	}
 
-	now := time.Now().UTC()
+	// Intentially not caring about daylight savings, just need this to be the same
+	// result called from anywhere
+	cst := time.FixedZone("CST", -6*60*60)
+	now := time.Now().UTC().In(cst)
 	seed := now.Year() + now.YearDay()
 	rng := rand.New(rand.NewSource(int64(seed)))
 
