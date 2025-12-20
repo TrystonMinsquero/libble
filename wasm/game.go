@@ -48,8 +48,11 @@ func saveNonStaticData(data SaveData) error {
 }
 
 func canPlay() bool {
+	isEmptyJson := func(j string) bool {
+		return j == "" || j == "{}" || j == "[]"
+	}
 	for _, key := range []string{"libble.player", "libble.quotes", "libble.books"} {
-		if data, err := loadData(key); data == "" || data == "{}" || err != nil {
+		if data, err := loadData(key); isEmptyJson(data) || err != nil {
 			return false
 		}
 	}
