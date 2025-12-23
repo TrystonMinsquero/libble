@@ -49,7 +49,7 @@ func main() {
 	r.SetTrustedProxies(nil)
 
 	// Host the site as well when debugging
-	if true {
+	if isDebug {
 		const siteDir = "./site"
 		if entries, err := os.ReadDir(siteDir); err == nil {
 			for _, entry := range entries {
