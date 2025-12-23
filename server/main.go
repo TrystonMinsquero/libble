@@ -263,14 +263,45 @@ func main() {
 		c.JSON(http.StatusOK, res)
 	})
 
-	r.GET("/game/daily/:id", func(c *gin.Context) {
-		libbleIDStr := c.Param("id")
-		libbleIDUint, err := strconv.ParseUint(libbleIDStr, 10, 64)
+	r.GET("/game/player/:id", func(c *gin.Context) {
+		libbleID, err := parseLibbleID(c, "id")
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid libbleID format"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		libbleID := DBID(libbleIDUint)
+
+		player, err := LoadPlayer(libbleID)
+		if err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": fmt.Sprintf("Player with ID %d not found", libbleID)})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"player": player})
+	})
+
+	r.GET("/game/user-books/:id", func(c *gin.Context) {
+		libbleID, err := parseLibbleID(c, "id")
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		books, err := LoadUserBooks(libbleID)
+		if err != nil {
+			errMsg := fmt.Sprintf("Books for player %d not found %v", libbleID, err)
+			c.JSON(http.StatusNotFound, gin.H{"error": errMsg})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"books": books})
+	})
+
+	r.GET("/game/daily/:id", func(c *gin.Context) {
+		libbleID, err := parseLibbleID(c, "id")
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
 
 		lock := getUserLock(libbleID)
 		lock.Lock()
@@ -279,7 +310,8 @@ func main() {
 		// Load complete SaveData
 		data, err := LoadSaveData(libbleID)
 		if err != nil {
-			c.JSON(http.StatusNotFound, gin.H{"error": fmt.Sprintf("Player with ID %d not found", libbleID)})
+			errMsg := fmt.Sprintf("Player with ID %d not found: %v", libbleID, err)
+			c.JSON(http.StatusNotFound, gin.H{"error": errMsg})
 			return
 		}
 
@@ -301,7 +333,7 @@ func main() {
 			return
 		}
 
-		book, err := data.GetBook(quote.BookId)
+		userBook, err := data.GetBook(quote.BookId)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"error": fmt.Sprintf("Failed to get book: %v", err),
@@ -311,9 +343,8 @@ func main() {
 
 		// Return lightweight payload
 		c.JSON(http.StatusOK, gin.H{
-			"quote":    quote,
-			"book":     book,
-			"settings": data.Player.Settings.GameSettings,
+			"quote": quote,
+			"book":  userBook,
 		})
 	})
 
@@ -331,4 +362,13 @@ func logger() *log.Logger {
 		Level:           level,
 	})
 	return logger
+}
+
+func parseLibbleID(c *gin.Context, paramName string) (DBID, error) {
+	libbleIDStr := c.Param(paramName)
+	libbleIDUint, err := strconv.ParseUint(libbleIDStr, 10, 64)
+	if err != nil {
+		return 0, fmt.Errorf("invalid libbleID format")
+	}
+	return DBID(libbleIDUint), nil
 }

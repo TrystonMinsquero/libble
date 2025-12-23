@@ -311,9 +311,8 @@ func scrapeQuote(quoteElem *colly.HTMLElement) (Quote, error) {
 	likes, err := strconv.ParseInt(likeText, 10, 32) // Yes there are negative likes
 	if err != nil {
 		return quote, fmt.Errorf("Failed to parse likes: %v", err)
-	} else {
-		quote.Likes = uint(likes)
 	}
+	quote.Likes = int(likes)
 
 	quote.QuoteGRID = parseGRID(rightElem.ChildAttr("a", "href"))
 

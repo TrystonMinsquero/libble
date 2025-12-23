@@ -124,7 +124,7 @@ func DefaultPlayerSettings() PlayerSettings {
 
 type ScrapeOptions struct {
 	MinPersonalStars uint
-	MinQuoteLikes    uint
+	MinQuoteLikes    int
 	MaxQuoteForBook  uint
 	UseCache         bool
 }
@@ -228,19 +228,14 @@ func (p *Player) TodaysGame() *Game {
 	return nil
 }
 
-func (p *Player) InitTodaysGame(data SaveData) (game *Game, err error) {
+func (p *Player) InitTodaysGame(data SaveData, dailyQuote QuoteId) (game *Game, err error) {
 	if game = p.TodaysGame(); game != nil {
 		err = game.Init(data)
 		return game, err
 	}
 
-	dailyQuoteId, err := data.PickDailyQuote()
-	if dailyQuoteId == NilID {
-		return game, fmt.Errorf("Failed to pick daily quote when making new game:\n%v", err)
-	}
-
 	p.Games = append(p.Games, Game{
-		QuoteID: dailyQuoteId,
+		QuoteID: dailyQuote,
 		Date:    time.Now(),
 		Guesses: make([]BookId, 0),
 	})
@@ -266,7 +261,7 @@ func (b Book) CleanTitle() string {
 type Quote struct {
 	QuoteId   QuoteId `json:"libble_id"`
 	QuoteGRID string  `json:"quote_gr_id"`
-	Likes     uint    `json:"likes"`
+	Likes     int     `json:"likes"`
 	Text      string  `json:"text"`
 
 	BookId   BookId `json:"book_id"`

@@ -232,6 +232,43 @@ func UpdatePlayer(player Player) error {
 	return nil
 }
 
+// LoadUserBooks loads just the books for a user (without quotes)
+func LoadUserBooks(libbleID DBID) ([]UserBook, error) {
+	rows, err := db.Query(`
+		SELECT b.book_id, b.book_gr_id, b.title, b.author, b.author_gr_id,
+		       b.avg_rating, b.rating_count, ub.stars, ub.dates_read, ub.date_added
+		FROM books b
+		JOIN user_books ub ON b.book_id = ub.book_id
+		WHERE ub.user_id = ?
+	`, libbleID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to query books: %w", err)
+	}
+	defer rows.Close()
+
+	var books []UserBook
+	for rows.Next() {
+		var ub UserBook
+		var datesReadJSON string
+		err := rows.Scan(
+			&ub.Book.BookId, &ub.Book.BookGRID, &ub.Book.Title, &ub.Book.Author,
+			&ub.Book.AuthorGRID, &ub.Book.AvgRating, &ub.Book.RatingCount,
+			&ub.UserData.Stars, &datesReadJSON, &ub.UserData.DateAdded,
+		)
+		if err != nil {
+			return nil, fmt.Errorf("failed to scan book: %w", err)
+		}
+
+		if err := json.Unmarshal([]byte(datesReadJSON), &ub.UserData.DatesRead); err != nil {
+			return nil, fmt.Errorf("failed to unmarshal dates read: %w", err)
+		}
+
+		books = append(books, ub)
+	}
+
+	return books, nil
+}
+
 // LoadSaveData loads a complete SaveData structure for a user
 func LoadSaveData(libbleID DBID) (SaveData, error) {
 	var data SaveData

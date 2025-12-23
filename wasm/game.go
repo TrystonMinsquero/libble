@@ -15,14 +15,95 @@ import (
 
 func initGame() {
 	debugPrint("Starting game...")
-	var data SaveData
-	// Load save data from local storage
-	if err := loadAllData(&data); err != nil {
-		log(err, "Failed loading data when starting game")
+
+	sendToStart := func() {
+		saveLibbleID("")
+		handlePage()
 	}
 
-	if _, err := data.Player.InitTodaysGame(data); err != nil {
+	// Get libble ID
+	libbleIDStr := loadLibbleID()
+
+	var data SaveData
+
+	// Try loading Player from LocalStorage
+	playerKey := "libble.player"
+	if err := loadJson(playerKey, &data.Player); err != nil {
+		debugPrint("Player not in LocalStorage, fetching from server...")
+		type PlayerResponse struct {
+			Player Player `json:"player"`
+		}
+		var resp PlayerResponse
+		if err := fetch("/game/player/"+libbleIDStr, &resp); err != nil {
+			log(err, "Failed to fetch player from server: %v")
+			sendToStart()
+			return
+		}
+		data.Player = resp.Player
+		debugPrint("Loaded player from server")
+	} else {
+		debugPrint("Loaded player from LocalStorage")
+	}
+
+	// Try loading Books from LocalStorage
+	booksKey := "libble.books"
+	if err := loadJson(booksKey, &data.Books); err != nil || len(data.Books) == 0 {
+		debugPrint("Books not in LocalStorage, fetching from server...")
+		type BooksResponse struct {
+			Books []UserBook `json:"books"`
+		}
+		var resp BooksResponse
+		if err := fetch("/game/user-books/"+libbleIDStr, &resp); err != nil {
+			log(err, "Failed to fetch books from server")
+			sendToStart()
+			return
+		}
+		data.Books = resp.Books
+		debugPrint("Loaded %d books from server", len(data.Books))
+	} else {
+		debugPrint("Loaded %d books from LocalStorage", len(data.Books))
+	}
+
+	dailyQuoteId := QuoteId(NilID)
+	// Try loading Quotes from LocalStorage
+	quotesKey := "libble.quotes"
+	if err := loadJson(quotesKey, &data.Quotes); err != nil || len(data.Quotes) <= 0 {
+		type DailyGameResponse struct {
+			Quote Quote    `json:"quote"`
+			Book  UserBook `json:"book"`
+		}
+		var dailyResp DailyGameResponse
+		if err := fetch("/game/daily/"+libbleIDStr, &dailyResp); err != nil {
+			log(err, "Failed to fetch daily game")
+			sendToStart()
+			return
+		}
+		// Add today's quote to our data
+		data.Quotes = []Quote{dailyResp.Quote}
+		dailyQuoteId = dailyResp.Quote.QuoteId
+		debugPrint("Loaded today's quote from server")
+	} else {
+		debugPrint("Loaded %d quotes from LocalStorage", len(data.Quotes))
+	}
+	data.PopulateLookups()
+
+	if dailyQuoteId == NilID {
+		debugPrint("Picking Daily Quote")
+		quoteId, err := data.PickDailyQuote()
+		log(err, "Error when picking daily quote")
+		if quoteId == NilID {
+			sendToStart()
+			return
+		}
+		dailyQuoteId = quoteId
+	}
+
+	debugPrint("Daily quote is %d", dailyQuoteId)
+
+	if _, err := data.Player.InitTodaysGame(data, dailyQuoteId); err != nil {
 		log(err, "Failed initializing today's game")
+		sendToStart()
+		return
 	}
 
 	debugPrint("Setting update autocomplete")
