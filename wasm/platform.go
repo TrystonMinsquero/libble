@@ -94,16 +94,35 @@ func loadJson(key string, data any) error {
 }
 
 func fetch(path string, data any) error {
-	return fetchMethod(path, data, "GET")
+	return fetchMethod(path, data, "GET", nil)
 }
 
-func fetchMethod(path string, data any, method string) error {
+func post(path string, data any, body any) error {
+	return fetchMethod(path, data, "POST", body)
+}
+
+func fetchMethod(path string, data any, method string, body any) error {
 	url := strings.TrimSuffix(APIOrigin, "/") + "/" + strings.TrimPrefix(path, "/")
 
-	// Call fetch
-	promise := js.Global().Call("fetch", url, map[string]any{
+	// Build fetch options
+	fetchOpts := map[string]any{
 		"method": method,
-	})
+		"headers": map[string]any{
+			"Content-Type": "application/json",
+		},
+	}
+
+	// Add body for POST/PUT requests
+	if body != nil {
+		jsonBytes, err := json.Marshal(body)
+		if err != nil {
+			return fmt.Errorf("Failed to marshal request body: %v", err)
+		}
+		fetchOpts["body"] = string(jsonBytes)
+	}
+
+	// Call fetch
+	promise := js.Global().Call("fetch", url, fetchOpts)
 
 	// Create channels for async response
 	resultChan := make(chan error, 1)

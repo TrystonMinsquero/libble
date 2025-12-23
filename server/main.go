@@ -1,16 +1,13 @@
 package main
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"os"
 	"path"
 	"strconv"
-	"sync"
+	"strings"
 
-	"compress/gzip"
 	. "libble/shared"
 
 	"github.com/bwmarrin/snowflake"
@@ -76,30 +73,117 @@ func main() {
 		logg.Errorf("Failed making save dir: %v", err)
 	}
 
-	// I really need to setup some kind of database
+	// Initialize database
+	if err := InitDB(); err != nil {
+		logg.Fatal("Failed to initialize database:", err)
+	}
 
-	var GRIDtoID sync.Map
 	node, err := snowflake.NewNode(1)
 	if err != nil {
 		logg.Fatal(err)
 	}
 
-	r.GET("/scrape/gr/user-books/:GRID", func(c *gin.Context) {
+	// GET /user/lookup/:GRID - Look up users by Goodreads ID
+	r.GET("/user/lookup/:GRID", func(c *gin.Context) {
 		userGRID := c.Param("GRID")
 		if userGRID == "" {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Must provide GRID param (goodreads user ID)"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Must provide GRID param"})
 			return
 		}
 
-		// TODO: try to reads options from req body
-		options := DefaultScrapeOptions()
+		summaries, err := GetUsersByGRID(userGRID)
+		if err != nil {
+			// No users found - return empty list
+			c.JSON(http.StatusOK, gin.H{"users": []UserSummary{}})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"users": summaries})
+	})
+
+	r.POST("/user/create", func(c *gin.Context) {
+		type UserCreateRequest struct {
+			GRID          string        `json:"grid"`
+			ScrapeOptions ScrapeOptions `json:"scrape_options"`
+		}
+
+		var req UserCreateRequest
+		if err := c.BindJSON(&req); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+			return
+		}
+
+		req.GRID = strings.TrimSpace(req.GRID)
+		if req.GRID == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Missing 'grid' field"})
+			return
+		}
+
+		// Create new player
+		libbleID := DBID(node.Generate().Int64())
+		settings := PlayerSettings{
+			GameSettings:  DefaultGameSettings(),
+			ScrapeOptions: req.ScrapeOptions,
+		}
+
+		if err := CreateUser(libbleID, req.GRID, settings); err != nil {
+			logg.Errorf("Failed to create user: %v", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
+			return
+		}
+
+		player := Player{
+			ID:         libbleID,
+			UserGRID:   req.GRID,
+			Settings:   settings,
+			SeenQuotes: []QuoteId{},
+			Games:      []Game{},
+		}
+
+		logg.Infof("Created new user %d from GRID '%s'", libbleID, req.GRID)
+		c.JSON(http.StatusCreated, gin.H{"player": player})
+	})
+
+	r.GET("/scrape/gr/user-books/:libbleID", func(c *gin.Context) {
+		libbleIDStr := c.Param("libbleID")
+		libbleIDUint, err := strconv.ParseUint(libbleIDStr, 10, 64)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid libbleID format"})
+			return
+		}
+		libbleID := DBID(libbleIDUint)
+
+		lock := getUserLock(libbleID)
+		lock.Lock()
+		defer lock.Unlock()
+
+		// Load player to get userGRID and settings
+		player, err := LoadPlayer(libbleID)
+		if err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": fmt.Sprintf("Player with ID %d not found", libbleID)})
+			return
+		}
+
+		userGRID := player.UserGRID
+		options := player.Settings.ScrapeOptions
+
+		// Scrape books from Goodreads
 		books, err := scrapeBooks(userGRID, options)
 
-		// resolve ids
+		// Resolve book IDs
 		for index := range books {
 			ub := &books[index]
-			id, _ := GRIDtoID.LoadOrStore(ub.Book.BookGRID, node.Generate().Int64())
-			ub.Book.BookId = BookId(id.(int64))
+			bookID, idErr := GetOrCreateBookID(ub.Book.BookGRID, node)
+			if idErr != nil {
+				logg.Errorf("Failed to get book ID: %v", idErr)
+				bookID = BookId(node.Generate().Int64())
+			}
+			ub.Book.BookId = bookID
+		}
+
+		// Save books to database
+		if _, saveErr := SaveBooks(books, libbleID); saveErr != nil {
+			logg.Errorf("Failed to save books: %v", saveErr)
 		}
 
 		res := gin.H{
@@ -112,36 +196,125 @@ func main() {
 		c.JSON(http.StatusOK, res)
 	})
 
-	r.GET("/scrape/gr/quotes/:GRID", func(c *gin.Context) {
-		userGRID := c.Param("GRID")
-		if userGRID == "" {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Must provide GRID param (goodreads book ID)"})
+	r.GET("/scrape/gr/quotes/:libbleID/:bookGRID", func(c *gin.Context) {
+		libbleIDStr := c.Param("libbleID")
+		libbleIDUint, err := strconv.ParseUint(libbleIDStr, 10, 64)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid libbleID format"})
+			return
+		}
+		libbleID := DBID(libbleIDUint)
+
+		bookGRID := c.Param("bookGRID")
+		if bookGRID == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Must provide bookGRID param"})
 			return
 		}
 
-		// TODO: try to reads options from req body
-		options := DefaultScrapeOptions()
-		quotes, err := scrapeQuotes(userGRID, options)
+		lock := getUserLock(libbleID)
+		lock.Lock()
+		defer lock.Unlock()
 
+		// Load player to get settings
+		player, err := LoadPlayer(libbleID)
+		if err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": fmt.Sprintf("Player with ID %d not found", libbleID)})
+			return
+		}
+
+		options := player.Settings.ScrapeOptions
+
+		// Scrape quotes from Goodreads for this specific book
+		quotes, err := scrapeQuotes(bookGRID, options)
+
+		// Resolve book and quote IDs
 		for index := range quotes {
 			quote := &quotes[index]
-			bookId, loaded := GRIDtoID.LoadOrStore(quote.BookGRID, node.Generate().Int64())
-			if !loaded {
-				logg.Warnf("Quote %s has book grid %s but it's not in the id map", quote.QuoteGRID, quote.BookGRID)
+
+			// Get or create book ID
+			bookID, idErr := GetOrCreateBookID(quote.BookGRID, node)
+			if idErr != nil {
+				logg.Errorf("Failed to get book ID: %v", idErr)
+				bookID = BookId(node.Generate().Int64())
 			}
-			quote.BookId = BookId(bookId.(int64))
-			quoteId, _ := GRIDtoID.LoadOrStore(quote.QuoteGRID, node.Generate().Int64())
-			quote.QuoteId = QuoteId(quoteId.(int64))
+			quote.BookId = bookID
+
+			// Get or create quote ID
+			quoteID, idErr := GetOrCreateQuoteID(quote.QuoteGRID, node)
+			if idErr != nil {
+				logg.Errorf("Failed to get quote ID: %v", idErr)
+				quoteID = QuoteId(node.Generate().Int64())
+			}
+			quote.QuoteId = quoteID
+		}
+
+		// Save quotes to database
+		if _, saveErr := SaveQuotes(quotes); saveErr != nil {
+			logg.Errorf("Failed to save quotes: %v", saveErr)
 		}
 
 		res := gin.H{
 			"quotes": quotes,
 		}
 		if err != nil {
-			res["error"] = fmt.Sprintf("Failed to scrape books from user %s: \n%v", userGRID, err)
+			res["error"] = fmt.Sprintf("Failed to scrape quotes from book %s: \n%v", bookGRID, err)
 		}
 
 		c.JSON(http.StatusOK, res)
+	})
+
+	r.GET("/game/daily/:id", func(c *gin.Context) {
+		libbleIDStr := c.Param("id")
+		libbleIDUint, err := strconv.ParseUint(libbleIDStr, 10, 64)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid libbleID format"})
+			return
+		}
+		libbleID := DBID(libbleIDUint)
+
+		lock := getUserLock(libbleID)
+		lock.Lock()
+		defer lock.Unlock()
+
+		// Load complete SaveData
+		data, err := LoadSaveData(libbleID)
+		if err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": fmt.Sprintf("Player with ID %d not found", libbleID)})
+			return
+		}
+
+		// Pick today's daily quote
+		dailyQuoteId, err := data.PickDailyQuote()
+		if dailyQuoteId == NilID {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": fmt.Sprintf("Failed to pick daily quote: %v", err),
+			})
+			return
+		}
+
+		// Get the quote and book
+		quote, err := data.GetQuote(dailyQuoteId)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": fmt.Sprintf("Failed to get quote: %v", err),
+			})
+			return
+		}
+
+		book, err := data.GetBook(quote.BookId)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": fmt.Sprintf("Failed to get book: %v", err),
+			})
+			return
+		}
+
+		// Return lightweight payload
+		c.JSON(http.StatusOK, gin.H{
+			"quote":    quote,
+			"book":     book,
+			"settings": data.Player.Settings.GameSettings,
+		})
 	})
 
 	logg.Fatal(r.Run())
@@ -158,78 +331,4 @@ func logger() *log.Logger {
 		Level:           level,
 	})
 	return logger
-}
-
-func saveFileName(userID DBID) string {
-	return strconv.FormatUint(uint64(userID), 10)
-}
-
-func saveUserData(save SaveData) error {
-	fileName := saveFileName(save.Player.ID)
-	file, err := os.OpenFile(path.Join(saveDir, fileName), os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		return fmt.Errorf("Failed opening save file: %v", err)
-	}
-
-	saveBytes, err := json.Marshal(save)
-	if err != nil {
-		return fmt.Errorf("Failed marshelling save data: %v", err)
-	}
-
-	// Compress saveBytes to compressedBuffer
-	var compressedBuffer bytes.Buffer
-	compresser := gzip.NewWriter(&compressedBuffer)
-	defer compresser.Close()
-	if _, err := compresser.Write(saveBytes); err != nil {
-		return err
-	}
-	if err := compresser.Close(); err != nil {
-		return err
-	}
-
-	compressedBytes := compressedBuffer.Bytes()
-	written, err := file.Write(compressedBytes)
-	if err != nil {
-		return fmt.Errorf("Failed writing save data: %v", err)
-	}
-
-	compressPercent := float32(len(compressedBytes)) / float32(len(saveBytes))
-	logg.Infof("Saved %d bytes (%.2f%% of original) of data for %s", written, compressPercent, fileName)
-	return nil
-}
-
-func loadUserData(userID DBID) (SaveData, error) {
-	var data SaveData
-	fileName := saveFileName(userID)
-	file, err := os.Open(path.Join(saveDir, fileName))
-	if err != nil {
-		return data, fmt.Errorf("Failed opening save file: %v", err)
-	}
-	defer file.Close()
-
-	// Decompress the file
-	decompresser, err := gzip.NewReader(file)
-	if err != nil {
-		return data, fmt.Errorf("Failed creating gzip reader: %v", err)
-	}
-	defer decompresser.Close()
-
-	// Decode JSON from decompressed data
-	decoder := json.NewDecoder(decompresser)
-	if err := decoder.Decode(&data); err != nil {
-		return data, fmt.Errorf("Failed decoding save data: %v", err)
-	}
-
-	return data, nil
-}
-
-func createUserData(userGRID string, books []UserBook, quotes []Quote) SaveData {
-	data := NewSaveData(userGRID, books, quotes)
-	logg.Debugf("Created new user %d from GRID '%s'", data.Player.ID, userGRID)
-
-	if err := saveUserData(data); err != nil {
-		logg.Errorf("Unabled to save new user data: %v", err)
-	}
-
-	return data
 }

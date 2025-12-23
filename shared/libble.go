@@ -47,10 +47,10 @@ func (s *SaveData) PopulateLookups() {
 	}
 }
 
-func NewSaveData(userGRID string, books []UserBook, quotes []Quote) SaveData {
+func NewSaveData(libbleID DBID, userGRID string, books []UserBook, quotes []Quote) SaveData {
 	var data SaveData
 	data.Player.UserGRID = userGRID
-	data.Player.ID = DBID(rand.Uint64())
+	data.Player.ID = libbleID
 	data.Player.Settings = DefaultPlayerSettings()
 
 	// Initialize maps
@@ -97,16 +97,6 @@ func (s SaveData) FindBookId(query string) BookId {
 		}
 	}
 	return NilID
-}
-
-func IsStaticSaveDataField(jsonFieldName string) bool {
-	switch jsonFieldName {
-	case "books":
-		return true
-	case "quotes":
-		return true
-	}
-	return false
 }
 
 type UserBook struct {
@@ -224,6 +214,41 @@ func (g Game) Won() bool {
 	return g.Guesses[len(g.Guesses)-1] == g.BookId
 }
 
+func (p *Player) TodaysGame() *Game {
+	if len(p.Games) > 0 {
+		MaxLookback := 5
+		lastValidIndex := max(len(p.Games)-MaxLookback-1, 0)
+		for i := len(p.Games) - 1; i >= lastValidIndex; i-- {
+			game := &p.Games[i]
+			if DateSeed(time.Now()) == DateSeed(game.Date) {
+				return game
+			}
+		}
+	}
+	return nil
+}
+
+func (p *Player) InitTodaysGame(data SaveData) (game *Game, err error) {
+	if game = p.TodaysGame(); game != nil {
+		err = game.Init(data)
+		return game, err
+	}
+
+	dailyQuoteId, err := data.PickDailyQuote()
+	if dailyQuoteId == NilID {
+		return game, fmt.Errorf("Failed to pick daily quote when making new game:\n%v", err)
+	}
+
+	p.Games = append(p.Games, Game{
+		QuoteID: dailyQuoteId,
+		Date:    time.Now(),
+		Guesses: make([]BookId, 0),
+	})
+	game = &p.Games[len(p.Games)-1]
+	err = errors.Join(game.Init(data))
+	return game, err
+}
+
 type Book struct {
 	BookId      BookId  `json:"libble_id"`
 	BookGRID    string  `json:"book_gr_id"`
@@ -260,6 +285,18 @@ func (b UserBookData) IsRead() bool {
 	return false
 }
 
+func ToCST(t time.Time) time.Time {
+	// Intentially not caring about daylight savings, just need this to be the same
+	// result called from anywhere
+	cst := time.FixedZone("CST", -6*60*60)
+	return t.UTC().In(cst)
+}
+
+func DateSeed(t time.Time) int {
+	t = ToCST(t)
+	return t.Year() + t.YearDay()
+}
+
 func (s SaveData) PickDailyQuote() (quoteId QuoteId, err error) {
 	quoteId = NilID
 	quoteCount := len(s.Quotes)
@@ -267,12 +304,8 @@ func (s SaveData) PickDailyQuote() (quoteId QuoteId, err error) {
 		return quoteId, fmt.Errorf("User has no quotes")
 	}
 
-	// Intentially not caring about daylight savings, just need this to be the same
-	// result called from anywhere
-	cst := time.FixedZone("CST", -6*60*60)
-	now := time.Now().UTC().In(cst)
-	seed := now.Year() + now.YearDay()
-	rng := rand.New(rand.NewSource(int64(seed)))
+	seed := int64(DateSeed(time.Now()))
+	rng := rand.New(rand.NewSource(seed))
 
 	// TODO: actually use weights for meta data like how many times the book was played
 	type QuoteMetaData struct {
@@ -332,4 +365,11 @@ func (s SaveData) PickDailyQuote() (quoteId QuoteId, err error) {
 	err = errors.Join(fmt.Errorf("Recycling quote for %s\n", s.Player.UserGRID))
 	quoteIndex = rng.Intn(quoteCount)
 	return quotes[quoteIndex], err
+}
+
+// UserSummary contains summary information about a user
+type UserSummary struct {
+	LibbleID   DBID   `json:"libble_id"`
+	GameCount  int    `json:"game_count"`
+	LastPlayed string `json:"last_played"` // Empty string if never played
 }

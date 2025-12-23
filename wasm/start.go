@@ -68,6 +68,68 @@ func initStart() {
 				submitButton.SetDisabled(false)
 			}()
 
+			// Step 0: Check for existing users
+			showStatus("Checking for existing accounts...")
+
+			type LookupResponse struct {
+				Users []libble.UserSummary `json:"users"`
+			}
+
+			var lookupResp LookupResponse
+			if err := fetch("/user/lookup/"+userGrid, &lookupResp); err != nil {
+				log(err, "Failed to lookup users")
+				showError(err.Error())
+				return
+			}
+
+			var libbleID libble.DBID
+			libbleIDStr := ""
+
+			// If existing users found, ask user what to do
+			if len(lookupResp.Users) > 0 {
+				// TODO: Implement UI to show user options
+				// For now, just use the first one
+				// Future: Show list with game count and last played, let user choose
+				libbleID = libble.DBID(lookupResp.Users[0].LibbleID)
+				libbleIDStr = fmt.Sprintf("%d", libbleID)
+				saveLibbleID(libbleIDStr)
+				debugPrint("Using existing user with libble ID: %d", libbleID)
+				showStatus("Using existing account, loading your data...")
+			} else {
+				// No existing users, create new one
+				showStatus("Creating your account...")
+				type UserCreateRequest struct {
+					GRID          string               `json:"grid"`
+					ScrapeOptions libble.ScrapeOptions `json:"scrape_options"`
+				}
+				type UserCreateResponse struct {
+					Player libble.Player `json:"player"`
+					Error  string        `json:"error,omitempty"`
+				}
+
+				reqBody := UserCreateRequest{
+					GRID:          userGrid,
+					ScrapeOptions: libble.DefaultScrapeOptions(),
+				}
+
+				var createResp UserCreateResponse
+				if err := post("/user/create", &createResp, reqBody); err != nil {
+					log(err, "Failed to create user")
+					showError(err.Error())
+					return
+				}
+
+				if createResp.Error != "" {
+					showError(createResp.Error)
+					return
+				}
+
+				libbleID = createResp.Player.ID
+				libbleIDStr = fmt.Sprintf("%d", libbleID)
+				saveLibbleID(libbleIDStr)
+				debugPrint("Created user with libble ID: %d", libbleID)
+			}
+
 			// Step 1: Fetch books
 			showStatus("Fetching your books...")
 			type BooksResponse struct {
@@ -75,7 +137,7 @@ func initStart() {
 				Error     string            `json:"error,omitempty"`
 			}
 			var booksResp BooksResponse
-			if err := fetch("/scrape/gr/user-books/"+userGrid, &booksResp); err != nil {
+			if err := fetch("/scrape/gr/user-books/"+libbleIDStr, &booksResp); err != nil {
 				log(err, "Unable to fetch books")
 				showError(err.Error())
 				return
@@ -109,7 +171,8 @@ func initStart() {
 				go func(idx int, ub libble.UserBook) {
 					book := ub.Book
 					var quotesResp QuotesResponse
-					if err := fetch("/scrape/gr/quotes/"+book.BookGRID, &quotesResp); err != nil {
+					quotesURL := fmt.Sprintf("/scrape/gr/quotes/%s/%s", libbleIDStr, book.BookGRID)
+					if err := fetch(quotesURL, &quotesResp); err != nil {
 						log(err, "Failed to fetch quotes for book "+book.CleanTitle())
 						resultChan <- bookResult{quotes: nil, index: idx}
 						return
@@ -140,12 +203,11 @@ func initStart() {
 			showStatus(fmt.Sprintf("Successfully loaded %d quotes from %d books!", len(allQuotes), len(books)))
 
 			// Create save data
-			data := libble.NewSaveData(userGrid, books, allQuotes)
-			debugPrint("Successfully created new user: %d", data.Player.ID)
+			data := libble.NewSaveData(libbleID, userGrid, books, allQuotes)
+			debugPrint("Successfully loaded user data: %d", data.Player.ID)
 
 			if err := saveAllData(data); err != nil {
-				log(err, "Failed to save data")
-				showError("Failed to save your data on device, sorry!")
+				log(err, "Failed to save data, will start requesting data")
 			}
 		}()
 	}

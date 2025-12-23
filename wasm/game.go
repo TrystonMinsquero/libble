@@ -1,10 +1,8 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"math"
-	"reflect"
 	"slices"
 	"strings"
 	"time"
@@ -15,75 +13,6 @@ import (
 	dom "honnef.co/go/js/dom/v2"
 )
 
-func saveKey(jsonName string) string {
-	return "libble." + jsonName
-}
-
-type FieldPredicate func(string) bool
-
-func saveAllDataFiltered(data SaveData, filter FieldPredicate) error {
-	v := reflect.ValueOf(data)
-	t := v.Type()
-	var err error
-	err = nil
-	for i := range t.NumField() {
-		field := t.Field(i)
-		if !field.IsExported() {
-			continue
-		}
-		jsonName := field.Tag.Get("json")
-		if jsonName != "" && filter(jsonName) {
-			err = errors.Join(err, saveJson(saveKey(jsonName), v.Field(i).Interface()))
-		}
-	}
-	return err
-}
-
-func saveAllData(data SaveData) error {
-	return saveAllDataFiltered(data, func(s string) bool { return true })
-}
-
-func saveNonStaticData(data SaveData) error {
-	return saveAllDataFiltered(data, func(s string) bool { return !IsStaticSaveDataField(s) })
-}
-
-func canPlay() bool {
-	isEmptyJson := func(j string) bool {
-		return j == "" || j == "{}" || j == "[]"
-	}
-	for _, key := range []string{"libble.player"} {
-		if data, err := loadData(key); isEmptyJson(data) || err != nil {
-			return false
-		}
-	}
-	return true
-}
-
-func loadAllDataFiltered(data *SaveData, filter FieldPredicate) error {
-	pv := reflect.ValueOf(data)
-	v := pv.Elem()
-	t := v.Type()
-	var err error
-	err = nil
-	for i := range t.NumField() {
-		fieldType := t.Field(i)
-		if !fieldType.IsExported() {
-			continue
-		}
-		jsonName := fieldType.Tag.Get("json")
-		field := v.Field(i).Addr().Interface()
-		if jsonName != "" && filter(jsonName) {
-			err = errors.Join(err, loadJson(saveKey(jsonName), field))
-		}
-	}
-	data.PopulateLookups()
-	return err
-}
-
-func loadAllData(data *SaveData) error {
-	return loadAllDataFiltered(data, func(s string) bool { return true })
-}
-
 func initGame() {
 	debugPrint("Starting game...")
 	var data SaveData
@@ -92,7 +21,7 @@ func initGame() {
 		log(err, "Failed loading data when starting game")
 	}
 
-	if _, err := initTodaysGame(&data); err != nil {
+	if _, err := data.Player.InitTodaysGame(data); err != nil {
 		log(err, "Failed initializing today's game")
 	}
 
@@ -107,56 +36,11 @@ func initGame() {
 
 	setupHTML(&data, allBooks)
 }
-func toDate(t time.Time) time.Time {
-	return t.Truncate(24 * time.Hour)
-}
-
-func todaysDate() time.Time {
-	return toDate(time.Now())
-}
-
-func todaysGame(data *SaveData) *Game {
-	player := &data.Player
-	if len(player.Games) > 0 {
-		MaxLookback := 5
-		lastValidIndex := max(len(player.Games)-MaxLookback-1, 0)
-		for i := len(player.Games) - 1; i >= lastValidIndex; i-- {
-			game := &player.Games[i]
-			if todaysDate().Equal(toDate(game.Date)) {
-				return game
-			}
-		}
-	}
-	return nil
-}
-
-func initTodaysGame(data *SaveData) (game *Game, err error) {
-	if game = todaysGame(data); game != nil {
-		err = game.Init(*data)
-		return game, err
-	}
-
-	dailyQuoteId, err := data.PickDailyQuote()
-	if dailyQuoteId == NilID {
-		return game, fmt.Errorf("Failed to pick daily quote when making new game:\n%v", err)
-	}
-	log(err, "Issue when picking daily quote when making new game")
-
-	player := &data.Player
-	player.Games = append(player.Games, Game{
-		QuoteID: dailyQuoteId,
-		Date:    time.Now(),
-		Guesses: make([]BookId, 0),
-	})
-	game = &player.Games[len(player.Games)-1]
-	err = game.Init(*data)
-	return game, err
-}
 
 func setupHTML(data *SaveData, allBooks Books) {
 	doc := dom.GetWindow().Document()
 
-	game := todaysGame(data)
+	game := data.Player.TodaysGame()
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -322,7 +206,7 @@ func onSubmit(
 ) bool {
 
 	query := strings.ToLower(strings.TrimSpace(input.Value()))
-	game := todaysGame(data)
+	game := data.Player.TodaysGame()
 	target := strings.ToLower(game.Book.Book.CleanTitle())
 
 	defer saveNonStaticData(*data)
@@ -363,7 +247,7 @@ func onSkip(
 	data *SaveData,
 	setFeedback func(msg string, status string),
 ) error {
-	game := todaysGame(data)
+	game := data.Player.TodaysGame()
 
 	if game.Started() {
 		return fmt.Errorf("Trying to skip after the game already started")
