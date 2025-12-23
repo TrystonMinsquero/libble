@@ -279,6 +279,38 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{"player": player})
 	})
 
+	r.PUT("/game/player/:id", func(c *gin.Context) {
+		libbleID, err := parseLibbleID(c, "id")
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		var player Player
+		if err := c.BindJSON(&player); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+			return
+		}
+
+		// Ensure the ID in the body matches the URL
+		if player.ID != libbleID {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Player ID mismatch"})
+			return
+		}
+
+		lock := getUserLock(libbleID)
+		lock.Lock()
+		defer lock.Unlock()
+
+		// Update player in database
+		if err := UpdatePlayer(player); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("Failed to update player: %v", err)})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"success": true})
+	})
+
 	r.GET("/game/user-books/:id", func(c *gin.Context) {
 		libbleID, err := parseLibbleID(c, "id")
 		if err != nil {

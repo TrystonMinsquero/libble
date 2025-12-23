@@ -31,8 +31,16 @@ type SaveData struct {
 	Books  []UserBook `json:"books"`
 	Quotes []Quote    `json:"quotes"`
 
-	bookMap  map[BookId]int
-	quoteMap map[QuoteId]int
+	NeedsServer bool
+	bookMap     map[BookId]int
+	quoteMap    map[QuoteId]int
+}
+
+func (s *SaveData) PopulateQuoteLookup() {
+	s.quoteMap = make(map[QuoteId]int)
+	for index, quote := range s.Quotes {
+		s.quoteMap[quote.QuoteId] = index
+	}
 }
 
 func (s *SaveData) PopulateLookups() {
@@ -40,11 +48,7 @@ func (s *SaveData) PopulateLookups() {
 	for index, book := range s.Books {
 		s.bookMap[book.Book.BookId] = index
 	}
-
-	s.quoteMap = make(map[QuoteId]int)
-	for index, quote := range s.Quotes {
-		s.quoteMap[quote.QuoteId] = index
-	}
+	s.PopulateQuoteLookup()
 }
 
 func NewSaveData(libbleID DBID, userGRID string, books []UserBook, quotes []Quote) SaveData {
@@ -76,15 +80,34 @@ func (s SaveData) GetBook(ID BookId) (UserBook, error) {
 	return s.Books[index], nil
 }
 
+func (s SaveData) FindQuote(ID QuoteId) Quote {
+	for _, quote := range s.Quotes {
+		if quote.QuoteId == ID {
+			return quote
+		}
+	}
+	return Quote{}
+}
+
 func (s SaveData) GetQuote(ID QuoteId) (Quote, error) {
 	index, ok := s.quoteMap[ID]
 	if !ok {
-		return Quote{}, fmt.Errorf("Quote %v not in map", ID)
+		return Quote{}, fmt.Errorf("Quote %v not in map. Quotes Map:\n%v", ID, s.quoteMap)
 	}
 	if index < 0 || index >= len(s.Quotes) {
 		return Quote{}, fmt.Errorf("Quote %v had index %d which is out of bounds ", ID, index)
 	}
 	return s.Quotes[index], nil
+}
+
+func (s *SaveData) AddQuote(quote Quote) {
+	index, found := s.quoteMap[quote.QuoteId]
+	if found {
+		s.Quotes[index] = quote
+	} else {
+		s.Quotes = append(s.Quotes, quote)
+		s.PopulateLookups()
+	}
 }
 
 func (s SaveData) FindBookId(query string) BookId {
@@ -230,6 +253,7 @@ func (p *Player) TodaysGame() *Game {
 
 func (p *Player) InitTodaysGame(data SaveData, dailyQuote QuoteId) (game *Game, err error) {
 	if game = p.TodaysGame(); game != nil {
+		game.QuoteID = dailyQuote
 		err = game.Init(data)
 		return game, err
 	}

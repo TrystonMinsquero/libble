@@ -7,21 +7,26 @@ import (
 	. "libble/shared"
 )
 
-func saveKey(jsonName string) string {
-	return "libble." + jsonName
-}
-
 type FieldPredicate func(string) bool
 
-const libbleIDKey = "libble.id"
+func saveKey(key string) string {
+	return "libble." + key
+}
+
+const (
+	saveKeyID     = "libble.id"
+	saveKeyPlayer = "libble.player"
+	saveKeyBooks  = "libble.books"
+	saveKeyQuotes = "libble.quotes"
+)
 
 func saveLibbleID(libbleID string) {
-	err := saveData(saveKey(libbleIDKey), libbleID)
+	err := saveData(saveKeyID, libbleID)
 	log(err, "Failed to save libble id "+libbleID)
 }
 
 func loadLibbleID() string {
-	id, err := loadData(saveKey(libbleIDKey))
+	id, err := loadData(saveKeyID)
 	log(err, "Failed to load libble id "+id)
 	return id
 }
@@ -54,12 +59,32 @@ func saveAllDataFiltered(data SaveData, filter FieldPredicate) error {
 	return err
 }
 
+func syncPlayer(player Player) {
+	libbleID := loadLibbleID()
+	if libbleID == "" {
+		logErr("Can't sync to server because no libble.id is not saved")
+		return
+	}
+	var response map[string]any
+	if syncErr := put("/game/player/"+libbleID, &response, player); syncErr != nil {
+		log(syncErr, "Failed to sync player data to server")
+	} else {
+		debugPrint("Synced player data to server")
+	}
+}
+
 func saveAllData(data SaveData) error {
 	return saveAllDataFiltered(data, func(s string) bool { return true })
 }
 
 func saveNonStaticData(data SaveData) error {
-	return saveAllDataFiltered(data, func(s string) bool { return !isStaticSaveDataField(s) })
+	err := saveAllDataFiltered(data, func(s string) bool { return !isStaticSaveDataField(s) })
+	if data.NeedsServer {
+		syncPlayer(data.Player)
+	} else {
+		go syncPlayer(data.Player)
+	}
+	return err
 }
 
 func canPlay() bool {

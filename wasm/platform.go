@@ -16,6 +16,11 @@ var APIOrigin string
 
 var isDebug = mode == "debug"
 
+func removeData(key string) {
+	localStorage := js.Global().Get("localStorage")
+	localStorage.Call("removeItem", key)
+}
+
 func saveData(key string, value string) (err error) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -25,6 +30,7 @@ func saveData(key string, value string) (err error) {
 	err = nil
 	localStorage := js.Global().Get("localStorage")
 	localStorage.Call("setItem", key, value)
+	debugPrint("Saving %v", key)
 	return err
 }
 
@@ -101,7 +107,11 @@ func post(path string, data any, body any) error {
 	return fetchMethod(path, data, "POST", body)
 }
 
-func fetchMethod(path string, data any, method string, body any) error {
+func put(path string, data any, body any) error {
+	return fetchMethod(path, data, "PUT", body)
+}
+
+func fetchMethod(path string, data any, method string, body any) (err error) {
 	url := strings.TrimSuffix(APIOrigin, "/") + "/" + strings.TrimPrefix(path, "/")
 
 	// Build fetch options
@@ -126,6 +136,12 @@ func fetchMethod(path string, data any, method string, body any) error {
 
 	// Create channels for async response
 	resultChan := make(chan error, 1)
+	defer func() {
+		if r := recover(); r != nil {
+			debugPrint("Recoving from %v", r)
+			resultChan <- fmt.Errorf("Failed to fetch at %s: %v\n", url, r)
+		}
+	}()
 
 	// Handle response
 	promise.Call("then", js.FuncOf(func(this js.Value, args []js.Value) any {
