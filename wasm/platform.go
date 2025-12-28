@@ -52,7 +52,11 @@ func saveJson(key string, data any) error {
 	if err != nil {
 		return errors.Join(fmt.Errorf("Failed to marshal %s", key), err)
 	}
-	saveData(key, string(jsonBytes))
+	if len(jsonBytes) < 3_000_000 {
+		saveData(key, string(jsonBytes))
+	} else {
+		debugPrint("Didn't save %s because it's too large (%.3f MB)", key, float64(len(jsonBytes))/1_000_000.0)
+	}
 	return nil
 }
 

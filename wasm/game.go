@@ -105,6 +105,9 @@ func initGame() {
 	bookCount := len(data.Books)
 	allBooks := make([]Book, 0, bookCount)
 	for _, book := range data.Books {
+		if !data.Player.Settings.ScrapeOptions.ShouldScrapeQuotes(book) {
+			continue
+		}
 		allBooks = append(allBooks, book.Book)
 	}
 
