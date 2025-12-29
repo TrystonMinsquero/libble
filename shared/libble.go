@@ -162,10 +162,7 @@ func DefaultScrapeOptions() ScrapeOptions {
 }
 
 func (o ScrapeOptions) ShouldScrapeQuotes(userBook UserBook) bool {
-	if userBook.UserData.Stars >= o.MinPersonalStars {
-		return false
-	}
-	return true
+	return userBook.UserData.Stars >= o.MinPersonalStars
 }
 
 type GameSettings struct {
@@ -323,6 +320,8 @@ func (s SaveData) PickDailyQuote() (quoteId QuoteId, err error) {
 		return quoteId, fmt.Errorf("User has no quotes")
 	}
 
+	options := s.Player.Settings.ScrapeOptions
+
 	seed := int64(DateSeed(time.Now()))
 	rng := rand.New(rand.NewSource(seed))
 
@@ -375,7 +374,7 @@ func (s SaveData) PickDailyQuote() (quoteId QuoteId, err error) {
 			err = errors.Join(err)
 			continue
 		}
-		if !book.UserData.IsRead() {
+		if !options.ShouldScrapeQuotes(book) {
 			continue
 		}
 		return quoteId, err
