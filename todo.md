@@ -13,12 +13,12 @@
 ## --------BOTTOM LINE --------------------------------------------------------
 - [x] Clean up the quote text to make sure punctuation and spacing is correct
 - [ ] Hide characters and title in quotes (can scrape from Goodreads!)
-- [ ] Implement Hints
-    - [ ] Show when you read the book
+- [~] Implement Hints
+    - [x] Show when you read the book
     - [ ] Show how popular the book is likes/reads etc.
     - [ ] Show the hidden characters mentioned
 - [ ] Make the quote selection better
-    - [ ] Prioritize books that haven't been used
+    - [ ] Prioritize books that haven't been used, recently read, more likes, more stars
     - [x] Make sure it's deterministic
 - [ ] Make it easier to setup account
     - Currently if you have the Goodreads app installed it takes to you the app, which is hard to find your user id
@@ -33,10 +33,12 @@
 - [x] Stream scraping the website so it's not one big payload and makes it feel like the site isn't working
 - [x] Cache html files by default
     - [ ] Reset cache periodically (probably once a day)
-- [ ] Should probably use a database instead of raw save json files.
-    - [ ] Also saves the books by id so not saving duplicate scraped data.
+- [~] Should probably use a database instead of raw save json files.
+    - [ ] Move the database to postgress instance
+    - [x] Also saves the books by id so not saving duplicate scraped data.
 - [ ] Have up and down arrows "scroll" as you go down the options
-- [ ] Make pretty, maybe get some input from others
+- [x] Make pretty, maybe get some input from others
+- [ ] Show lives like how we show the share text with emojis in the right justified area where "Book Title:" is
     - Should maybe port to react/TypeScript.
 - [ ] Make tab in input work
 - [ ] Highlight selected text that was hit during search
