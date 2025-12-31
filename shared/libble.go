@@ -139,7 +139,6 @@ var NoDateErr = errors.New("book has no read date")
 func parseDate(dateStr string) (time.Time, error) {
 	if dateStr == "not set" || dateStr == "" {
 		return time.Time{}, NoDateErr
-
 	}
 
 	layouts := []string{
@@ -163,18 +162,25 @@ func parseDate(dateStr string) (time.Time, error) {
 func (b UserBookData) LastReadDate() (time.Time, error) {
 	best := time.Time{}
 	var parseErr error
-	for _, dateStr := range b.DatesRead {
+	checkDate := func(dateStr string) {
 		date, err := parseDate(dateStr)
 		if err != nil {
 			if err == ParseDateErr {
 				dateErr := fmt.Errorf("%s can't be parsed", dateStr)
 				parseErr = errors.Join(parseErr, dateErr)
 			}
-			continue
+			return
 		} else if date.After(best) {
 			best = date
 		}
 	}
+	for _, dateStr := range b.DatesRead {
+		checkDate(dateStr)
+	}
+	if best.Equal(time.Time{}) {
+		checkDate(b.DateAdded)
+	}
+
 	var err error
 	if best.Equal(time.Time{}) {
 		err = errors.Join(NoDateErr)
