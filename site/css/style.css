@@ -1,3 +1,6 @@
+/* Import pixel fonts */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&display=swap');
+
 /* Reset and base styles */
 * {
   margin: 0;
@@ -6,85 +9,173 @@
 }
 
 body {
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #121212;
-  color: #f5f5f5;
+  font-family: 'Silkscreen', monospace;
+  background: linear-gradient(135deg, #d4b896 0%, #c9a882 50%, #b89968 100%);
+  background-attachment: fixed;
+  color: #2b1810;
   display: flex;
   justify-content: center;
   padding: 2rem;
   min-height: 100vh;
+  position: relative;
+}
+
+/* Add a subtle bookshelf pattern */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 100px,
+      rgba(139, 69, 19, 0.03) 100px,
+      rgba(139, 69, 19, 0.03) 102px
+    );
+  pointer-events: none;
+  z-index: 0;
 }
 
 .container {
   max-width: 600px;
   width: 100%;
-  background: #1e1e1e;
+  background: #f4e8d8;
   padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+  border: 6px solid #6B4423;
+  box-shadow:
+    8px 8px 0px #4a2e1a,
+    12px 12px 0px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 1;
+}
+
+/* Book spine decorations on container */
+.container::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  right: -6px;
+  height: 12px;
+  background: linear-gradient(90deg,
+    #8B2635 0%, #8B2635 20%,
+    #6B4423 20%, #6B4423 40%,
+    #2F4F2F 40%, #2F4F2F 60%,
+    #8B4513 60%, #8B4513 80%,
+    #4B0082 80%, #4B0082 100%
+  );
+  z-index: 2;
 }
 
 h1 {
   text-align: center;
   margin-bottom: 0.5rem;
-  color: #ffffff;
+  color: #6B4423;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 2em;
+  text-shadow: 3px 3px 0px #D4AF37;
+  letter-spacing: 2px;
 }
 
 .subtitle {
   text-align: center;
   margin-bottom: 1.5rem;
-  font-size: 0.95rem;
-  color: #aaa;
+  font-size: 0.85rem;
+  color: #8B4513;
+  font-family: 'Silkscreen', monospace;
 }
 
 .quote-box {
-  background-color: #2c2c2c;
+  background-color: #fef8f0;
   padding: 1.5rem;
-  border-left: 4px solid #64ffda;
-  border-radius: 6px;
+  border: 4px solid #8B4513;
+  box-shadow: 4px 4px 0px #6B4423;
   font-style: italic;
   margin-bottom: 1rem;
   white-space: pre-line;
+  position: relative;
+  color: #3a2518;
+  line-height: 1.6;
+}
+
+/* Decorative quotation marks */
+.quote-box::before {
+  content: "\201C";
+  position: absolute;
+  top: -15px;
+  left: 10px;
+  font-size: 4em;
+  color: #D4AF37;
+  font-family: Georgia, serif;
+  line-height: 1;
+}
+
+.quote-box::after {
+  content: "\201D";
+  position: absolute;
+  bottom: -35px;
+  right: 10px;
+  font-size: 4em;
+  color: #D4AF37;
+  font-family: Georgia, serif;
+  line-height: 1;
 }
 
 .hints-section {
   margin-bottom: 1.5rem;
   text-align: center;
+  display: grid;
+  justify-items: center;
+}
+
+.hints-section:disabled {
+    display: none;
 }
 
 .hint-btn {
   padding: 0.5rem 1rem;
   margin: 0.25rem;
-  background-color: #3d3d3d;
+  background-color: #8B2635;
   color: #fff;
-  border: 1px solid #64ffda;
-  border-radius: 6px;
+  border: 4px solid #6B1a28;
+  box-shadow: 4px 4px 0px #4a0e1a;
   cursor: pointer;
   font-size: 0.9rem;
-  transition: all 0.3s ease;
+  font-family: 'Silkscreen', monospace;
+  transition: all 0.1s ease;
+  position: relative;
 }
 
 .hint-btn:hover:not(:disabled) {
-  background-color: #64ffda;
-  color: #000;
+  background-color: #a52f3e;
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px #4a0e1a;
+}
+
+.hint-btn:active:not(:disabled) {
+  transform: translate(4px, 4px);
+  box-shadow: 0px 0px 0px #4a0e1a;
 }
 
 .hint-btn:disabled {
-  background-color: #1a1a1a;
-  border-color: #333;
+  background-color: #a89581;
+  border-color: #8a7767;
   cursor: not-allowed;
   opacity: 0.5;
+  display: none;
 }
 
-.hint-display {
-  display: none;
-  margin-top: 0.75rem;
-  padding: 0.75rem;
-  background-color: #2c2c2c;
-  border-left: 4px solid #ffb300;
-  border-radius: 6px;
-  color: #ffb300;
-  font-size: 0.95rem;
+.used-hint {
+  border: 4px solid #D4AF37;
+  background-color: #8B6914;
+}
+
+.used-hint:hover:not(:disabled) {
+  background-color: #a57f1a;
 }
 
 .input-group {
@@ -96,25 +187,34 @@ label {
   display: block;
   margin-bottom: 0.4rem;
   font-weight: bold;
-  color: #ccc;
+  color: #6B4423;
+  font-family: 'Silkscreen', monospace;
+  text-shadow: 1px 1px 0px rgba(212, 175, 55, 0.3);
 }
 
 input[type="text"] {
   width: 100%;
   padding: 0.6rem;
-  border: 1px solid #333;
-  background-color: #2a2a2a;
-  color: #fff;
-  border-radius: 4px;
+  border: 4px solid #8B4513;
+  background-color: #fef8f0;
+  color: #2b1810;
   font-size: 1rem;
+  font-family: 'Silkscreen', monospace;
+  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 input[type="text"]::placeholder {
-  color: #888;
+  color: #a89581;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: #D4AF37;
+  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.1), 0 0 0 3px rgba(212, 175, 55, 0.3);
 }
 
 input[type="text"]:disabled {
-  background-color: #1a1a1a;
+  background-color: #e8dcc8;
   cursor: not-allowed;
   opacity: 0.6;
 }
@@ -122,69 +222,75 @@ input[type="text"]:disabled {
 .submit-btn {
   width: 100%;
   padding: 0.75rem;
-  background-color: #64ffda;
-  color: #000;
+  background-color: #2F4F2F;
+  color: #fff;
   font-size: 1rem;
   font-weight: bold;
-  border: none;
-  border-radius: 6px;
+  font-family: 'Silkscreen', monospace;
+  border: 4px solid #1a301a;
+  box-shadow: 6px 6px 0px #0f1a0f;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: all 0.1s ease;
+  text-transform: uppercase;
 }
 
-.submit-btn:hover {
-  background-color: #1de9b6;
+.submit-btn:hover:not(:disabled) {
+  background-color: #3a6a3a;
+  transform: translate(3px, 3px);
+  box-shadow: 3px 3px 0px #0f1a0f;
+}
+
+.submit-btn:active:not(:disabled) {
+  transform: translate(6px, 6px);
+  box-shadow: 0px 0px 0px #0f1a0f;
 }
 
 .submit-btn:disabled {
-  background-color: #333;
+  background-color: #a89581;
+  border-color: #8a7767;
   cursor: not-allowed;
   opacity: 0.5;
-}
-
-.skip-btn {
-  padding: 0.5rem 1rem;
-  margin: 0.25rem;
-  background-color: #3d3d3d;
-  color: #fff;
-  border: 1px solid #64ffda;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
-}
-
-.skip-btn:hover:not(:disabled) {
-  background-color: #64ffda;
-  color: #000;
-}
-
-.skip-btn:disabled {
-  display: none;
+  box-shadow: 3px 3px 0px #6a5747;
 }
 
 .feedback {
   margin-top: 1.5rem;
-  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
   text-align: center;
   white-space: pre-line;
+  font-family: 'Silkscreen', monospace;
+  padding: 1rem;
+  border: 3px solid transparent;
 }
 
 /* Feedback styles */
 .feedback.success {
-  color: #00e676;
+  color: #2F4F2F;
+  background-color: #c8e6c8;
+  border-color: #2F4F2F;
+  box-shadow: 4px 4px 0px rgba(47, 79, 47, 0.3);
 }
 
 .feedback.partial {
-  color: #ffb300;
+  color: #8B6914;
+  background-color: #ffeaa7;
+  border-color: #D4AF37;
+  box-shadow: 4px 4px 0px rgba(212, 175, 55, 0.3);
 }
 
 .feedback.error {
-  color: #ef5350;
+  color: #6B1a28;
+  background-color: #f8d7da;
+  border-color: #8B2635;
+  box-shadow: 4px 4px 0px rgba(139, 38, 53, 0.3);
 }
 
 .feedback.warning {
-  color: #ff9800;
+  color: #8B4513;
+  background-color: #ffe5cc;
+  border-color: #D2691E;
+  box-shadow: 4px 4px 0px rgba(210, 105, 30, 0.3);
 }
 
 .input-row {
@@ -201,9 +307,9 @@ input[type="text"]:disabled {
 .suggestions {
   list-style: none;
   margin-top: 0.3rem;
-  background: #2c2c2c;
-  border-radius: 4px;
-  border: 1px solid #333;
+  background: #fef8f0;
+  border: 4px solid #8B4513;
+  box-shadow: 4px 4px 0px #6B4423;
   max-height: 150px;
   overflow-y: auto;
   display: none;
@@ -211,39 +317,209 @@ input[type="text"]:disabled {
   width: 100%;
   z-index: 10;
   padding: 0;
+  font-family: 'Silkscreen', monospace;
 }
 
 .suggestions li {
   padding: 0.5rem 0.75rem;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: background 0.1s ease;
+  border-bottom: 2px solid #e8dcc8;
+  color: #2b1810;
+}
+
+.suggestions li:last-child {
+  border-bottom: none;
 }
 
 .suggestions li:hover,
 .suggestions li.selected {
-  background: #3d3d3d;
+  background: #D4AF37;
+  color: #2b1810;
 }
 
 .share-btn {
   padding: 0.75rem 1.5rem;
-  background-color: #64ffda;
-  color: #000;
+  background-color: #4B0082;
+  color: #fff;
   font-size: 1rem;
   font-weight: bold;
-  border: none;
-  border-radius: 6px;
+  font-family: 'Silkscreen', monospace;
+  border: 4px solid #2d004f;
+  box-shadow: 5px 5px 0px #1a002d;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(100, 255, 218, 0.2);
+  transition: all 0.1s ease;
 }
 
 .share-btn:hover {
-  background-color: #1de9b6;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(100, 255, 218, 0.3);
+  background-color: #6a00b8;
+  transform: translate(2px, 2px);
+  box-shadow: 3px 3px 0px #1a002d;
 }
 
 .share-btn:active {
-  transform: translateY(0);
+  transform: translate(5px, 5px);
+  box-shadow: 0px 0px 0px #1a002d;
+}
+
+/* Landing/Start page styles */
+.landing-container {
+  max-width: 600px;
+  margin: 100px auto;
+  padding: 40px;
+  text-align: center;
+}
+
+.landing-container h1 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+}
+
+.landing-container .description {
+  font-size: 1em;
+  margin-bottom: 40px;
+  color: #6B4423;
+}
+
+.goodreads-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.goodreads-form label {
+  font-size: 1em;
+  font-weight: 700;
+}
+
+.goodreads-form input {
+  width: 100%;
+  max-width: 400px;
+  padding: 12px 16px;
+  font-size: 1em;
+  border: 4px solid #8B4513;
+  background-color: #fef8f0;
+  color: #2b1810;
+  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.2s;
+}
+
+.goodreads-form input:focus {
+  outline: none;
+  border-color: #D4AF37;
+  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.1), 0 0 0 3px rgba(212, 175, 55, 0.3);
+}
+
+.goodreads-form button {
+  padding: 12px 32px;
+  font-size: 1em;
+  background-color: #2F4F2F;
+  color: white;
+  border: 4px solid #1a301a;
+  box-shadow: 6px 6px 0px #0f1a0f;
+  cursor: pointer;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: all 0.1s ease;
+}
+
+.goodreads-form button:hover:not(:disabled) {
+  background-color: #3a6a3a;
+  transform: translate(3px, 3px);
+  box-shadow: 3px 3px 0px #0f1a0f;
+}
+
+.goodreads-form button:active:not(:disabled) {
+  transform: translate(6px, 6px);
+  box-shadow: 0px 0px 0px #0f1a0f;
+}
+
+.goodreads-form button:disabled {
+  background-color: #a89581;
+  border-color: #8a7767;
+  cursor: not-allowed;
+  opacity: 0.6;
+  box-shadow: 3px 3px 0px #6a5747;
+}
+
+.help-text {
+  margin-top: 30px;
+  font-size: 0.8em;
+  color: #8B4513;
+}
+
+.help-text a {
+  color: #8B2635;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.help-text a:hover {
+  text-decoration: underline;
+  color: #a52f3e;
+}
+
+.error-message {
+  margin-top: 20px;
+  padding: 12px 16px;
+  background-color: #f8d7da;
+  color: #6B1a28;
+  border: 4px solid #8B2635;
+  box-shadow: 4px 4px 0px rgba(139, 38, 53, 0.3);
+  display: none;
+}
+
+.error-message.visible {
+  display: block;
+}
+
+.status-message {
+  margin-top: 20px;
+  padding: 12px 16px;
+  background-color: #c8e6f8;
+  color: #2b1810;
+  border: 4px solid #4a90e2;
+  box-shadow: 4px 4px 0px rgba(74, 144, 226, 0.3);
+  display: none;
+}
+
+.status-message.visible {
+  display: block;
+}
+
+.progress-container {
+  margin-top: 10px;
+  width: 100%;
+  max-width: 400px;
+  display: none;
+}
+
+.progress-container.visible {
+  display: block;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 12px;
+  background-color: #e8dcc8;
+  border: 3px solid #8B4513;
+  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #2F4F2F;
+  width: 0%;
+  transition: width 0.3s ease;
+  box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.2);
+}
+
+.progress-text {
+  margin-top: 5px;
+  font-size: 0.8em;
+  color: #6B4423;
+  text-align: center;
 }
 
