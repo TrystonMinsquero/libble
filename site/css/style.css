@@ -106,8 +106,8 @@ h1 {
 .quote-box::before {
   content: "\201C";
   position: absolute;
-  top: -15px;
-  left: 10px;
+  top: 0px;
+  left: 5px;
   font-size: 4em;
   color: #D4AF37;
   font-family: Georgia, serif;
@@ -117,8 +117,8 @@ h1 {
 .quote-box::after {
   content: "\201D";
   position: absolute;
-  bottom: -35px;
-  right: 10px;
+  bottom: -25px;
+  right: 5px;
   font-size: 4em;
   color: #D4AF37;
   font-family: Georgia, serif;
@@ -254,14 +254,36 @@ input[type="text"]:disabled {
 }
 
 .feedback {
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
   font-size: 1rem;
   text-align: center;
   white-space: pre-line;
   font-family: 'Silkscreen', monospace;
+}
+
+.feedback:not(:empty) {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
   padding: 1rem;
   border: 3px solid transparent;
+}
+
+/* Status box (hints) styling */
+#statusBox:not(:empty) {
+  color: #1a5490;
+  background-color: #c8e6f8;
+  border-color: #4a90e2;
+  box-shadow: 4px 4px 0px rgba(74, 144, 226, 0.3);
+  position: relative;
+  padding-left: 2.5rem;
+}
+
+#statusBox:not(:empty)::before {
+  content: "💡";
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2em;
 }
 
 /* Feedback styles */
