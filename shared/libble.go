@@ -240,6 +240,7 @@ type Hint string
 
 const HintTime Hint = "Time"
 const HintGenre Hint = "Genre"
+const HintAuthorInitial Hint = "AuthorInitial"
 const HintSelfRating Hint = "SelfRating"
 const HintSelfReview Hint = "SelfReview"
 

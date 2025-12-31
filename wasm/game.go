@@ -219,6 +219,37 @@ func setupHTML(data *SaveData, allBooks Books) {
 				return msg
 			},
 		},
+		// {
+		// 	kind: HintAuthorInitial,
+		// 	elem: hintElem("authorInitialBtn"),
+		// 	canUse: func(g Game) bool {
+		// 		_, err := g.Book.UserData.LastReadDate()
+		// 		if err == nil {
+		// 			debugPrint("No error")
+		// 			return true
+		// 		}
+		// 		if errors.Is(err, ParseDateErr) {
+		// 			log(err, "Issue parsing date for book "+g.Book.Book.CleanTitle())
+		// 		}
+		// 		debugPrint("User Data #%", g.Book.UserData)
+		// 		if errors.Is(err, NoDateErr) {
+		// 			debugPrint("no date")
+		// 		}
+		// 		return !errors.Is(err, NoDateErr)
+		// 	},
+		// 	use: func(g *Game) string {
+		// 		date, err := g.Book.UserData.LastReadDate()
+		// 		if err != nil {
+		// 			log(err, "Trying to use time hint but cant get date")
+		// 			return ""
+		// 		}
+		// 		msg := fmt.Sprintf("You read this book in %s of %d", date.Month().String(), date.Year())
+		// 		if !g.UsedHint(HintTime) {
+		// 			g.UseHint(HintTime)
+		// 		}
+		// 		return msg
+		// 	},
+		// },
 	}
 
 	updateGameProgress := func() {
@@ -270,7 +301,7 @@ func setupHTML(data *SaveData, allBooks Books) {
 		if game.Won() {
 			setFeedback("Congrats! You've already won for today,\ncome back tomorrow to play again.", FBStatusSuccess)
 		} else {
-			setFeedback("Looks like you didn't get it this time :(\nCome back tomorrow and try again!", "")
+			setFeedback("Looks like you didn't get it this time :(\nCome back tomorrow and try again!", FBStatusError)
 		}
 		input.SetPlaceholder(game.Book.Book.CleanTitle())
 		setVisible(submitBtn, false)
@@ -464,6 +495,8 @@ func hintEmoji(kind Hint) rune {
 	switch kind {
 	case HintTime:
 		return '🕗'
+	case HintAuthorInitial:
+		return '👩'
 	}
 	return '💡'
 }
@@ -484,15 +517,15 @@ func addEmojiStrip(game *Game, sb *strings.Builder) {
 
 		if i < len(game.Guesses) {
 			if i == len(game.Guesses)-1 && game.Won() {
-				sb.WriteString("🟩")
+				sb.WriteRune('🟩')
 			} else {
-				sb.WriteString("🟥")
+				sb.WriteRune('🟥')
 			}
 		} else {
-			sb.WriteString("⬜")
+			sb.WriteRune('⬜')
 		}
 		if i < game.Settings.MaxGuesses-1 {
-			sb.WriteString(" ")
+			sb.WriteRune(' ')
 		}
 	}
 }
