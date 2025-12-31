@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"math"
 	"slices"
@@ -110,6 +111,7 @@ func initGame() {
 		}
 		allBooks = append(allBooks, book.Book)
 	}
+	debugPrint("Using %d/%d books (from scrape options)", len(allBooks), len(data.Books))
 
 	setupHTML(&data, allBooks)
 }
@@ -172,10 +174,58 @@ func setupHTML(data *SaveData, allBooks Books) {
 	}
 
 	gameInputs := doc.GetElementsByClassName("game-input")
-	skipBtn := getElemByIDAs[*dom.HTMLButtonElement](doc, "skipBtn")
 	submitBtn := getElemByIDAs[*dom.HTMLButtonElement](doc, "submitBtn")
 	shareContainer := getElemByIDAs[dom.HTMLElement](doc, "shareContainer")
 	shareBtn := getElemByIDAs[*dom.HTMLButtonElement](doc, "shareBtn")
+
+	hintSection := getElemByIDAs[dom.HTMLElement](doc, "hintSection")
+	skipBtn := getElemByIDAs[*dom.HTMLButtonElement](doc, "skipBtn")
+
+	type hintUI struct {
+		kind            Hint
+		elem            *dom.HTMLButtonElement
+		canUse          func(g Game) bool
+		use             func(g *Game) string
+		enabledTooltip  string
+		disabledTooltip string
+	}
+
+	hintElem := func(ID string) *dom.HTMLButtonElement {
+		return getElemByIDAs[*dom.HTMLButtonElement](doc, ID)
+	}
+	hints := []hintUI{
+		{
+			kind: HintTime,
+			elem: hintElem("timeHintBtn"),
+			canUse: func(g Game) bool {
+				_, err := g.Book.UserData.LastReadDate()
+				if err == nil {
+					debugPrint("No error")
+					return true
+				}
+				if errors.Is(err, ParseDateErr) {
+					log(err, "Issue parsing date for book "+g.Book.Book.CleanTitle())
+				}
+				debugPrint("User Data #%", g.Book.UserData)
+				if errors.Is(err, NoDateErr) {
+					debugPrint("no date")
+				}
+				return !errors.Is(err, NoDateErr)
+			},
+			use: func(g *Game) string {
+				date, err := g.Book.UserData.LastReadDate()
+				if err != nil {
+					log(err, "Trying to use time hint but cant get date")
+					return ""
+				}
+				msg := fmt.Sprintf("You read this book in %s of %d", date.Month().String(), date.Year())
+				if !g.UsedHint(HintTime) {
+					g.UseHint(HintTime)
+				}
+				return msg
+			},
+		},
+	}
 
 	updateInputStates := func() {
 		defer func() {
@@ -189,16 +239,25 @@ func setupHTML(data *SaveData, allBooks Books) {
 			e.Underlying().Set("disabled", disabled)
 		}
 
-		skipBtn.SetDisabled(game.Started())
-
 		setVisible(submitBtn, !completed)
 		setVisible(shareContainer, completed)
+
+		started := game.Started()
+		skipBtn.SetDisabled(started)
+		setVisible(skipBtn, !started)
+		for _, hint := range hints {
+			disabled := !hint.canUse(*game)
+			debugPrint("%v can use: %v", hint.kind, !disabled)
+			hint.elem.SetDisabled(disabled)
+			setVisible(hint.elem, started)
+		}
 	}
 
 	handleRevist := func() bool {
 		if !game.Completed() {
 			setStatus("", "")
 			setVisible(submitBtn, true)
+			setVisible(hintSection, true)
 			return true
 		}
 		if game.Won() {
@@ -208,7 +267,7 @@ func setupHTML(data *SaveData, allBooks Books) {
 		}
 		input.SetPlaceholder(game.Book.Book.CleanTitle())
 		setVisible(submitBtn, false)
-
+		setVisible(hintSection, false)
 		return false
 	}
 
@@ -240,6 +299,32 @@ func setupHTML(data *SaveData, allBooks Books) {
 			}()
 		}
 	})
+
+	const usedHintClass = "used-hint"
+	// setup hints
+	for _, hint := range hints {
+		if hint.elem == nil {
+			continue
+		}
+		hint.elem.AddEventListener("click", false, func(e dom.Event) {
+			debugPrint("Used hint: " + string(hint.kind))
+			e.PreventDefault()
+			if handleRevist() {
+				go func() {
+					msg := hint.use(game)
+					if msg != "" {
+						setStatus(msg, "")
+					}
+					if game.UsedHint(hint.kind) {
+						hint.elem.Class().Add(usedHintClass)
+					}
+					saveErr := saveNonStaticData(*data)
+					log(saveErr, "Failed saving data after using hint")
+				}()
+			}
+
+		})
+	}
 
 	// setup share button
 	shareBtn.AddEventListener("click", false, func(e dom.Event) {

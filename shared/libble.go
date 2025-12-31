@@ -133,6 +133,59 @@ type UserBookData struct {
 	DateAdded string   `json:"date_added"`
 }
 
+var ParseDateErr = errors.New("date cannot be parsed (bad layout)")
+var NoDateErr = errors.New("book has no read date")
+
+func parseDate(dateStr string) (time.Time, error) {
+	if dateStr == "not set" || dateStr == "" {
+		return time.Time{}, NoDateErr
+
+	}
+
+	layouts := []string{
+		"Jan 02, 2006",
+		"Jan 2, 2006",
+		"Jan 02 2006",
+		"Jan 2 2006",
+		"January 02 2006",
+		"January 2 2006",
+	}
+	for _, layout := range layouts {
+		t, err := time.Parse(layout, dateStr)
+		if err != nil {
+			continue
+		}
+		return t, nil
+	}
+	return time.Time{}, ParseDateErr
+}
+
+func (b UserBookData) LastReadDate() (time.Time, error) {
+	best := time.Time{}
+	var parseErr error
+	for _, dateStr := range b.DatesRead {
+		date, err := parseDate(dateStr)
+		if err != nil {
+			if err == ParseDateErr {
+				dateErr := fmt.Errorf("%s can't be parsed", dateStr)
+				parseErr = errors.Join(parseErr, dateErr)
+			}
+			continue
+		} else if date.After(best) {
+			best = date
+		}
+	}
+	var err error
+	if best.Equal(time.Time{}) {
+		err = errors.Join(NoDateErr)
+		return best, errors.Join(NoDateErr, parseErr)
+	}
+	if parseErr != nil {
+		err = errors.Join(ParseDateErr, parseErr)
+	}
+	return best, err
+}
+
 type PlayerSettings struct {
 	GameSettings  GameSettings  `json:"game_settings"`
 	ScrapeOptions ScrapeOptions `json:"scrape_options"`
@@ -177,10 +230,23 @@ func DefaultGameSettings() GameSettings {
 	}
 }
 
+type Hint string
+
+const HintTime Hint = "Time"
+const HintGenre Hint = "Genre"
+const HintSelfRating Hint = "SelfRating"
+const HintSelfReview Hint = "SelfReview"
+
+type UsedHint struct {
+	Kind       Hint `json:"hint"`
+	GuessIndex uint `json:"guess_index"` // which guess count the hint was used on
+}
+
 type Game struct {
-	QuoteID QuoteId   `json:"quote_id"`
-	Date    time.Time `json:"date_started"`
-	Guesses []BookId  `json:"guesses"`
+	QuoteID QuoteId    `json:"quote_id"`
+	Date    time.Time  `json:"date_started"`
+	Guesses []BookId   `json:"guesses"`
+	Hints   []UsedHint `json:"used_hints"`
 
 	// Runtime data
 	Quote    Quote        `json:"-"`
@@ -216,6 +282,22 @@ func (g *Game) Init(data SaveData) error {
 
 func (g Game) Started() bool {
 	return g.Attempts() > 0 // NOTE: add hints here later
+}
+
+func (g Game) UsedHint(kind Hint) bool {
+	for _, hint := range g.Hints {
+		if hint.Kind == kind {
+			return true
+		}
+	}
+	return false
+}
+
+func (g *Game) UseHint(kind Hint) {
+	g.Hints = append(g.Hints, UsedHint{
+		Kind:       kind,
+		GuessIndex: uint(g.Attempts()),
+	})
 }
 
 func (g Game) Attempts() int {
