@@ -245,7 +245,7 @@ const HintSelfReview Hint = "SelfReview"
 
 type UsedHint struct {
 	Kind       Hint `json:"hint"`
-	GuessIndex uint `json:"guess_index"` // which guess count the hint was used on
+	GuessIndex int  `json:"guess_index"` // which guess count the hint was used on
 }
 
 type Game struct {
@@ -302,7 +302,7 @@ func (g Game) UsedHint(kind Hint) bool {
 func (g *Game) UseHint(kind Hint) {
 	g.Hints = append(g.Hints, UsedHint{
 		Kind:       kind,
-		GuessIndex: uint(g.Attempts()),
+		GuessIndex: g.Attempts(),
 	})
 }
 

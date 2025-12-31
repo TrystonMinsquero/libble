@@ -158,18 +158,10 @@ func setupHTML(data *SaveData, allBooks Books) {
 	suggestions := getElemByIDAs[dom.HTMLElement](doc, "titleSuggestions")
 	guessForm := getElemByID(doc, "guessForm")
 
-	hintBox := getElemByIDAs[dom.HTMLElement](doc, "hintBox")
-	setStatus := func(msg string, status string) {
-		if hintBox != nil {
-			setFeedbackElem(hintBox, msg, status)
-		}
-	}
-
 	feedback := getElemByIDAs[dom.HTMLElement](doc, "feedbackBox")
 	setFeedback := func(msg string, status string) {
 		if feedback != nil {
 			setFeedbackElem(feedback, msg, status)
-			setStatus("", "")
 		}
 	}
 
@@ -177,6 +169,7 @@ func setupHTML(data *SaveData, allBooks Books) {
 	submitBtn := getElemByIDAs[*dom.HTMLButtonElement](doc, "submitBtn")
 	shareContainer := getElemByIDAs[dom.HTMLElement](doc, "shareContainer")
 	shareBtn := getElemByIDAs[*dom.HTMLButtonElement](doc, "shareBtn")
+	gameProgress := getElemByIDAs[dom.HTMLElement](doc, "gameProgress")
 
 	hintSection := getElemByIDAs[dom.HTMLElement](doc, "hintSection")
 	skipBtn := getElemByIDAs[*dom.HTMLButtonElement](doc, "skipBtn")
@@ -228,6 +221,15 @@ func setupHTML(data *SaveData, allBooks Books) {
 		},
 	}
 
+	updateGameProgress := func() {
+		if gameProgress == nil {
+			return
+		}
+		var sb strings.Builder
+		addEmojiStrip(game, &sb)
+		gameProgress.SetTextContent(sb.String())
+	}
+
 	updateInputStates := func() {
 		defer func() {
 			if r := recover(); r != nil {
@@ -255,19 +257,20 @@ func setupHTML(data *SaveData, allBooks Books) {
 				hint.elem.Class().Add(usedHintClass)
 			}
 		}
+
+		updateGameProgress()
 	}
 
 	handleRevist := func() bool {
 		if !game.Completed() {
-			setStatus("", "")
 			setVisible(submitBtn, true)
 			setVisible(hintSection, true)
 			return true
 		}
 		if game.Won() {
-			setStatus("Congrats! You've already won for today,\ncome back tomorrow to play again.", FBStatusSuccess)
+			setFeedback("Congrats! You've already won for today,\ncome back tomorrow to play again.", FBStatusSuccess)
 		} else {
-			setStatus("Looks like you didn't get it this time :(\nCome back tomorrow and try again!", "")
+			setFeedback("Looks like you didn't get it this time :(\nCome back tomorrow and try again!", "")
 		}
 		input.SetPlaceholder(game.Book.Book.CleanTitle())
 		setVisible(submitBtn, false)
@@ -295,7 +298,7 @@ func setupHTML(data *SaveData, allBooks Books) {
 		if game.Attempts() <= 0 && handleRevist() {
 			// Run in goroutine to avoid blocking the event loop
 			go func() {
-				err := onSkip(data, setStatus)
+				err := onSkip(data, setFeedback)
 				log(err, "Failed skipping current quote")
 
 				quoteElement.SetTextContent(game.Quote.Text)
@@ -316,11 +319,9 @@ func setupHTML(data *SaveData, allBooks Books) {
 				go func() {
 					msg := hint.use(game)
 					if msg != "" {
-						setStatus(msg, FBStatusHint)
+						setFeedback(msg, FBStatusHint)
 					}
-					if game.UsedHint(hint.kind) {
-						hint.elem.Class().Add(usedHintClass)
-					}
+					updateInputStates()
 					saveErr := saveNonStaticData(*data)
 					log(saveErr, "Failed saving data after using hint")
 				}()
@@ -459,6 +460,43 @@ func onSkip(
 	return nil
 }
 
+func hintEmoji(kind Hint) rune {
+	switch kind {
+	case HintTime:
+		return '🕗'
+	}
+	return '💡'
+}
+
+func addEmojiStrip(game *Game, sb *strings.Builder) {
+	hintIndex := 0
+	for i := 0; i < game.Settings.MaxGuesses; i++ {
+		for hintIndex < len(game.Hints) {
+			hint := game.Hints[hintIndex]
+			if hint.GuessIndex != i {
+				break
+			}
+
+			sb.WriteRune(hintEmoji(hint.Kind))
+			sb.WriteRune(' ')
+			hintIndex++
+		}
+
+		if i < len(game.Guesses) {
+			if i == len(game.Guesses)-1 && game.Won() {
+				sb.WriteString("🟩")
+			} else {
+				sb.WriteString("🟥")
+			}
+		} else {
+			sb.WriteString("⬜")
+		}
+		if i < game.Settings.MaxGuesses-1 {
+			sb.WriteString(" ")
+		}
+	}
+}
+
 func generateResultsString(game *Game) string {
 	// Create shareable text
 	var shareText strings.Builder
@@ -472,20 +510,7 @@ func generateResultsString(game *Game) string {
 	shareText.WriteString("\n\n")
 
 	// Add visual representation of guesses
-	for i := 0; i < game.Settings.MaxGuesses; i++ {
-		if i < len(game.Guesses) {
-			if i == len(game.Guesses)-1 && game.Won() {
-				shareText.WriteString("🟩")
-			} else {
-				shareText.WriteString("🟥")
-			}
-		} else {
-			shareText.WriteString("⬜")
-		}
-		if i < game.Settings.MaxGuesses-1 {
-			shareText.WriteString(" ")
-		}
-	}
+	addEmojiStrip(game, &shareText)
 
 	// Copy to clipboard
 	return shareText.String()
