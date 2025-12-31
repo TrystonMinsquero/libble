@@ -265,20 +265,11 @@ input[type="text"]:disabled {
   margin-bottom: 1.5rem;
   padding: 1rem;
   border: 3px solid transparent;
-}
-
-/* Status box (hints) styling */
-#statusBox:not(:empty) {
-  color: #1a5490;
-  background-color: #c8e6f8;
-  border-color: #4a90e2;
-  box-shadow: 4px 4px 0px rgba(74, 144, 226, 0.3);
   position: relative;
   padding-left: 2.5rem;
 }
 
-#statusBox:not(:empty)::before {
-  content: "💡";
+.feedback:not(:empty)::before {
   position: absolute;
   left: 0.75rem;
   top: 50%;
@@ -292,6 +283,10 @@ input[type="text"]:disabled {
   background-color: #c8e6c8;
   border-color: #2F4F2F;
   box-shadow: 4px 4px 0px rgba(47, 79, 47, 0.3);
+}
+
+.feedback.success:not(:empty)::before {
+  content: "🎉";
 }
 
 .feedback.partial {
@@ -308,12 +303,32 @@ input[type="text"]:disabled {
   box-shadow: 4px 4px 0px rgba(139, 38, 53, 0.3);
 }
 
+.feedback.error:not(:empty)::before {
+  content: "❌";
+}
+
 .feedback.warning {
   color: #8B4513;
   background-color: #ffe5cc;
   border-color: #D2691E;
   box-shadow: 4px 4px 0px rgba(210, 105, 30, 0.3);
 }
+
+.feedback.warning:not(:empty)::before {
+  content: "⚠️";
+}
+
+.feedback.hint {
+  color: #1a5490;
+  background-color: #c8e6f8;
+  border-color: #4a90e2;
+  box-shadow: 4px 4px 0px rgba(74, 144, 226, 0.3);
+}
+
+.feedback.hint:not(:empty)::before {
+  content: "💡";
+}
+
 
 .input-row {
   display: flex;

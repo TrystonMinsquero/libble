@@ -158,18 +158,18 @@ func setupHTML(data *SaveData, allBooks Books) {
 	suggestions := getElemByIDAs[dom.HTMLElement](doc, "titleSuggestions")
 	guessForm := getElemByID(doc, "guessForm")
 
+	hintBox := getElemByIDAs[dom.HTMLElement](doc, "hintBox")
+	setStatus := func(msg string, status string) {
+		if hintBox != nil {
+			setFeedbackElem(hintBox, msg, status)
+		}
+	}
+
 	feedback := getElemByIDAs[dom.HTMLElement](doc, "feedbackBox")
 	setFeedback := func(msg string, status string) {
 		if feedback != nil {
 			setFeedbackElem(feedback, msg, status)
-		}
-	}
-
-	statusBox := getElemByIDAs[dom.HTMLElement](doc, "statusBox")
-	setStatus := func(msg string, status string) {
-		if statusBox != nil {
-			setFeedbackElem(statusBox, msg, status)
-			setFeedback("", "")
+			setStatus("", "")
 		}
 	}
 
@@ -190,6 +190,7 @@ func setupHTML(data *SaveData, allBooks Books) {
 		disabledTooltip string
 	}
 
+	const usedHintClass = "used-hint"
 	hintElem := func(ID string) *dom.HTMLButtonElement {
 		return getElemByIDAs[*dom.HTMLButtonElement](doc, ID)
 	}
@@ -250,6 +251,9 @@ func setupHTML(data *SaveData, allBooks Books) {
 			debugPrint("%v can use: %v", hint.kind, !disabled)
 			hint.elem.SetDisabled(disabled)
 			setVisible(hint.elem, started)
+			if game.UsedHint(hint.kind) {
+				hint.elem.Class().Add(usedHintClass)
+			}
 		}
 	}
 
@@ -261,7 +265,7 @@ func setupHTML(data *SaveData, allBooks Books) {
 			return true
 		}
 		if game.Won() {
-			setStatus("Congrats! You've already won for today,\ncome back tomorrow to play again.", SuccessFBStatus)
+			setStatus("Congrats! You've already won for today,\ncome back tomorrow to play again.", FBStatusSuccess)
 		} else {
 			setStatus("Looks like you didn't get it this time :(\nCome back tomorrow and try again!", "")
 		}
@@ -300,7 +304,6 @@ func setupHTML(data *SaveData, allBooks Books) {
 		}
 	})
 
-	const usedHintClass = "used-hint"
 	// setup hints
 	for _, hint := range hints {
 		if hint.elem == nil {
@@ -313,7 +316,7 @@ func setupHTML(data *SaveData, allBooks Books) {
 				go func() {
 					msg := hint.use(game)
 					if msg != "" {
-						setStatus(msg, "")
+						setStatus(msg, FBStatusHint)
 					}
 					if game.UsedHint(hint.kind) {
 						hint.elem.Class().Add(usedHintClass)
@@ -361,30 +364,18 @@ func setupHTML(data *SaveData, allBooks Books) {
 
 const (
 	// Feedback statuses
-	SuccessFBStatus = "successs"
-	ErrorFBStatus   = "error"
-	WarnFBStatus    = "warning"
+	FBStatusSuccess = "success"
+	FBStatusError   = "error"
+	FBStatusWarn    = "warning"
+	FBStatusHint    = "hint"
 )
 
 func setFeedbackElem(e dom.HTMLElement, message string, status string) {
 	if e == nil {
 		return
 	}
-	emoji := ""
-	switch status {
-	case ErrorFBStatus:
-		emoji = "❌"
-	case SuccessFBStatus:
-		emoji = "🎉"
-	case WarnFBStatus:
-		emoji = "⚠️"
-	}
 
-	if emoji != "" {
-		e.SetTextContent(emoji + " " + message)
-	} else {
-		e.SetTextContent(message)
-	}
+	e.SetTextContent(message)
 	e.Class().SetString("feedback " + status)
 }
 
@@ -408,26 +399,26 @@ func onSubmit(
 			s = "s"
 		}
 		message := fmt.Sprintf("Correct! You got it in %d attempt%s", attempts, s)
-		setFeedback(message, SuccessFBStatus)
+		setFeedback(message, FBStatusSuccess)
 		return true
 	} else if bookId := data.FindBookId(query); bookId != NilID {
 		if slices.Contains(game.Guesses, bookId) {
-			setFeedback("You already tried that guess!", WarnFBStatus)
+			setFeedback("You already tried that guess!", FBStatusWarn)
 		} else {
 			game.Guesses = append(game.Guesses, bookId)
 
 			if len(game.Guesses) >= game.Settings.MaxGuesses {
 				msg := fmt.Sprintf("Failed! The answer was \"%s\"", game.Book.Book.CleanTitle())
-				setFeedback(msg, ErrorFBStatus)
+				setFeedback(msg, FBStatusError)
 				return true
 			} else {
 				msg := fmt.Sprintf("Nope! Try again (%d attempts remaining)",
 					game.Settings.MaxGuesses-len(game.Guesses))
-				setFeedback(msg, ErrorFBStatus)
+				setFeedback(msg, FBStatusError)
 			}
 		}
 	} else {
-		setFeedback("That book is not in your library!", WarnFBStatus)
+		setFeedback("That book is not in your library!", FBStatusWarn)
 	}
 	return false
 }
@@ -452,7 +443,7 @@ func onSkip(
 	}
 
 	msg := fmt.Sprintf("Skipped! The answer was \"%s\"", game.Book.Book.CleanTitle())
-	setFeedback(msg, ErrorFBStatus)
+	setFeedback(msg, FBStatusError)
 
 	dailyQuoteId, err := pickDailyQuote(data)
 	if dailyQuoteId == NilID {
