@@ -231,6 +231,20 @@ func setupHTML(data *SaveData, allBooks Books) {
 			},
 		},
 		{
+			kind: HintSelfRating,
+			elem: addHintElem(HintSelfRating),
+			canUse: func(g Game) bool {
+				return g.Book.UserData.Stars > 0
+			},
+			use: func(g *Game) string {
+				msg := fmt.Sprintf("You gave this book %d stars", g.Book.UserData.Stars)
+				if !g.UsedHint(HintSelfRating) {
+					g.UseHint(HintSelfRating)
+				}
+				return msg
+			},
+		},
+		{
 			kind: HintAuthorInitial,
 			elem: addHintElem(HintAuthorInitial),
 			canUse: func(g Game) bool {
@@ -494,6 +508,8 @@ func hintEmoji(kind Hint) string {
 	switch kind {
 	case HintTime:
 		return "🕗"
+	case HintSelfRating:
+		return "⭐️"
 	case HintAuthorInitial:
 		return "🖊️"
 	}
