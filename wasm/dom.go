@@ -21,12 +21,21 @@ func getElemByIDAs[T any](doc dom.Document, ID string) T {
 	return empty
 }
 
+func setEnabled(elem dom.HTMLElement, enabled bool) {
+	if elem == nil {
+		return
+	}
+	if e := elem.Underlying(); !e.IsNull() {
+		e.Set("disabled", !enabled)
+	}
+}
+
 func setVisible(elem dom.HTMLElement, visible bool) {
 	if elem == nil {
 		return
 	}
 	if visible {
-		elem.Style().SetProperty("display", "block", "")
+		elem.Style().SetProperty("display", "inline-block", "")
 	} else {
 		elem.Style().SetProperty("display", "none", "")
 	}

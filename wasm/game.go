@@ -183,14 +183,25 @@ func setupHTML(data *SaveData, allBooks Books) {
 		disabledTooltip string
 	}
 
-	const usedHintClass = "used-hint"
-	hintElem := func(ID string) *dom.HTMLButtonElement {
-		return getElemByIDAs[*dom.HTMLButtonElement](doc, ID)
+	addHintElem := func(kind Hint) *dom.HTMLButtonElement {
+		// TODO: check user settings on whether to show the hint
+		e := doc.CreateElement("button")
+		e.SetTextContent(string(hintEmoji(kind)))
+
+		e.Class().Add("hint-btn")
+		e.Class().Add("game-input")
+		hintSection.AppendChild(e)
+		button, ok := e.(*dom.HTMLButtonElement)
+		if !ok {
+			logErr("Failed to get button element for %s", string(kind))
+		}
+		return button
 	}
+	const usedHintClass = "used-hint"
 	hints := []hintUI{
 		{
 			kind: HintTime,
-			elem: hintElem("timeHintBtn"),
+			elem: addHintElem(HintTime),
 			canUse: func(g Game) bool {
 				_, err := g.Book.UserData.LastReadDate()
 				if err == nil {
@@ -219,37 +230,25 @@ func setupHTML(data *SaveData, allBooks Books) {
 				return msg
 			},
 		},
-		// {
-		// 	kind: HintAuthorInitial,
-		// 	elem: hintElem("authorInitialBtn"),
-		// 	canUse: func(g Game) bool {
-		// 		_, err := g.Book.UserData.LastReadDate()
-		// 		if err == nil {
-		// 			debugPrint("No error")
-		// 			return true
-		// 		}
-		// 		if errors.Is(err, ParseDateErr) {
-		// 			log(err, "Issue parsing date for book "+g.Book.Book.CleanTitle())
-		// 		}
-		// 		debugPrint("User Data #%", g.Book.UserData)
-		// 		if errors.Is(err, NoDateErr) {
-		// 			debugPrint("no date")
-		// 		}
-		// 		return !errors.Is(err, NoDateErr)
-		// 	},
-		// 	use: func(g *Game) string {
-		// 		date, err := g.Book.UserData.LastReadDate()
-		// 		if err != nil {
-		// 			log(err, "Trying to use time hint but cant get date")
-		// 			return ""
-		// 		}
-		// 		msg := fmt.Sprintf("You read this book in %s of %d", date.Month().String(), date.Year())
-		// 		if !g.UsedHint(HintTime) {
-		// 			g.UseHint(HintTime)
-		// 		}
-		// 		return msg
-		// 	},
-		// },
+		{
+			kind: HintAuthorInitial,
+			elem: addHintElem(HintAuthorInitial),
+			canUse: func(g Game) bool {
+				initials := g.Book.Book.AuthorInitials()
+				return initials != ""
+			},
+			use: func(g *Game) string {
+				initials := g.Book.Book.AuthorInitials()
+				if initials == "" {
+					logErr("Trying to use author initials but it's empty")
+					return ""
+				}
+				if !g.UsedHint(HintAuthorInitial) {
+					g.UseHint(HintAuthorInitial)
+				}
+				return fmt.Sprintf("The author's initials are %s", initials)
+			},
+		},
 	}
 
 	updateGameProgress := func() {
@@ -295,7 +294,7 @@ func setupHTML(data *SaveData, allBooks Books) {
 	handleRevist := func() bool {
 		if !game.Completed() {
 			setVisible(submitBtn, true)
-			setVisible(hintSection, true)
+			setEnabled(hintSection, true)
 			return true
 		}
 		if game.Won() {
@@ -305,7 +304,7 @@ func setupHTML(data *SaveData, allBooks Books) {
 		}
 		input.SetPlaceholder(game.Book.Book.CleanTitle())
 		setVisible(submitBtn, false)
-		setVisible(hintSection, false)
+		setEnabled(hintSection, false)
 		return false
 	}
 
@@ -491,14 +490,14 @@ func onSkip(
 	return nil
 }
 
-func hintEmoji(kind Hint) rune {
+func hintEmoji(kind Hint) string {
 	switch kind {
 	case HintTime:
-		return '🕗'
+		return "🕗"
 	case HintAuthorInitial:
-		return '👩'
+		return "🖊️"
 	}
-	return '💡'
+	return "💡"
 }
 
 func addEmojiStrip(game *Game, sb *strings.Builder) {
@@ -510,7 +509,7 @@ func addEmojiStrip(game *Game, sb *strings.Builder) {
 				break
 			}
 
-			sb.WriteRune(hintEmoji(hint.Kind))
+			sb.WriteString(hintEmoji(hint.Kind))
 			sb.WriteRune(' ')
 			hintIndex++
 		}

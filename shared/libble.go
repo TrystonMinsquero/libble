@@ -7,6 +7,7 @@ import (
 	"slices"
 	"strings"
 	"time"
+	"unicode"
 )
 
 type DBID uint64
@@ -190,6 +191,36 @@ func (b UserBookData) LastReadDate() (time.Time, error) {
 		err = errors.Join(ParseDateErr, parseErr)
 	}
 	return best, err
+}
+
+func (b Book) AuthorInitials() string {
+	author := b.Author
+	if author == "" {
+		return author
+	}
+	lastNameComesFirst := strings.ContainsRune(author, ',')
+	author = strings.ReplaceAll(author, ",", "")
+	words := strings.Split(author, " ")
+	var sb strings.Builder
+	for i, word := range words {
+		if i == 0 && lastNameComesFirst {
+			continue // skip first word
+		}
+		runes := []rune(word)
+		if len(runes) <= 0 {
+			continue
+		}
+		sb.WriteRune(unicode.ToUpper(runes[0]))
+		sb.WriteRune('.')
+	}
+	if lastNameComesFirst {
+		runes := []rune(words[0])
+		if len(runes) > 0 {
+			sb.WriteRune(unicode.ToUpper(runes[0]))
+			sb.WriteRune('.')
+		}
+	}
+	return sb.String()
 }
 
 type PlayerSettings struct {
