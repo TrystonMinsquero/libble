@@ -23,8 +23,10 @@
 - [ ] Make it easier to setup account
     - Currently if you have the Goodreads app installed it takes to you the app, which is hard to find your user id
     - Could have search function that scrapes search results for that user and show possible options
+- [ ] Fix quotes to gather the proper line breaks and remove extra quotes.
 - [ ] Have user/settings page
     - [ ] Can see stats
+    - [ ] Can change colorscheme (also with custom css)
     - [ ] Can configure how quotes are selected (default of minimum likes of 5 can be higher or lower)
     - [ ] Can sync data across devices
         - [ ] Need to figure this out. Current options are:
