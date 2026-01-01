@@ -537,12 +537,12 @@ func generateResultsString(game *Game) string {
 	// Format date
 	dateStr := game.Date.Format("Jan 2 2006")
 	shareText.WriteString(dateStr)
+
+	shareText.WriteRune('\n')
+	addEmojiStrip(game, &shareText)
+
 	shareText.WriteString("\n\n")
 	shareText.WriteString(game.Quote.Text)
-	shareText.WriteString("\n\n")
-
-	// Add visual representation of guesses
-	addEmojiStrip(game, &shareText)
 
 	// Copy to clipboard
 	return shareText.String()
