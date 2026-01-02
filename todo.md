@@ -35,6 +35,9 @@
             - Have other device for code to sync, only need to do once.
             - Or could have account, with cloud saves
 - [x] Stream scraping the website so it's not one big payload and makes it feel like the site isn't working
+    - [ ] Fix not showing it's loaded on devices that can't save quotes
+    - [ ] Think about if switching to a polling flow for user creating would be better.
+        - Would be /create/user/ which returns the id, and then /user/status/:id would return data and phase.
 - [x] Cache html files by default
     - [ ] Reset cache periodically (probably once a day)
 - [~] Should probably use a database instead of raw save json files.
