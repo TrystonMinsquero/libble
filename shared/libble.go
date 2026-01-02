@@ -193,19 +193,9 @@ func (b UserBookData) LastReadDate() (time.Time, error) {
 	return best, err
 }
 
-func (b Book) AuthorInitials() string {
-	author := b.Author
-	if author == "" {
-		return author
-	}
-	lastNameComesFirst := strings.ContainsRune(author, ',')
-	author = strings.ReplaceAll(author, ",", "")
-	words := strings.Split(author, " ")
+func getInitials(words []string) string {
 	var sb strings.Builder
-	for i, word := range words {
-		if i == 0 && lastNameComesFirst {
-			continue // skip first word
-		}
+	for _, word := range words {
 		runes := []rune(word)
 		if len(runes) <= 0 {
 			continue
@@ -213,14 +203,29 @@ func (b Book) AuthorInitials() string {
 		sb.WriteRune(unicode.ToUpper(runes[0]))
 		sb.WriteRune('.')
 	}
-	if lastNameComesFirst {
-		runes := []rune(words[0])
-		if len(runes) > 0 {
-			sb.WriteRune(unicode.ToUpper(runes[0]))
-			sb.WriteRune('.')
-		}
-	}
 	return sb.String()
+}
+
+func (b Book) AuthorInitials() string {
+	author := b.Author
+	if author == "" {
+		return author
+	}
+	// Arrange words so they come in correct order
+	// Ex: Green, John        -> John Green        -> J.G.
+	// Ex: Van Helt, Shelby   -> Shelby Van Helt   -> S.V.H.
+	// Ex: Last, First Middle -> First Middle Last -> F.M.L.
+	chunks := strings.Split(author, ",")
+	var words []string
+	if len(chunks) >= 2 {
+		for _, chunk := range chunks[1:] {
+			words = append(words, strings.Split(chunk, " ")...)
+		}
+		words = append(words, strings.Split(chunks[0], " ")...)
+	} else {
+		words = strings.Split(chunks[0], " ")
+	}
+	return getInitials(words)
 }
 
 type PlayerSettings struct {
@@ -236,10 +241,10 @@ func DefaultPlayerSettings() PlayerSettings {
 }
 
 type ScrapeOptions struct {
-	MinPersonalStars uint
-	MinQuoteLikes    int
-	MaxQuoteForBook  uint
-	UseCache         bool
+	MinPersonalStars uint `json:"min_personal_stars"`
+	MinQuoteLikes    int  `json:"min_quote_likes"`
+	MaxQuoteForBook  uint `json:"max_quotes_per_book"`
+	UseCache         bool `json:"use_cache"`
 }
 
 func DefaultScrapeOptions() ScrapeOptions {
