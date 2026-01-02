@@ -81,6 +81,11 @@ func main() {
 	if err := InitDB(); err != nil {
 		logg.Fatal("Failed to initialize database:", err)
 	}
+	defer func() {
+		if db != nil {
+			db.Close()
+		}
+	}()
 
 	node, err := snowflake.NewNode(1)
 	if err != nil {
@@ -95,7 +100,7 @@ func main() {
 			return
 		}
 
-		summaries, err := GetUsersByGRID(userGRID)
+		summaries, err := db.GetUsersByGRID(userGRID)
 		if err != nil {
 			// No users found - return empty list
 			c.JSON(http.StatusOK, gin.H{"users": []UserSummary{}})
@@ -130,7 +135,7 @@ func main() {
 			ScrapeOptions: req.ScrapeOptions,
 		}
 
-		if err := CreateUser(libbleID, req.GRID, settings); err != nil {
+		if err := db.CreateUser(libbleID, req.GRID, settings); err != nil {
 			logg.Errorf("Failed to create user: %v", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
 			return
@@ -149,6 +154,9 @@ func main() {
 	})
 
 	r.GET("/scrape/gr/user-books/:libbleID", func(c *gin.Context) {
+		// Set longer timeout for scraping operations (5 minutes)
+		c.Request.Context()
+
 		libbleIDStr := c.Param("libbleID")
 		libbleIDUint, err := strconv.ParseUint(libbleIDStr, 10, 64)
 		if err != nil {
@@ -161,8 +169,10 @@ func main() {
 		lock.Lock()
 		defer lock.Unlock()
 
+		logg.Infof("Starting book scrape for user %d", libbleID)
+
 		// Load player to get userGRID and settings
-		player, err := LoadPlayer(libbleID)
+		player, err := db.LoadPlayer(libbleID)
 		if err != nil {
 			c.JSON(http.StatusNotFound, gin.H{"error": fmt.Sprintf("Player with ID %d not found", libbleID)})
 			return
@@ -174,21 +184,27 @@ func main() {
 		// Scrape books from Goodreads
 		books, err := scrapeBooks(userGRID, options)
 
-		// Resolve book IDs
+		// Generate IDs for new books (SaveBooks will handle existing ones)
 		for index := range books {
 			ub := &books[index]
-			bookID, idErr := GetOrCreateBookID(ub.Book.BookGRID, node)
-			if idErr != nil {
-				logg.Errorf("Failed to get book ID: %v", idErr)
-				bookID = BookId(node.Generate().Int64())
-			}
-			ub.Book.BookId = bookID
+			// Generate a temporary ID - SaveBooks will replace with actual DB ID if exists
+			ub.Book.BookId = BookId(node.Generate().Int64())
 		}
 
-		// Save books to database
-		if _, saveErr := SaveBooks(books, libbleID); saveErr != nil {
+		// Save books to database (handles ID resolution in one transaction)
+		gridToID, saveErr := db.SaveBooks(books, libbleID)
+		if saveErr != nil {
 			logg.Errorf("Failed to save books: %v", saveErr)
+		} else {
+			// Update books with actual IDs from database
+			for index := range books {
+				if dbID, exists := gridToID[books[index].Book.BookGRID]; exists {
+					books[index].Book.BookId = dbID
+				}
+			}
 		}
+
+		logg.Infof("Completed book scrape for user %d: %d books", libbleID, len(books))
 
 		res := gin.H{
 			"books": books,
@@ -220,7 +236,7 @@ func main() {
 		defer lock.Unlock()
 
 		// Load player to get settings
-		player, err := LoadPlayer(libbleID)
+		player, err := db.LoadPlayer(libbleID)
 		if err != nil {
 			c.JSON(http.StatusNotFound, gin.H{"error": fmt.Sprintf("Player with ID %d not found", libbleID)})
 			return
@@ -231,30 +247,31 @@ func main() {
 		// Scrape quotes from Goodreads for this specific book
 		quotes, err := scrapeQuotes(bookGRID, options)
 
-		// Resolve book and quote IDs
-		for index := range quotes {
-			quote := &quotes[index]
-
-			// Get or create book ID
-			bookID, idErr := GetOrCreateBookID(quote.BookGRID, node)
-			if idErr != nil {
-				logg.Errorf("Failed to get book ID: %v", idErr)
-				bookID = BookId(node.Generate().Int64())
-			}
-			quote.BookId = bookID
-
-			// Get or create quote ID
-			quoteID, idErr := GetOrCreateQuoteID(quote.QuoteGRID, node)
-			if idErr != nil {
-				logg.Errorf("Failed to get quote ID: %v", idErr)
-				quoteID = QuoteId(node.Generate().Int64())
-			}
-			quote.QuoteId = quoteID
+		// Get book ID first (single query)
+		bookID, idErr := db.GetOrCreateBookID(bookGRID, node)
+		if idErr != nil {
+			logg.Errorf("Failed to get book ID: %v", idErr)
+			bookID = BookId(node.Generate().Int64())
 		}
 
-		// Save quotes to database
-		if _, saveErr := SaveQuotes(quotes); saveErr != nil {
+		// Generate IDs for quotes (SaveQuotes will handle existing ones)
+		for index := range quotes {
+			quote := &quotes[index]
+			quote.BookId = bookID
+			quote.QuoteId = QuoteId(node.Generate().Int64()) // Temporary ID
+		}
+
+		// Save quotes to database (handles ID resolution in one transaction)
+		gridToID, saveErr := db.SaveQuotes(quotes)
+		if saveErr != nil {
 			logg.Errorf("Failed to save quotes: %v", saveErr)
+		} else {
+			// Update quotes with actual IDs from database
+			for index := range quotes {
+				if dbID, exists := gridToID[quotes[index].QuoteGRID]; exists {
+					quotes[index].QuoteId = dbID
+				}
+			}
 		}
 
 		res := gin.H{
@@ -274,7 +291,7 @@ func main() {
 			return
 		}
 
-		player, err := LoadPlayer(libbleID)
+		player, err := db.LoadPlayer(libbleID)
 		if err != nil {
 			c.JSON(http.StatusNotFound, gin.H{"error": fmt.Sprintf("Player with ID %d not found", libbleID)})
 			return
@@ -307,7 +324,7 @@ func main() {
 		defer lock.Unlock()
 
 		// Update player in database
-		if err := UpdatePlayer(player); err != nil {
+		if err := db.UpdatePlayer(player); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("Failed to update player: %v", err)})
 			return
 		}
@@ -322,7 +339,7 @@ func main() {
 			return
 		}
 
-		books, err := LoadUserBooks(libbleID)
+		books, err := db.LoadUserBooks(libbleID)
 		if err != nil {
 			errMsg := fmt.Sprintf("Books for player %d not found %v", libbleID, err)
 			c.JSON(http.StatusNotFound, gin.H{"error": errMsg})
@@ -344,7 +361,7 @@ func main() {
 		defer lock.Unlock()
 
 		// Load complete SaveData
-		data, err := LoadSaveData(libbleID)
+		data, err := db.LoadSaveData(libbleID)
 		if err != nil {
 			errMsg := fmt.Sprintf("Player with ID %d not found: %v", libbleID, err)
 			c.JSON(http.StatusNotFound, gin.H{"error": errMsg})

@@ -44,10 +44,19 @@ build_wasm() {
 
 
 build_server() {
-    go build -o ./main ./server
+    local BUILD_TAGS=""
+    if [ "$USE_SQLITE" = "true" ]; then
+        BUILD_TAGS="-tags sqlite"
+        echo "Building server with SQLite support..."
+    else
+        echo "Building server with PostgreSQL support (default)..."
+    fi
+    go build $BUILD_TAGS -o ./main ./server
 }
 
 # Parse arguments
+USE_SQLITE=false
+
 if [ $# -eq 0 ]; then
     # No arguments, build both
     build_wasm
@@ -61,12 +70,17 @@ else
             server)
                 build_server
                 ;;
+            sqlite)
+                USE_SQLITE=true
+                build_server
+                ;;
             *)
                 echo "Unknown argument: $arg"
-                echo "Usage: $0 [wasm] [server]"
-                echo "  No arguments: build both"
+                echo "Usage: $0 [wasm] [server] [sqlite]"
+                echo "  No arguments: build both (server with PostgreSQL)"
                 echo "  wasm: build only WASM"
-                echo "  server: build only server"
+                echo "  server: build only server (PostgreSQL)"
+                echo "  sqlite: build server with SQLite support"
                 exit 1
                 ;;
         esac
