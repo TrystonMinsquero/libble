@@ -1,4 +1,6 @@
 .request_cache
 .env
+saves/**
+tmp
 main
 
