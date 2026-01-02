@@ -17,6 +17,7 @@
     - [x] Show when you read the book
     - [ ] Show how popular the book is likes/reads etc.
     - [x] Show the hidden characters mentioned
+    - [x] Show the stars you gave it
 - [ ] Make the quote selection better
     - [ ] Prioritize books that haven't been used, recently read, more likes, more stars
     - [x] Make sure it's deterministic
@@ -24,6 +25,7 @@
     - Currently if you have the Goodreads app installed it takes to you the app, which is hard to find your user id
     - Could have search function that scrapes search results for that user and show possible options
 - [ ] Fix quotes to gather the proper line breaks and remove extra quotation marks.
+- [ ] Have dark mode that works with dark reader
 - [ ] Have user/settings page
     - [ ] Can see stats
     - [ ] Can change colorscheme (also with custom css)
@@ -42,6 +44,6 @@
 - [x] Make pretty, maybe get some input from others
 - [x] Show lives like how we show the share text with emojis in the right justified area where "Book Title:" is
     - [ ] Should show emoji strip above book title if it starts wrapping
-    - Should maybe port to react/TypeScript.
+- [ ] Should maybe port to react/TypeScript. (I think it's too late for this)
 - [ ] Make tab in input work
 - [ ] Highlight selected text that was hit during search
