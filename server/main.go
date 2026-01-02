@@ -15,6 +15,7 @@ import (
 	"github.com/gin-contrib/cors"
 	ginzip "github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 const saveDir = "saves/"
@@ -23,6 +24,9 @@ var isDebug = os.Getenv(gin.EnvGinMode) == gin.DebugMode
 var logg = logger()
 
 func main() {
+	if err := godotenv.Load(); err != nil {
+		logg.Fatal(err)
+	}
 
 	// Run in release mode by default
 	if ginMode := os.Getenv(gin.EnvGinMode); ginMode != "" {
