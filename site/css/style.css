@@ -475,6 +475,7 @@ input[type="text"]:disabled {
   color: white;
   border: 4px solid #1a301a;
   box-shadow: 6px 6px 0px #0f1a0f;
+  font-family: 'Silkscreen', monospace;
   cursor: pointer;
   font-weight: bold;
   text-transform: uppercase;
