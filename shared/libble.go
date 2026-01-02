@@ -147,6 +147,7 @@ func parseDate(dateStr string) (time.Time, error) {
 		"Jan 2, 2006",
 		"Jan 02 2006",
 		"Jan 2 2006",
+		"Jan 2006",
 		"January 02 2006",
 		"January 2 2006",
 	}
