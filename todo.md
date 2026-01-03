@@ -15,6 +15,7 @@
 - [ ] Hide characters and title in quotes (can scrape from Goodreads!)
 - [~] Implement Hints
     - [x] Show when you read the book
+    - [ ] Show the genre of the book
     - [ ] Show how popular the book is likes/reads etc.
     - [x] Show the hidden characters mentioned
     - [x] Show the stars you gave it
@@ -26,6 +27,9 @@
     - Could have search function that scrapes search results for that user and show possible options
 - [ ] Fix quotes to gather the proper line breaks and remove extra quotation marks.
 - [ ] Have dark mode that works with dark reader
+- [ ] Highlight selected text that was hit during search
+- [ ] Hide hints on page reload when game is completed.
+- [ ] Be able to search by author
 - [ ] Have user/settings page
     - [ ] Can see stats
     - [ ] Can change colorscheme (also with custom css)
@@ -49,4 +53,3 @@
     - [ ] Should show emoji strip above book title if it starts wrapping
 - [ ] Should maybe port to react/TypeScript. (I think it's too late for this)
 - [ ] Make tab in input work
-- [ ] Highlight selected text that was hit during search
