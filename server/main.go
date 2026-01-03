@@ -411,8 +411,7 @@ func logger() *log.Logger {
 	}
 
 	logger := log.NewWithOptions(os.Stderr, log.Options{
-		ReportTimestamp: false,
-		Level:           level,
+		Level: level,
 	})
 	return logger
 }
