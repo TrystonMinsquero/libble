@@ -30,6 +30,7 @@
 - [ ] Highlight selected text that was hit during search
 - [ ] Hide hints on page reload when game is completed.
 - [ ] Be able to search by author
+- [ ] Write tests for the scraper that run on a schedule (make sure the scraper doesn't become out of date)
 - [ ] Have user/settings page
     - [ ] Can see stats
     - [ ] Can change colorscheme (also with custom css)

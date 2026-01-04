@@ -325,7 +325,7 @@ func (g *Game) Init(data SaveData) error {
 }
 
 func (g Game) Started() bool {
-	return g.Attempts() > 0 // NOTE: add hints here later
+	return g.Attempts() > 0 || len(g.Hints) > 0
 }
 
 func (g Game) UsedHint(kind Hint) bool {
@@ -427,10 +427,11 @@ func (b UserBookData) IsRead() bool {
 	return false
 }
 
+var cst = time.FixedZone("CST", -6*60*60)
+
 func ToCST(t time.Time) time.Time {
 	// Intentially not caring about daylight savings, just need this to be the same
 	// result called from anywhere
-	cst := time.FixedZone("CST", -6*60*60)
 	return t.UTC().In(cst)
 }
 

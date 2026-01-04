@@ -408,6 +408,15 @@ input[type="text"]:disabled {
   transition: all 0.1s ease;
 }
 
+.share-container {
+  justify-content: center;
+  display: flex;
+}
+
+.share-btn button:disabled {
+  display: none;
+}
+
 .share-btn:hover {
   background-color: #6a00b8;
   transform: translate(2px, 2px);
