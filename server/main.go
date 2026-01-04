@@ -23,6 +23,7 @@ const saveDir = "saves/"
 var isDebug = os.Getenv(gin.EnvGinMode) == gin.DebugMode
 var logg = logger()
 
+// TODO: clean this up, moving the routes to a different file & more
 func main() {
 	if err := godotenv.Load(); err != nil {
 		logg.Fatal(err)
@@ -76,6 +77,9 @@ func main() {
 	if err := os.MkdirAll(saveDir, os.ModePerm); err != nil {
 		logg.Errorf("Failed making save dir: %v", err)
 	}
+
+	// TODO: have option to use Postgres instance to have ephemeral servers.
+	// Requires a lot of work, most of the current db implementation isn't great.
 
 	// Initialize database
 	if err := InitDB(); err != nil {

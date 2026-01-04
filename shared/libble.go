@@ -435,8 +435,8 @@ func (b UserBookData) IsRead() bool {
 var cst = time.FixedZone("CST", -6*60*60)
 
 func ToCST(t time.Time) time.Time {
-	// Intentially not caring about daylight savings, just need this to be the same
-	// result called from anywhere
+	// Intentionally not caring about daylight savings,
+	// just need this to be the same result called from anywhere
 	return t.UTC().In(cst)
 }
 
@@ -446,6 +446,10 @@ func DateSeed(t time.Time) int {
 }
 
 func (s SaveData) PickDailyQuote() (quoteId QuoteId, err error) {
+	// NOTE: This needs to be deterministic because we don't save quotes the user might see.
+	// We only change the status of a quote when they take an action (like skipping or guessing).
+	// So when they refresh the page, we need to return the same quote.
+
 	quoteId = NilID
 	quoteCount := len(s.Quotes)
 	if quoteCount <= 0 {
@@ -457,7 +461,14 @@ func (s SaveData) PickDailyQuote() (quoteId QuoteId, err error) {
 	seed := int64(DateSeed(time.Now()))
 	rng := rand.New(rand.NewSource(seed))
 
-	// TODO: actually use weights for meta data like how many times the book was played
+	// TODO: actually use weights for meta data. Probably use some sort of heuristic
+	// Increase chance to pick quote when book:
+	// - not used in previous game
+	// - recently read
+	// - player gave more stars
+	// - has more likes on good reads
+	// can probably think of more things...
+
 	type QuoteMetaData struct {
 		tries uint8
 	}
@@ -473,7 +484,7 @@ func (s SaveData) PickDailyQuote() (quoteId QuoteId, err error) {
 		quotes[quoteIndex] = quote.QuoteId
 		quoteIndex++
 	}
-	slices.Sort(quotes) // needed to make the picking determinstic
+	slices.Sort(quotes) // required to make picking deterministic
 
 	for triedCount < quoteCount && collisions < quoteCount*2 {
 		quoteIndex := rng.Intn(quoteCount)

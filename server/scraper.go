@@ -19,6 +19,8 @@ const (
 	requestCache = "./.request_cache"
 )
 
+// TODO: reset scraper cache (`requestCache`) periodically (only do once production ready)
+
 func scrapeGoodreads(userGRID string, options ScrapeOptions) ([]UserBook, []Quote, error) {
 	books, err := scrapeBooks(userGRID, options)
 	if err != nil {
@@ -246,6 +248,7 @@ func scrapeQuotes(bookGRID string, options ScrapeOptions) ([]Quote, error) {
 	return quotes, nil
 }
 
+// TODO: delete this
 func inferLineBreaks(text string) string {
 	shouldBreak := func(lastChar, nextChar rune) bool {
 		switch lastChar {
@@ -290,6 +293,7 @@ func inferLineBreaks(text string) string {
 func scrapeQuote(quoteElem *colly.HTMLElement) (Quote, error) {
 	var quote Quote
 
+	// TODO: Fix quotes to gather the proper line breaks and remove extra quotation marks.
 	quote.Text = quoteElem.ChildText("div.quoteText")
 	endChar := "―"
 	lastIndex := strings.LastIndex(quote.Text, endChar)

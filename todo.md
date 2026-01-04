@@ -1,36 +1,10 @@
-
-# TODO (Ordered):
-- [x] Remove hints temporarily
-- [x] Make submit work
-    - [x] Make lives system
-    - [x] Make enter in input work
-    - [x] Figure out wight it sets the title on submit (it's probably the html)
-- [x] Add skip button (and make sure it's disabled after first guess, tooltip?)
-- [x] Actually host the website and server
-    - [x] Put website on GitHub pages (Need to make sure WASM works!)
-    - [x] Put server somewhere with something like api.libble.you
-- [x] Make share button
-## --------BOTTOM LINE --------------------------------------------------------
-- [x] Clean up the quote text to make sure punctuation and spacing is correct
-- [ ] Hide characters and title in quotes (can scrape from Goodreads!)
-- [~] Implement Hints
-    - [x] Show when you read the book
-    - [ ] Show the genre of the book
-    - [ ] Show how popular the book is likes/reads etc.
-    - [x] Show the hidden characters mentioned
-    - [x] Show the stars you gave it
-- [ ] Make the quote selection better
-    - [ ] Prioritize books that haven't been used, recently read, more likes, more stars
-    - [x] Make sure it's deterministic
 - [ ] Make it easier to setup account
     - Currently if you have the Goodreads app installed it takes to you the app, which is hard to find your user id
     - Could have search function that scrapes search results for that user and show possible options
-- [ ] Fix quotes to gather the proper line breaks and remove extra quotation marks.
-- [ ] Have dark mode that works with dark reader
-- [ ] Highlight selected text that was hit during search
-- [ ] Hide hints on page reload when game is completed.
-- [ ] Be able to search by author
 - [ ] Write tests for the scraper that run on a schedule (make sure the scraper doesn't become out of date)
+- [ ] Have some sort of auth and user account.
+    - Currently not secure at all. Anyone can login to user's data via Goodreads id.
+    - No mitigations for a DDoS
 - [ ] Have user/settings page
     - [ ] Can see stats
     - [ ] Can change colorscheme (also with custom css)
@@ -39,18 +13,6 @@
         - [ ] Need to figure this out. Current options are:
             - Have other device for code to sync, only need to do once.
             - Or could have account, with cloud saves
-- [x] Stream scraping the website so it's not one big payload and makes it feel like the site isn't working
-    - [ ] Fix not showing it's loaded on devices that can't save quotes
-    - [ ] Think about if switching to a polling flow for user creating would be better.
-        - Would be /create/user/ which returns the id, and then /user/status/:id would return data and phase.
-- [x] Cache html files by default
-    - [ ] Reset cache periodically (probably once a day)
-- [~] Should probably use a database instead of raw save json files.
-    - [ ] Move the database to postgress instance
-    - [x] Also saves the books by id so not saving duplicate scraped data.
-- [ ] Have up and down arrows "scroll" as you go down the options
-- [x] Make pretty, maybe get some input from others
-- [x] Show lives like how we show the share text with emojis in the right justified area where "Book Title:" is
-    - [ ] Should show emoji strip above book title if it starts wrapping
-- [ ] Should maybe port to react/TypeScript. (I think it's too late for this)
-- [ ] Make tab in input work
+- [ ] Think about having some sort of page system where you can view each book, quote, player, etc. on its own page
+
+There are more todos in the source code, just search for `TODO:`

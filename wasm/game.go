@@ -182,6 +182,7 @@ func setupHTML(data *SaveData, allBooks Books) {
 		var sb strings.Builder
 		addEmojiStrip(game, &sb)
 		gameProgress.SetTextContent(sb.String())
+		// TODO: show emoji strip above book title if it starts wrapping
 	}
 
 	updateInputStates := func() {
@@ -467,6 +468,9 @@ func generateResultsString(game *Game) string {
 	return shareText.String()
 }
 
+// TODO: Remove the end (...) on quotes
+// TODO: Also search by author
+// TODO: highlight indexes that matched the text
 func setupAutocomplete(
 	input *dom.HTMLInputElement,
 	suggestionsParent dom.HTMLElement,
@@ -574,8 +578,11 @@ func setupAutocomplete(
 		}
 		keyEvent := e.(*dom.KeyboardEvent)
 		key := keyEvent.Key()
+		// TODO: figure out how to make it select the entire text on single click
 
 		switch key {
+		// TODO: figure out how to "scroll" the suggestions so it moves the selection
+		// if it goes out of being visible
 		case "ArrowDown":
 			e.PreventDefault()
 			setSelection((currentSelection + 1) % len(suggestions))

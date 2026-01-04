@@ -130,6 +130,10 @@ func initStart() {
 				debugPrint("Created user with libble ID: %d", libbleID)
 			}
 
+			// TODO: switch to some sort of polling method
+			// Also streamline getting into the game after finding one good quote
+			// Then the server will keep processing so it's ready for tomorrow
+
 			// Step 1: Fetch books
 			showStatus("Fetching your books...")
 			type BooksResponse struct {
