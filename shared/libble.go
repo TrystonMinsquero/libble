@@ -275,11 +275,16 @@ func DefaultGameSettings() GameSettings {
 
 type Hint string
 
-const HintTime Hint = "Time"
-const HintGenre Hint = "Genre"
-const HintAuthorInitial Hint = "AuthorInitial"
-const HintSelfRating Hint = "SelfRating"
-const HintSelfReview Hint = "SelfReview"
+const (
+	HintTime          Hint = "Time"
+	HintSelfRating    Hint = "SelfRating"
+	HintAuthorInitial Hint = "AuthorInitial"
+
+	// TODO: Implement these (need to update scraper)
+	HintGenre      Hint = "Genre"
+	HintCharacters Hint = "Characters"
+	HintSelfReview Hint = "SelfReview"
+)
 
 type UsedHint struct {
 	Kind       Hint `json:"hint"`
