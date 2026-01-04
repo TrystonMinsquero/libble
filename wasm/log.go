@@ -14,6 +14,7 @@ func debugPrint(format string, args ...any) {
 func logErr(contextFmt string, args ...any) {
 	context := fmt.Sprintf(contextFmt, args...)
 	console := js.Global().Get("console")
+	// TODO: add some sort of tracking or stats so we can know what goes wrong
 	console.Call("error", context)
 }
 

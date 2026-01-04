@@ -589,7 +589,6 @@ func setupAutocomplete(
 		case "Enter":
 			e.PreventDefault()
 			useSelection()
-			// TODO: submit game
 		case "Tab":
 			e.PreventDefault()
 			input.SetValue(getBookTitle(currentSelection))
