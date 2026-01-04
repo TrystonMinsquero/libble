@@ -28,7 +28,7 @@ Take a look at the [to-do](./todo.md) for things that need to be done.
 I'm a game dev and still pretty new to go and web world, so don't hesitate to make suggestions.
 
 Both backend and frontend are written in go. A separate backend service is needed because you can't web-scrape on client due to CORS.
-Backend server is mostly used for scraping and syncing player data. Hosted at [api.libble.you](https://api.libble.you)
+Backend server is mostly used for scraping and syncing player data. Hosted api.libble.(https://api.libble.you)
 Actual frontend is just a static site using GitHub pages at [libble.you](https://libble.you).
 
 #### Backend
@@ -41,4 +41,4 @@ Actual frontend is just a static site using GitHub pages at [libble.you](https:/
 #### Frontend
 - Using go WASM with a [DOM library](https://github.com/dominikh/go-js-dom) to do the game logic.
     - Thought it would be cool to do the whole thing in go.
-    - I'm sure it'd be better to use React-TypeScript, but the golang DOM route hasn't been too bad.
+    - I'm sure it'd be better to use React-TypeScript, golang DOM route hasn't been too bad.
