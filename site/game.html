@@ -25,10 +25,11 @@
 				<p id="quote">"Selecting your quote for the day..."</p>
 			</div>
 
-			<div class="hints-section" id="hintSection" disabled>
-				<button type="button" id="skipBtn" class="hint-btn game-input" disabled title="Skip this quote (only available before making a guess)">⏭️</button>
+			<div class="hints-section">
+				<div id="hintSection" hidden>
+					<button type="button" id="skipBtn" class="hint-btn game-input" disabled title="Skip this quote (only available before making a guess)">⏭️</button>
+				</div>
 			</div>
-
 			<div class="feedback" id="feedbackBox"></div>
 
 			<form id="guessForm">
@@ -54,9 +55,8 @@
 				</div>
 			</form>
 
-
-			<div class="share-container" id="shareContainer" style="display: none; margin-top: 20px; text-align: center;">
-				<button type="button" id="shareBtn" class="share-btn">📋 Share Results</button>
+			<div class="share-container">
+				<button type="button" id="shareBtn" class="share-btn" hidden>📋 Share Results</button>
 			</div>
 		</div>
 	</body>

@@ -133,10 +133,6 @@ h1 {
   gap: 0.5rem;
 }
 
-.hints-section:disabled {
-    display: none;
-}
-
 .hint-btn {
   padding: 0.75rem 1.25rem;
   margin: 0.25rem;
@@ -172,7 +168,6 @@ h1 {
   border-color: #8a7767;
   cursor: not-allowed;
   opacity: 0.5;
-  display: none;
 }
 
 .used-hint {
@@ -408,15 +403,6 @@ input[type="text"]:disabled {
   transition: all 0.1s ease;
 }
 
-.share-container {
-  justify-content: center;
-  display: flex;
-}
-
-.share-btn button:disabled {
-  display: none;
-}
-
 .share-btn:hover {
   background-color: #6a00b8;
   transform: translate(2px, 2px);
@@ -426,6 +412,11 @@ input[type="text"]:disabled {
 .share-btn:active {
   transform: translate(5px, 5px);
   box-shadow: 0px 0px 0px #1a002d;
+}
+
+.share-container {
+  justify-content: center;
+  display: flex;
 }
 
 /* Landing/Start page styles */

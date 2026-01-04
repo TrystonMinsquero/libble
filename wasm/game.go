@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"math"
 	"slices"
@@ -35,7 +34,7 @@ func initGame() {
 		}
 		var resp PlayerResponse
 		if err := fetch("/game/player/"+libbleIDStr, &resp); err != nil {
-			log(err, "Failed to fetch player from server: %v")
+			log(err, "Failed to fetch player from server")
 			sendToStart()
 			return
 		}
@@ -99,6 +98,8 @@ func initGame() {
 		sendToStart()
 		return
 	}
+
+	debugPrint("Today's book is %s", data.Player.TodaysGame().Book.Book.CleanTitle())
 
 	debugPrint("Setting update autocomplete")
 
@@ -167,7 +168,6 @@ func setupHTML(data *SaveData, allBooks Books) {
 
 	gameInputs := doc.GetElementsByClassName("game-input")
 	submitBtn := getElemByIDAs[*dom.HTMLButtonElement](doc, "submitBtn")
-	shareContainer := getElemByIDAs[dom.HTMLElement](doc, "shareContainer")
 	shareBtn := getElemByIDAs[*dom.HTMLButtonElement](doc, "shareBtn")
 	gameProgress := getElemByIDAs[dom.HTMLElement](doc, "gameProgress")
 
@@ -175,14 +175,13 @@ func setupHTML(data *SaveData, allBooks Books) {
 	skipBtn := getElemByIDAs[*dom.HTMLButtonElement](doc, "skipBtn")
 
 	type hintUI struct {
-		kind            Hint
-		elem            *dom.HTMLButtonElement
-		canUse          func(g Game) bool
-		use             func(g *Game) string
-		enabledTooltip  string
-		disabledTooltip string
+		kind   Hint
+		elem   *dom.HTMLButtonElement
+		canUse func(g Game) bool
+		use    func(g *Game) string
 	}
 
+	const usedHintClass = "used-hint"
 	addHintElem := func(kind Hint) *dom.HTMLButtonElement {
 		// TODO: check user settings on whether to show the hint
 		e := doc.CreateElement("button")
@@ -190,6 +189,10 @@ func setupHTML(data *SaveData, allBooks Books) {
 
 		e.Class().Add("hint-btn")
 		e.Class().Add("game-input")
+		tooltip := hintTooltip(kind)
+		if tooltip != "" {
+			e.SetAttribute("title", tooltip)
+		}
 		hintSection.AppendChild(e)
 		button, ok := e.(*dom.HTMLButtonElement)
 		if !ok {
@@ -197,7 +200,6 @@ func setupHTML(data *SaveData, allBooks Books) {
 		}
 		return button
 	}
-	const usedHintClass = "used-hint"
 	hints := []hintUI{
 		{
 			kind: HintTime,
@@ -205,17 +207,10 @@ func setupHTML(data *SaveData, allBooks Books) {
 			canUse: func(g Game) bool {
 				_, err := g.Book.UserData.LastReadDate()
 				if err == nil {
-					debugPrint("No error")
 					return true
 				}
-				if errors.Is(err, ParseDateErr) {
-					log(err, "Issue parsing date for book "+g.Book.Book.CleanTitle())
-				}
-				debugPrint("User Data #%", g.Book.UserData)
-				if errors.Is(err, NoDateErr) {
-					debugPrint("no date")
-				}
-				return !errors.Is(err, NoDateErr)
+				debugPrint("Can't use time hint: %v", err)
+				return false
 			},
 			use: func(g *Game) string {
 				date, err := g.Book.UserData.LastReadDate()
@@ -234,7 +229,11 @@ func setupHTML(data *SaveData, allBooks Books) {
 			kind: HintSelfRating,
 			elem: addHintElem(HintSelfRating),
 			canUse: func(g Game) bool {
-				return g.Book.UserData.Stars > 0
+				if g.Book.UserData.Stars > 0 {
+					return true
+				}
+				debugPrint("Can't use %s because there are no stars", HintSelfRating)
+				return false
 			},
 			use: func(g *Game) string {
 				msg := fmt.Sprintf("You gave this book %d stars", g.Book.UserData.Stars)
@@ -249,6 +248,10 @@ func setupHTML(data *SaveData, allBooks Books) {
 			elem: addHintElem(HintAuthorInitial),
 			canUse: func(g Game) bool {
 				initials := g.Book.Book.AuthorInitials()
+				if initials != "" {
+					return true
+				}
+				debugPrint("Can't use %s. Author: %s", HintAuthorInitial, g.Book.Book.Author)
 				return initials != ""
 			},
 			use: func(g *Game) string {
@@ -286,29 +289,30 @@ func setupHTML(data *SaveData, allBooks Books) {
 			e.Underlying().Set("disabled", disabled)
 		}
 
-		setVisible(submitBtn, !completed)
-		setVisible(shareContainer, completed)
+		setVisible(hintSection, !completed)
 
 		started := game.Started()
-		skipBtn.SetDisabled(started)
-		setVisible(skipBtn, !started)
+		setVisible(skipBtn, !completed && !started)
+		setEnabled(skipBtn, !completed && !started)
 		for _, hint := range hints {
-			disabled := !hint.canUse(*game)
-			debugPrint("%v can use: %v", hint.kind, !disabled)
-			hint.elem.SetDisabled(disabled)
-			setVisible(hint.elem, started)
 			if game.UsedHint(hint.kind) {
 				hint.elem.Class().Add(usedHintClass)
 			}
+			show := !completed && started && hint.canUse(*game)
+			setVisible(hint.elem, show)
+			setEnabled(hint.elem, show)
 		}
 
 		updateGameProgress()
+
+		setVisible(submitBtn, !completed)
+		setVisible(shareBtn, completed)
 	}
 
 	handleRevist := func() bool {
 		if !game.Completed() {
 			setVisible(submitBtn, true)
-			setEnabled(hintSection, true)
+			setVisible(hintSection, true)
 			return true
 		}
 		if game.Won() {
@@ -317,8 +321,11 @@ func setupHTML(data *SaveData, allBooks Books) {
 			setFeedback("Looks like you didn't get it this time :(\nCome back tomorrow and try again!", FBStatusError)
 		}
 		input.SetPlaceholder(game.Book.Book.CleanTitle())
+
 		setVisible(submitBtn, false)
-		setEnabled(hintSection, false)
+		setVisible(hintSection, false)
+		setVisible(shareBtn, true)
+		shareBtn.SetDisabled(false)
 		return false
 	}
 
@@ -391,8 +398,8 @@ func setupHTML(data *SaveData, allBooks Books) {
 			} else {
 				log(err, "Failed to share")
 				shareBtn.SetTextContent("Sorry, failed to copy")
-				shareBtn.SetDisabled(true)
 			}
+			shareBtn.SetDisabled(true)
 
 			go func() {
 				time.Sleep(time.Second * 3)
@@ -501,7 +508,21 @@ func onSkip(
 	if err := game.Init(*data); err != nil {
 		return err
 	}
+	debugPrint("The book is now %s", game.Book.Book.CleanTitle())
 	return nil
+}
+
+func hintTooltip(kind Hint) string {
+	switch kind {
+	case HintTime:
+		return "See when you last read the book"
+	case HintSelfRating:
+		return "See how many stars you gave the book"
+	case HintAuthorInitial:
+		return "See the initials of the author"
+	}
+	logErr("Hint '%s' does not have a tooltip", string(kind))
+	return ""
 }
 
 func hintEmoji(kind Hint) string {
@@ -513,6 +534,7 @@ func hintEmoji(kind Hint) string {
 	case HintAuthorInitial:
 		return "🖊️"
 	}
+	logErr("Hint '%s' does not have a set emoji", string(kind))
 	return "💡"
 }
 

@@ -35,8 +35,8 @@ func setVisible(elem dom.HTMLElement, visible bool) {
 		return
 	}
 	if visible {
-		elem.Style().SetProperty("display", "inline-block", "")
+		elem.RemoveAttribute("hidden")
 	} else {
-		elem.Style().SetProperty("display", "none", "")
+		elem.SetAttribute("hidden", "")
 	}
 }
