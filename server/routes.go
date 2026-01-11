@@ -47,13 +47,11 @@ func setupRoutes(r *gin.Engine, node *snowflake.Node) {
 	setupUserRoutes(r, node)
 
 	r.GET("/scrape/gr/user-books/:libbleID", func(c *gin.Context) {
-		libbleIDStr := c.Param("libbleID")
-		libbleIDUint, err := strconv.ParseUint(libbleIDStr, 10, 64)
+		libbleID, err := parseLibbleID(c, "libbleID")
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid libbleID format"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		libbleID := DBID(libbleIDUint)
 
 		lock := getUserLock(libbleID)
 		lock.Lock()
@@ -285,7 +283,7 @@ func setupRoutes(r *gin.Engine, node *snowflake.Node) {
 
 func setupUserRoutes(r *gin.Engine, node *snowflake.Node) {
 	user := r.Group("/user")
-	user.GET("/lookup/:GRID", func(c *gin.Context) {
+	user.GET("/lookup/gr/:GRID", func(c *gin.Context) {
 		userGRID := c.Param("GRID")
 		if userGRID == "" {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Must provide GRID param"})
@@ -321,7 +319,7 @@ func setupUserRoutes(r *gin.Engine, node *snowflake.Node) {
 		}
 
 		// Create new player
-		libbleID := DBID(node.Generate().Int64())
+		libbleID := PlayerID(node.Generate().Int64())
 		settings := PlayerSettings{
 			GameSettings:  DefaultGameSettings(),
 			ScrapeOptions: req.ScrapeOptions,
@@ -403,11 +401,11 @@ func hostSite(r *gin.Engine) {
 	}
 }
 
-func parseLibbleID(c *gin.Context, paramName string) (DBID, error) {
+func parseLibbleID(c *gin.Context, paramName string) (PlayerID, error) {
 	libbleIDStr := c.Param(paramName)
 	libbleIDUint, err := strconv.ParseUint(libbleIDStr, 10, 64)
 	if err != nil {
 		return 0, fmt.Errorf("invalid libbleID format")
 	}
-	return DBID(libbleIDUint), nil
+	return PlayerID(libbleIDUint), nil
 }

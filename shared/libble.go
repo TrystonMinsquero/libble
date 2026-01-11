@@ -14,11 +14,12 @@ type DBID uint64
 
 type QuoteId DBID
 type BookId DBID
+type LibbleID DBID
 
 const NilID = 0
 
 type Player struct {
-	ID       DBID           `json:"libble_id"`
+	ID       LibbleID `json:"libble_id"`
 	UserGRID string         `json:"user_gr_id"`
 	Settings PlayerSettings `json:"settings"`
 
@@ -489,7 +490,7 @@ func (s SaveData) PickDailyQuote() (quoteId QuoteId, err error) {
 
 // UserSummary contains summary information about a user
 type UserSummary struct {
-	LibbleID   DBID   `json:"libble_id"`
+	LibbleID   LibbleID `json:"libble_id"`
 	GameCount  int    `json:"game_count"`
 	LastPlayed string `json:"last_played"` // Empty string if never played
 }

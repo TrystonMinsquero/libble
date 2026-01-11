@@ -98,13 +98,13 @@ func InitDB() error {
 }
 
 // getUserLock returns a mutex for the given user ID to ensure concurrent safety
-func getUserLock(userID DBID) *sync.Mutex {
+func getUserLock(userID LibbleID) *sync.Mutex {
 	lock, _ := userLocks.LoadOrStore(userID, &sync.Mutex{})
 	return lock.(*sync.Mutex)
 }
 
 // CreateUser creates a new user in the database
-func CreateUser(libbleID DBID, userGRID string, settings PlayerSettings) error {
+func CreateUser(libbleID LibbleID, userGRID string, settings PlayerSettings) error {
 	settingsJSON, err := json.Marshal(settings)
 	if err != nil {
 		return fmt.Errorf("failed to marshal settings: %w", err)
@@ -142,7 +142,7 @@ func GetUsersByGRID(userGRID string) ([]UserSummary, error) {
 
 	var summaries []UserSummary
 	for rows.Next() {
-		var id DBID
+		var id LibbleID
 		var gamesJSON string
 		if err := rows.Scan(&id, &gamesJSON); err != nil {
 			return nil, fmt.Errorf("failed to scan user: %w", err)
@@ -181,7 +181,7 @@ func GetUsersByGRID(userGRID string) ([]UserSummary, error) {
 }
 
 // LoadPlayer loads a player from the database
-func LoadPlayer(libbleID DBID) (Player, error) {
+func LoadPlayer(libbleID LibbleID) (Player, error) {
 	var player Player
 	var settingsJSON, seenQuotesJSON, gamesJSON string
 
@@ -243,7 +243,7 @@ func UpdatePlayer(player Player) error {
 }
 
 // LoadUserBooks loads just the books for a user (without quotes)
-func LoadUserBooks(libbleID DBID) ([]UserBook, error) {
+func LoadUserBooks(libbleID LibbleID) ([]UserBook, error) {
 	rows, err := db.Query(`
 		SELECT b.book_id, b.book_gr_id, b.title, b.author, b.author_gr_id,
 		       b.avg_rating, b.rating_count, ub.stars, ub.dates_read, ub.date_added
@@ -280,7 +280,7 @@ func LoadUserBooks(libbleID DBID) ([]UserBook, error) {
 }
 
 // LoadSaveData loads a complete SaveData structure for a user
-func LoadSaveData(libbleID DBID) (SaveData, error) {
+func LoadSaveData(libbleID LibbleID) (SaveData, error) {
 	var data SaveData
 
 	// Load player
@@ -394,7 +394,7 @@ func LoadSaveData(libbleID DBID) (SaveData, error) {
 const dateLayout = "Jan 02, 2006"
 
 // SaveBooks inserts or updates books in the database and returns a map of GRID -> BookId
-func SaveBooks(books []UserBook, userID DBID) (map[string]BookId, error) {
+func SaveBooks(books []UserBook, userID LibbleID) (map[string]BookId, error) {
 	tx, err := db.Begin()
 	if err != nil {
 		return nil, fmt.Errorf("failed to begin transaction: %w", err)
