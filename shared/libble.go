@@ -385,7 +385,7 @@ func (b UserBookData) IsRead() bool {
 		return true
 	}
 	for _, date := range b.DatesRead {
-		if date != "not set" {
+		if !date.Equal(time.Time{}) {
 			return true
 		}
 	}
