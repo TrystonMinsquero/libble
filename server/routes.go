@@ -97,13 +97,11 @@ func setupRoutes(r *gin.Engine, node *snowflake.Node) {
 	})
 
 	r.GET("/scrape/gr/quotes/:libbleID/:bookGRID", func(c *gin.Context) {
-		libbleIDStr := c.Param("libbleID")
-		libbleIDUint, err := strconv.ParseUint(libbleIDStr, 10, 64)
+		libbleID, err := parseLibbleID(c, "libbleID")
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid libbleID format"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		libbleID := DBID(libbleIDUint)
 
 		bookGRID := c.Param("bookGRID")
 		if bookGRID == "" {
@@ -319,7 +317,7 @@ func setupUserRoutes(r *gin.Engine, node *snowflake.Node) {
 		}
 
 		// Create new player
-		libbleID := PlayerID(node.Generate().Int64())
+		libbleID := LibbleID(node.Generate().Int64())
 		settings := PlayerSettings{
 			GameSettings:  DefaultGameSettings(),
 			ScrapeOptions: req.ScrapeOptions,
@@ -401,11 +399,11 @@ func hostSite(r *gin.Engine) {
 	}
 }
 
-func parseLibbleID(c *gin.Context, paramName string) (PlayerID, error) {
+func parseLibbleID(c *gin.Context, paramName string) (LibbleID, error) {
 	libbleIDStr := c.Param(paramName)
 	libbleIDUint, err := strconv.ParseUint(libbleIDStr, 10, 64)
 	if err != nil {
 		return 0, fmt.Errorf("invalid libbleID format")
 	}
-	return PlayerID(libbleIDUint), nil
+	return LibbleID(libbleIDUint), nil
 }
