@@ -15,7 +15,8 @@ Install via one the following:
     sudo apt install binaryen
     brew install binaryen
     cargo install wasm-opt --locked
-    npm install -g wasm-opt"
+    npm install -g wasm-opt
+If you just want to run locally, use GIN_MODE=debug before your command."
     exit 1
 fi
 }
