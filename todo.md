@@ -2,6 +2,7 @@
     - Currently if you have the Goodreads app installed it takes to you the app, which is hard to find your user id
     - Could have search function that scrapes search results for that user and show possible options
 - [ ] Write tests for the scraper that run on a schedule (make sure the scraper doesn't become out of date)
+- [ ] Add streaks!
 - [ ] Have some sort of auth and user account.
     - Currently not secure at all. Anyone can login to user's data via Goodreads id.
     - No mitigations for a DDoS
