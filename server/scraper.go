@@ -192,15 +192,13 @@ func scrapeShelves(GRID string, options ScrapeOptions) ([]Shelf, error) {
 
 var parseDateErr = errors.New("date cannot be parsed (bad layout)")
 
-const bestLayout = "Jan 02, 2006"
-
 func parseDate(dateStr string) (time.Time, error) {
 	if dateStr == "not set" || dateStr == "" {
 		return time.Time{}, fmt.Errorf("No Date")
 	}
 
 	layouts := []string{
-		bestLayout,
+		"Jan 02, 2006",
 		"Jan 2, 2006",
 		"Jan 02 2006",
 		"Jan 2 2006",
