@@ -166,15 +166,15 @@ func getInitials(words []string) string {
 	return sb.String()
 }
 
+// Arrange words so they come in correct order
+// Ex: Green, John        -> John Green        -> J.G.
+// Ex: Van Helt, Shelby   -> Shelby Van Helt   -> S.V.H.
+// Ex: Last, First Middle -> First Middle Last -> F.M.L.
 func (b Book) AuthorInitials() string {
 	author := b.Author
 	if author == "" {
 		return author
 	}
-	// Arrange words so they come in correct order
-	// Ex: Green, John        -> John Green        -> J.G.
-	// Ex: Van Helt, Shelby   -> Shelby Van Helt   -> S.V.H.
-	// Ex: Last, First Middle -> First Middle Last -> F.M.L.
 	chunks := strings.Split(author, ",")
 	var words []string
 	if len(chunks) >= 2 {
