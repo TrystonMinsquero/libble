@@ -82,7 +82,7 @@ func initStart() {
 				return
 			}
 
-			var libbleID DBID
+			var libbleID LibbleID
 			libbleIDStr := ""
 
 			// If existing users found, ask user what to do
@@ -90,7 +90,7 @@ func initStart() {
 				// TODO: Implement UI to show user options
 				// For now, just use the first one
 				// Future: Show list with game count and last played, let user choose
-				libbleID = DBID(lookupResp.Users[0].LibbleID)
+				libbleID = lookupResp.Users[0].LibbleID
 				libbleIDStr = fmt.Sprintf("%d", libbleID)
 				saveLibbleID(libbleIDStr)
 				debugPrint("Using existing user with libble ID: %d", libbleID)

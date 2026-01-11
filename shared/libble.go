@@ -53,7 +53,7 @@ func (s *SaveData) PopulateLookups() {
 	s.PopulateQuoteLookup()
 }
 
-func NewSaveData(libbleID DBID, userGRID string, books []UserBook, quotes []Quote) SaveData {
+func NewSaveData(libbleID LibbleID, userGRID string, books []UserBook, quotes []Quote) SaveData {
 	var data SaveData
 	data.Player.UserGRID = userGRID
 	data.Player.ID = libbleID
