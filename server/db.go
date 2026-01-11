@@ -4,7 +4,9 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"os"
 	"sync"
+	"time"
 
 	. "libble/shared"
 
@@ -12,6 +14,7 @@ import (
 	_ "modernc.org/sqlite"
 )
 
+const saveDir = "saves/"
 const dbPath = "saves/libble.db"
 
 var (
@@ -19,8 +22,15 @@ var (
 	userLocks sync.Map // DBID -> *sync.Mutex
 )
 
+// TODO: have option to use Postgres instance to have ephemeral servers.
+// Requires a lot of work, most of the current db implementation isn't great.
+
 // InitDB initializes the SQLite database and creates tables if needed
 func InitDB() error {
+	if err := os.MkdirAll(saveDir, os.ModePerm); err != nil {
+		return err
+	}
+
 	var err error
 	db, err = sql.Open("sqlite", dbPath)
 	if err != nil {
@@ -296,17 +306,40 @@ func LoadSaveData(libbleID DBID) (SaveData, error) {
 	for rows.Next() {
 		var ub UserBook
 		var datesReadJSON string
+		var dateAdded string
 		err := rows.Scan(
 			&ub.Book.BookId, &ub.Book.BookGRID, &ub.Book.Title, &ub.Book.Author,
 			&ub.Book.AuthorGRID, &ub.Book.AvgRating, &ub.Book.RatingCount,
-			&ub.UserData.Stars, &datesReadJSON, &ub.UserData.DateAdded,
+			&ub.UserData.Stars, &datesReadJSON, &dateAdded,
 		)
 		if err != nil {
 			return data, fmt.Errorf("failed to scan book: %w", err)
 		}
 
-		if err := json.Unmarshal([]byte(datesReadJSON), &ub.UserData.DatesRead); err != nil {
+		var datesRead []string
+		if err := json.Unmarshal([]byte(datesReadJSON), &datesRead); err != nil {
 			return data, fmt.Errorf("failed to unmarshal dates read: %w", err)
+		}
+		if len(ub.UserData.DatesRead) == 0 {
+			ub.UserData.DatesRead = make([]time.Time, 0, len(datesRead))
+		}
+		for i, dateRead := range datesRead {
+			date, err := parseDate(dateRead)
+			if err != nil {
+				logg.Errorf("Failed parsing date %s from user book %v\nError: %v", dateRead, ub, err)
+				continue
+			}
+
+			if i < len(ub.UserData.DatesRead) {
+				ub.UserData.DatesRead[i] = date
+			} else {
+				ub.UserData.DatesRead = append(ub.UserData.DatesRead, date)
+			}
+		}
+
+		ub.UserData.DateAdded, err = parseDate(dateAdded)
+		if err != nil {
+			logg.Errorf("Failed parsing date added %s for user book %v\nError: %v", dateAdded, ub, err)
 		}
 
 		data.Books = append(data.Books, ub)
@@ -358,6 +391,8 @@ func LoadSaveData(libbleID DBID) (SaveData, error) {
 	return data, nil
 }
 
+const dateLayout = "Jan 02, 2006"
+
 // SaveBooks inserts or updates books in the database and returns a map of GRID -> BookId
 func SaveBooks(books []UserBook, userID DBID) (map[string]BookId, error) {
 	tx, err := db.Begin()
@@ -387,16 +422,22 @@ func SaveBooks(books []UserBook, userID DBID) (map[string]BookId, error) {
 		}
 		gridToID[ub.Book.BookGRID] = bookID
 
+		var datesRead []string
+		for _, date := range ub.UserData.DatesRead {
+			datesRead = append(datesRead, date.Format(dateLayout))
+		}
+
 		// Insert or replace user_book
-		datesReadJSON, err := json.Marshal(ub.UserData.DatesRead)
+		datesReadJSON, err := json.Marshal(datesRead)
 		if err != nil {
 			return nil, fmt.Errorf("failed to marshal dates read: %w", err)
 		}
+		dateAdded := ub.UserData.DateAdded.Format(dateLayout)
 
 		_, err = tx.Exec(`
 			INSERT OR REPLACE INTO user_books (user_id, book_id, stars, dates_read, date_added)
 			VALUES (?, ?, ?, ?, ?)
-		`, userID, bookID, ub.UserData.Stars, string(datesReadJSON), ub.UserData.DateAdded)
+		`, userID, bookID, ub.UserData.Stars, string(datesReadJSON), dateAdded)
 		if err != nil {
 			return nil, fmt.Errorf("failed to insert user_book: %w", err)
 		}

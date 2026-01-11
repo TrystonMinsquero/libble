@@ -1,8 +1,10 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"net/url"
+	"os"
 	"strconv"
 	"strings"
 	"sync"
@@ -102,29 +104,29 @@ func scrapeBooks(userGRID string, options ScrapeOptions) ([]UserBook, error) {
 		defaultCollectorOptions(options),
 	)
 
-	bookCollector.OnError(func(r *colly.Response, err error) {
-		logg.Errorf("Error when collecting book at %+v\n%v", r, err)
-	})
-
+	var err error
 	bookCollector.OnHTML("a.next_page", tryVisitNextPage)
-
 	books := make([]UserBook, 0, 20)
 
 	bookCollector.OnHTML("tr.bookalike", func(bookElem *colly.HTMLElement) {
-		book, err := scrapeBook(bookElem)
-		if err == nil {
+		book, scrapeErr := scrapeUserBook(bookElem)
+		if book.Book.BookGRID != "" {
 			books = append(books, book)
-		} else {
-			logg.Errorf("%v", err)
+		}
+		if scrapeErr != nil {
+			bookErr := fmt.Errorf("Scrape UserBook Error: Issue(s) when scraping book from user %s:\n%v\nHTML:\n%v",
+				userGRID, scrapeErr, bookElem.Text)
+			logg.Error(bookErr)
+			err = errors.Join(err, bookErr)
 		}
 	})
 
 	url := "https://" + domain + "/review/list/" + userGRID
-	if err := bookCollector.Visit(url); err != nil {
-		logg.Error(err)
-		return books, err
+	if visitErr := bookCollector.Visit(url); visitErr != nil {
+		err = errors.Join(err, visitErr)
+		logg.Error(visitErr)
 	}
-	return books, nil
+	return books, err
 }
 
 func defaultCollectorOptions(options ScrapeOptions) func(*colly.Collector) {
@@ -132,14 +134,94 @@ func defaultCollectorOptions(options ScrapeOptions) func(*colly.Collector) {
 		if options.UseCache {
 			c.CacheDir = requestCache
 		}
-		colly.AllowedDomains(domain)
-		colly.Async(true)
+		colly.AllowedDomains(domain)(c)
+		// colly.Async(true)(c)
+
+		c.OnError(func(r *colly.Response, reqErr error) {
+			logg.Errorf("Error making request at %+v\n%v", r, reqErr)
+		})
+
+		if isDebug {
+			c.OnScraped(func(r *colly.Response) {
+				fileName := strings.ReplaceAll(r.Request.URL.Path, "/", "_")
+				os.WriteFile("./tmp/"+fileName+".html", r.Body, 0644)
+			})
+		}
 	}
 }
 
-func scrapeBook(bookElem *colly.HTMLElement) (UserBook, error) {
+func scrapeBook(bookGRID string, options ScrapeOptions) (Book, error) {
+	bookCollector := colly.NewCollector(
+		defaultCollectorOptions(options),
+	)
+
+	var book Book
+	var err error
+	bookCollector.OnHTML("div.BookPageMetadataSection__genres", func(elem *colly.HTMLElement) {
+		logg.Debug(elem.DOM.Text())
+	})
+
+	url := "https://" + domain + "/book/show/" + bookGRID
+	if visitErr := bookCollector.Visit(url); visitErr != nil {
+		err = errors.Join(err, visitErr)
+		logg.Error(visitErr)
+		return book, err
+	}
+
+	return book, nil
+}
+
+func scrapeShelves(GRID string, options ScrapeOptions) ([]Shelf, error) {
+	shelfCollector := colly.NewCollector(
+		defaultCollectorOptions(options),
+	)
+
+	shelfCollector.OnError(func(r *colly.Response, err error) {
+		logg.Errorf("Error when collecting book at %+v\n%v", r, err)
+	})
+
+	shelves := make([]Shelf, 0, 10)
+	url := "https://" + domain + "/work/shevles/" + GRID
+	if err := shelfCollector.Visit(url); err != nil {
+		logg.Error(err)
+		return shelves, err
+	}
+
+	return shelves, nil
+}
+
+var parseDateErr = errors.New("date cannot be parsed (bad layout)")
+
+const bestLayout = "Jan 02, 2006"
+
+func parseDate(dateStr string) (time.Time, error) {
+	if dateStr == "not set" || dateStr == "" {
+		return time.Time{}, fmt.Errorf("No Date")
+	}
+
+	layouts := []string{
+		bestLayout,
+		"Jan 2, 2006",
+		"Jan 02 2006",
+		"Jan 2 2006",
+		"Jan 2006",
+		"January 02 2006",
+		"January 2 2006",
+	}
+	for _, layout := range layouts {
+		t, err := time.Parse(layout, dateStr)
+		if err != nil {
+			continue
+		}
+		return t, nil
+	}
+	return time.Time{}, parseDateErr
+}
+
+func scrapeUserBook(bookElem *colly.HTMLElement) (UserBook, error) {
 	var book Book
 	var userData UserBookData
+	var err error
 	bookElem.ForEach("td.field", func(_ int, fieldElem *colly.HTMLElement) {
 		class := fieldElem.Attr("class")
 		class = strings.ReplaceAll(class, "field", "")
@@ -156,20 +238,20 @@ func scrapeBook(bookElem *colly.HTMLElement) (UserBook, error) {
 			book.Author = fieldElem.ChildText("a")
 			book.AuthorGRID = parseGRID(fieldElem.ChildAttr("a", "href"))
 		case "avg_rating":
-			avgRating, err := strconv.ParseFloat(fieldElem.ChildText("div.value"), 32)
-			if err == nil {
+			avgRating, parseErr := strconv.ParseFloat(fieldElem.ChildText("div.value"), 32)
+			if parseErr == nil {
 				book.AvgRating = float32(avgRating)
 			} else {
-				logg.Error("Error getting avg_rating", err)
+				err = errors.Join(err, fmt.Errorf("Couldn't parse avg rating %v", parseErr))
 			}
 		case "num_ratings":
 			valueText := fieldElem.ChildText("div.value")
 			valueText = strings.ReplaceAll(valueText, ",", "")
-			numRating, err := strconv.ParseUint(valueText, 10, 32)
-			if err == nil {
+			numRating, parseErr := strconv.ParseUint(valueText, 10, 32)
+			if parseErr == nil {
 				book.RatingCount = uint(numRating)
 			} else {
-				logg.Error("Error getting num_ratings", err)
+				err = errors.Join(err, fmt.Errorf("Couldn't parse num ratings %v", parseErr))
 			}
 		case "rating":
 			valueText := fieldElem.ChildText("div.value")
@@ -187,23 +269,31 @@ func scrapeBook(bookElem *colly.HTMLElement) (UserBook, error) {
 			case "":
 				userData.Stars = 0 // Not rated
 			default:
-				logg.Errorf("Was unable to translate '%s' to star count for %s",
+				ratingErr := fmt.Errorf("Unable to translate '%s' to star count for %s",
 					valueText, book.Title)
+				err = errors.Join(err, ratingErr)
 			}
 		case "date_read":
+			userData.DatesRead = make([]time.Time, 0)
 			fieldElem.ForEach("div.date_row", func(_ int, dateElem *colly.HTMLElement) {
-				userData.DatesRead = append(userData.DatesRead, strings.TrimSpace(dateElem.Text))
+				dateStr := strings.TrimSpace(dateElem.Text)
+				date, parseErr := parseDate(dateStr)
+				if errors.Is(parseErr, parseDateErr) {
+					err = errors.Join(err, fmt.Errorf("Can't parse date %s: %v", dateStr, parseErr))
+				}
+				userData.DatesRead = append(userData.DatesRead, date)
 			})
 		case "date_added":
-			userData.DateAdded = fieldElem.ChildText("div.value")
+			dateStr := strings.TrimSpace(fieldElem.ChildText("div.value"))
+			date, parseErr := parseDate(dateStr)
+			if errors.Is(parseErr, parseDateErr) {
+				err = errors.Join(err, fmt.Errorf("Can't parse date %s: %v", dateStr, parseErr))
+			}
+			userData.DateAdded = date
 		}
 	})
-
 	userBook := UserBook{Book: book, UserData: userData}
-	if book.BookGRID != "" {
-		return userBook, nil
-	}
-	return userBook, fmt.Errorf("Failed to scrape the book")
+	return userBook, err
 }
 
 func scrapeQuotes(bookGRID string, options ScrapeOptions) ([]Quote, error) {
@@ -213,10 +303,6 @@ func scrapeQuotes(bookGRID string, options ScrapeOptions) ([]Quote, error) {
 	)
 
 	quotes := make([]Quote, 0, 100)
-
-	quoteCollector.OnError(func(r *colly.Response, err error) {
-		logg.Errorf("Error when collecting quote at %v\n%v", r.Request.URL, err)
-	})
 
 	stopCollecting := func() {
 		quoteCollector.OnHTMLDetach("a.next_page")

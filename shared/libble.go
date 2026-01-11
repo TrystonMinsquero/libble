@@ -129,69 +129,28 @@ type UserBook struct {
 }
 
 type UserBookData struct {
-	Stars     uint     `json:"stars"`
-	DatesRead []string `json:"dates_read"`
-	DateAdded string   `json:"date_added"`
-}
-
-var ParseDateErr = errors.New("date cannot be parsed (bad layout)")
-var NoDateErr = errors.New("book has no read date")
-
-func parseDate(dateStr string) (time.Time, error) {
-	if dateStr == "not set" || dateStr == "" {
-		return time.Time{}, NoDateErr
-	}
-
-	layouts := []string{
-		"Jan 02, 2006",
-		"Jan 2, 2006",
-		"Jan 02 2006",
-		"Jan 2 2006",
-		"Jan 2006",
-		"January 02 2006",
-		"January 2 2006",
-	}
-	for _, layout := range layouts {
-		t, err := time.Parse(layout, dateStr)
-		if err != nil {
-			continue
-		}
-		return t, nil
-	}
-	return time.Time{}, ParseDateErr
+	Stars     uint        `json:"stars"`
+	DatesRead []time.Time `json:"dates_read"`
+	DateAdded time.Time   `json:"date_added"`
 }
 
 func (b UserBookData) LastReadDate() (time.Time, error) {
 	best := time.Time{}
-	var parseErr error
-	checkDate := func(dateStr string) {
-		date, err := parseDate(dateStr)
-		if err != nil {
-			if err == ParseDateErr {
-				dateErr := fmt.Errorf("%s can't be parsed", dateStr)
-				parseErr = errors.Join(parseErr, dateErr)
-			}
-			return
-		} else if date.After(best) {
+	checkDate := func(date time.Time) {
+		if !date.Equal(time.Time{}) && date.After(best) {
 			best = date
 		}
 	}
-	for _, dateStr := range b.DatesRead {
-		checkDate(dateStr)
+	for _, date := range b.DatesRead {
+		checkDate(date)
 	}
 	if best.Equal(time.Time{}) {
 		checkDate(b.DateAdded)
 	}
-
-	var err error
 	if best.Equal(time.Time{}) {
-		err = errors.Join(NoDateErr)
-		return best, errors.Join(NoDateErr, parseErr)
+		return best, errors.New("No date")
 	}
-	if parseErr != nil {
-		err = errors.Join(ParseDateErr, parseErr)
-	}
-	return best, err
+	return best, nil
 }
 
 func getInitials(words []string) string {
