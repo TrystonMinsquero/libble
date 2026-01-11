@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	libble "libble/shared"
+	. "libble/shared"
 
 	"honnef.co/go/js/dom/v2"
 )
@@ -72,7 +72,7 @@ func initStart() {
 			showStatus("Checking for existing accounts...")
 
 			type LookupResponse struct {
-				Users []libble.UserSummary `json:"users"`
+				Users []UserSummary `json:"users"`
 			}
 
 			var lookupResp LookupResponse
@@ -82,7 +82,7 @@ func initStart() {
 				return
 			}
 
-			var libbleID libble.DBID
+			var libbleID DBID
 			libbleIDStr := ""
 
 			// If existing users found, ask user what to do
@@ -90,7 +90,7 @@ func initStart() {
 				// TODO: Implement UI to show user options
 				// For now, just use the first one
 				// Future: Show list with game count and last played, let user choose
-				libbleID = libble.DBID(lookupResp.Users[0].LibbleID)
+				libbleID = DBID(lookupResp.Users[0].LibbleID)
 				libbleIDStr = fmt.Sprintf("%d", libbleID)
 				saveLibbleID(libbleIDStr)
 				debugPrint("Using existing user with libble ID: %d", libbleID)
@@ -98,18 +98,10 @@ func initStart() {
 			} else {
 				// No existing users, create new one
 				showStatus("Creating your account...")
-				type UserCreateRequest struct {
-					GRID          string               `json:"grid"`
-					ScrapeOptions libble.ScrapeOptions `json:"scrape_options"`
-				}
-				type UserCreateResponse struct {
-					Player libble.Player `json:"player"`
-					Error  string        `json:"error,omitempty"`
-				}
 
 				reqBody := UserCreateRequest{
 					GRID:          userGrid,
-					ScrapeOptions: libble.DefaultScrapeOptions(),
+					ScrapeOptions: DefaultScrapeOptions(),
 				}
 
 				var createResp UserCreateResponse
@@ -137,8 +129,8 @@ func initStart() {
 			// Step 1: Fetch books
 			showStatus("Fetching your books...")
 			type BooksResponse struct {
-				UserBooks []libble.UserBook `json:"books"`
-				Error     string            `json:"error,omitempty"`
+				UserBooks []UserBook `json:"books"`
+				Error     string     `json:"error,omitempty"`
 			}
 			var booksResp BooksResponse
 			if err := fetch("/scrape/gr/user-books/"+libbleIDStr, &booksResp); err != nil {
@@ -157,22 +149,22 @@ func initStart() {
 
 			// Step 2: Fetch quotes for each book in parallel
 			type QuotesResponse struct {
-				Quotes []libble.Quote `json:"quotes"`
-				Error  string         `json:"error,omitempty"`
+				Quotes []Quote `json:"quotes"`
+				Error  string  `json:"error,omitempty"`
 			}
 
 			type bookResult struct {
-				quotes []libble.Quote
+				quotes []Quote
 				index  int
 			}
 
 			resultChan := make(chan bookResult, len(books))
 			completed := 0
-			var allQuotes []libble.Quote
+			var allQuotes []Quote
 
 			// Launch goroutines for each book
 			for i, userBook := range books {
-				go func(idx int, ub libble.UserBook) {
+				go func(idx int, ub UserBook) {
 					book := ub.Book
 					var quotesResp QuotesResponse
 					quotesURL := fmt.Sprintf("/scrape/gr/quotes/%s/%s", libbleIDStr, book.BookGRID)
@@ -207,7 +199,7 @@ func initStart() {
 			showStatus(fmt.Sprintf("Successfully loaded %d quotes from %d books!", len(allQuotes), len(books)))
 
 			// Create save data
-			data := libble.NewSaveData(libbleID, userGrid, books, allQuotes)
+			data := NewSaveData(libbleID, userGrid, books, allQuotes)
 			debugPrint("Successfully loaded user data: %d", data.Player.ID)
 
 			if err := saveAllData(data); err != nil {
