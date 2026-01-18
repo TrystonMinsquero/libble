@@ -17,6 +17,13 @@
 		</script>
 	</head>
 	<body>
+		<!-- User Icon - Fixed position in top right -->
+		<div class="user-icon-container">
+			<button id="userIconBtn" class="user-icon-btn" title="Account Settings">
+				👤
+			</button>
+		</div>
+
 		<div class="container">
 			<h1>📖 Libble</h1>
 			<p class="subtitle">Guess the book from a quote</p>
@@ -57,6 +64,18 @@
 
 			<div class="share-container">
 				<button type="button" id="shareBtn" class="share-btn" hidden>📋 Share Results</button>
+			</div>
+		</div>
+
+		<!-- Settings Modal -->
+		<div id="settingsModal" class="modal" hidden>
+			<div class="modal-content">
+				<button class="modal-close" id="closeModalBtn">✖</button>
+				<h2>Account Settings</h2>
+
+				<div id="settingsContent">
+					<!-- Populated by WASM based on auth state -->
+				</div>
 			</div>
 		</div>
 	</body>

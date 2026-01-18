@@ -12,127 +12,139 @@ import (
 
 type DBID uint64
 
-type QuoteId DBID
-type BookId DBID
-type LibbleID DBID
+type QuoteID DBID
+type BookID DBID
+type UserID DBID
 
 const NilID = 0
 
-type Player struct {
-	ID       LibbleID `json:"libble_id"`
-	UserGRID string         `json:"user_gr_id"`
-	Settings PlayerSettings `json:"settings"`
+type User struct {
+	ID       UserID       `json:"user_id" gorm:"primaryKey;column:user_id"`
+	UserGRID string       `json:"user_gr_id,omitempty" gorm:"column:user_gr_id;not null;index"`
+	Settings UserSettings `json:"settings" gorm:"type:text;serializer:json"`
 
-	SeenQuotes []QuoteId `json:"seen_quote_ids"`
-	Games      []Game    `json:"games"`
+	Email      string     `json:"email,omitempty" gorm:"not null"`
+	VerifiedAt *time.Time `json:"verified_at" gorm:"column:verified_email_time"`
+
+	SeenQuotes []QuoteID `json:"seen_quote_ids" gorm:"type:text;serializer:json"`
+	Games      []Game    `json:"games" gorm:"type:text;serializer:json"`
 }
 
-type SaveData struct {
-	Player Player `json:"player"`
+func (User) TableName() string {
+	return "users"
+}
+
+type App struct {
+	User User `json:"user"`
 
 	Books  []UserBook `json:"books"`
 	Quotes []Quote    `json:"quotes"`
 
 	NeedsServer bool
-	bookMap     map[BookId]int
-	quoteMap    map[QuoteId]int
+	bookMap     map[BookID]int
+	quoteMap    map[QuoteID]int
 }
 
-func (s *SaveData) PopulateQuoteLookup() {
-	s.quoteMap = make(map[QuoteId]int)
-	for index, quote := range s.Quotes {
-		s.quoteMap[quote.QuoteId] = index
+func (a *App) PopulateQuoteLookup() {
+	a.quoteMap = make(map[QuoteID]int)
+	for index, quote := range a.Quotes {
+		a.quoteMap[quote.ID] = index
 	}
 }
 
-func (s *SaveData) PopulateLookups() {
-	s.bookMap = make(map[BookId]int)
-	for index, book := range s.Books {
-		s.bookMap[book.Book.BookId] = index
+func (a *App) PopulateLookups() {
+	a.bookMap = make(map[BookID]int)
+	for index, book := range a.Books {
+		a.bookMap[book.Book.ID] = index
 	}
-	s.PopulateQuoteLookup()
+	a.PopulateQuoteLookup()
 }
 
-func NewSaveData(libbleID LibbleID, userGRID string, books []UserBook, quotes []Quote) SaveData {
-	var data SaveData
-	data.Player.UserGRID = userGRID
-	data.Player.ID = libbleID
-	data.Player.Settings = DefaultPlayerSettings()
+func NewApp(userID UserID, userGRID string, books []UserBook, quotes []Quote) App {
+	var app App
+	app.User.UserGRID = userGRID
+	app.User.ID = userID
+	app.User.Settings = DefaultUserSettings()
+	app.User.SeenQuotes = []QuoteID{}
+	app.User.Games = []Game{}
 
 	// Initialize maps
-	data.Books = books
-	data.Quotes = quotes
+	app.Books = books
+	app.Quotes = quotes
 
-	data.PopulateLookups()
+	app.PopulateLookups()
 
-	// Initialize empty slices
-	data.Player.SeenQuotes = []QuoteId{}
-	data.Player.Games = []Game{}
-	return data
+	return app
 }
 
-func (s SaveData) GetBook(ID BookId) (UserBook, error) {
-	index, ok := s.bookMap[ID]
+func (a App) GetBook(ID BookID) (UserBook, error) {
+	index, ok := a.bookMap[ID]
 	if !ok {
 		return UserBook{}, fmt.Errorf("Book %v not in map", ID)
 	}
-	if index < 0 || index >= len(s.Books) {
+	if index < 0 || index >= len(a.Books) {
 		return UserBook{}, fmt.Errorf("Book %v had index %d which is out of bounds ", ID, index)
 	}
-	return s.Books[index], nil
+	return a.Books[index], nil
 }
 
-func (s SaveData) FindQuote(ID QuoteId) Quote {
-	for _, quote := range s.Quotes {
-		if quote.QuoteId == ID {
+func (a App) FindQuote(ID QuoteID) Quote {
+	for _, quote := range a.Quotes {
+		if quote.ID == ID {
 			return quote
 		}
 	}
 	return Quote{}
 }
 
-func (s SaveData) GetQuote(ID QuoteId) (Quote, error) {
-	index, ok := s.quoteMap[ID]
+func (a App) GetQuote(ID QuoteID) (Quote, error) {
+	index, ok := a.quoteMap[ID]
 	if !ok {
-		return Quote{}, fmt.Errorf("Quote %v not in map. Quotes Map:\n%v", ID, s.quoteMap)
+		return Quote{}, fmt.Errorf("Quote %v not in map. Quotes Map:\n%v", ID, a.quoteMap)
 	}
-	if index < 0 || index >= len(s.Quotes) {
+	if index < 0 || index >= len(a.Quotes) {
 		return Quote{}, fmt.Errorf("Quote %v had index %d which is out of bounds ", ID, index)
 	}
-	return s.Quotes[index], nil
+	return a.Quotes[index], nil
 }
 
-func (s *SaveData) AddQuote(quote Quote) {
-	index, found := s.quoteMap[quote.QuoteId]
+func (a *App) AddQuote(quote Quote) {
+	index, found := a.quoteMap[quote.ID]
 	if found {
-		s.Quotes[index] = quote
+		a.Quotes[index] = quote
 	} else {
-		s.Quotes = append(s.Quotes, quote)
-		s.PopulateLookups()
+		a.Quotes = append(a.Quotes, quote)
+		a.PopulateLookups()
 	}
 }
 
-func (s SaveData) FindBookId(query string) BookId {
+func (a App) FindBookID(query string) BookID {
 	query = strings.ToLower(strings.TrimSpace(query))
-	for _, book := range s.Books {
+	for _, book := range a.Books {
 		target := book.Book.CleanTitle()
 		target = strings.ToLower(strings.TrimSpace(target))
 		if target == query {
-			return book.Book.BookId
+			return book.Book.ID
 		}
 	}
 	return NilID
 }
 
 type UserBook struct {
-	Book     Book         `json:"book"`
-	UserData UserBookData `json:"user_book_data"`
+	UserID   UserID       `json:"-" gorm:"primaryKey;column:user_id"`
+	BookID   BookID       `json:"-" gorm:"primaryKey;column:book_id"`
+	Book     Book         `json:"book" gorm:"foreignKey:BookID;references:BookID"`
+	UserData UserBookData `json:"user_book_data" gorm:"embedded"`
+}
+
+func (UserBook) TableName() string {
+	return "user_books"
 }
 
 type UserBookData struct {
-	Stars     uint        `json:"stars"`
-	DatesRead []time.Time `json:"dates_read"`
-	DateAdded time.Time   `json:"date_added"`
+	Stars     uint        `json:"stars" gorm:"not null"`
+	DatesRead []time.Time `json:"dates_read" gorm:"type:text;serializer:json;column:dates_read"`
+	DateAdded time.Time   `json:"date_added" gorm:"type:text;serializer:json;column:date_added"`
 }
 
 func (b UserBookData) LastReadDate() (time.Time, error) {
@@ -189,16 +201,21 @@ func (b Book) AuthorInitials() string {
 	return getInitials(words)
 }
 
-type PlayerSettings struct {
+type UserSettings struct {
 	GameSettings  GameSettings  `json:"game_settings"`
 	ScrapeOptions ScrapeOptions `json:"scrape_options"`
 }
 
-func DefaultPlayerSettings() PlayerSettings {
-	return PlayerSettings{
+func DefaultUserSettings() UserSettings {
+	return UserSettings{
 		GameSettings:  DefaultGameSettings(),
 		ScrapeOptions: DefaultScrapeOptions(),
 	}
+}
+
+type Shelf struct {
+	Name  string `json:"name"`
+	Count uint   `json:"count"` // amount of people assigned this shelf
 }
 
 type ScrapeOptions struct {
@@ -222,14 +239,16 @@ func (o ScrapeOptions) ShouldScrapeQuotes(userBook UserBook) bool {
 }
 
 type GameSettings struct {
-	MaxGuesses int  `json:"max_guesses"`
-	AllowHints bool `json:"allowed_hints"`
+	MaxGuesses   int    `json:"max_guesses"`
+	HintsEnabled []Hint `json:"allowed_hints"`
 }
 
 func DefaultGameSettings() GameSettings {
 	return GameSettings{
 		MaxGuesses: 5,
-		AllowHints: true,
+		HintsEnabled: []Hint{
+			HintTime, HintSelfRating, HintAuthorInitial,
+		},
 	}
 }
 
@@ -239,6 +258,10 @@ const (
 	HintTime          Hint = "Time"
 	HintSelfRating    Hint = "SelfRating"
 	HintAuthorInitial Hint = "AuthorInitial"
+
+	// TODO: Implement these
+	HintBookReadBefore Hint = "BookReadBefore"
+	HintBookReadAfter  Hint = "BookReadAfter"
 
 	// TODO: Implement these (need to update scraper)
 	HintGenre      Hint = "Genre"
@@ -252,20 +275,20 @@ type UsedHint struct {
 }
 
 type Game struct {
-	QuoteID QuoteId    `json:"quote_id"`
+	QuoteID QuoteID    `json:"quote_id"`
 	Date    time.Time  `json:"date_started"`
-	Guesses []BookId   `json:"guesses"`
+	Guesses []BookID   `json:"guesses"`
 	Hints   []UsedHint `json:"used_hints"`
 
 	// Runtime data
 	Quote    Quote        `json:"-"`
-	BookId   BookId       `json:"-"`
+	BookID   BookID       `json:"-"`
 	Book     UserBook     `json:"-"`
 	Settings GameSettings `json:"-"`
 }
 
-func (g *Game) Init(data SaveData) error {
-	g.Settings = data.Player.Settings.GameSettings
+func (g *Game) Init(app App) error {
+	g.Settings = app.User.Settings.GameSettings
 	if g.Settings.MaxGuesses < 1 {
 		// This should never happen, but just in case they can at least play
 		g.Settings.MaxGuesses = 1
@@ -273,15 +296,15 @@ func (g *Game) Init(data SaveData) error {
 
 	// Get the quote from the map
 
-	quote, err := data.GetQuote(g.QuoteID)
+	quote, err := app.GetQuote(g.QuoteID)
 	if err != nil {
 		return err
 	}
 	g.Quote = quote
-	g.BookId = quote.BookId
+	g.BookID = quote.BookID
 
 	// Get the book from the map
-	book, err := data.GetBook(g.BookId)
+	book, err := app.GetBook(g.BookID)
 	if err != nil {
 		return fmt.Errorf("Daily Quote's book Id was not found in books map:\n%v", err)
 	}
@@ -322,10 +345,10 @@ func (g Game) Won() bool {
 	if len(g.Guesses) <= 0 {
 		return false
 	}
-	return g.Guesses[len(g.Guesses)-1] == g.BookId
+	return g.Guesses[len(g.Guesses)-1] == g.BookID
 }
 
-func (p *Player) TodaysGame() *Game {
+func (p *User) TodaysGame() *Game {
 	if len(p.Games) > 0 {
 		MaxLookback := 5
 		lastValidIndex := max(len(p.Games)-MaxLookback-1, 0)
@@ -339,45 +362,59 @@ func (p *Player) TodaysGame() *Game {
 	return nil
 }
 
-func (p *Player) InitTodaysGame(data SaveData, dailyQuote QuoteId) (game *Game, err error) {
+func (p *User) InitTodaysGame(app App, dailyQuote QuoteID) (game *Game, err error) {
 	if game = p.TodaysGame(); game != nil {
 		game.QuoteID = dailyQuote
-		err = game.Init(data)
+		err = game.Init(app)
 		return game, err
 	}
 
 	p.Games = append(p.Games, Game{
 		QuoteID: dailyQuote,
 		Date:    time.Now(),
-		Guesses: make([]BookId, 0),
+		Guesses: make([]BookID, 0),
 	})
 	game = &p.Games[len(p.Games)-1]
-	err = errors.Join(game.Init(data))
+	err = errors.Join(game.Init(app))
 	return game, err
 }
 
 type Book struct {
-	BookId      BookId  `json:"libble_id"`
-	BookGRID    string  `json:"book_gr_id"`
-	Title       string  `json:"title"`
-	Author      string  `json:"author"`
-	AuthorGRID  string  `json:"author_gr_id"`
-	AvgRating   float32 `json:"avg_rating"`
-	RatingCount uint    `json:"rating_count"`
+	ID          BookID    `json:"book_id" gorm:"primaryKey;column:book_id"`
+	BookGRID    string    `json:"book_gr_id" gorm:"uniqueIndex;column:book_gr_id;not null"`
+	Title       string    `json:"title" gorm:"not null"`
+	Author      string    `json:"author" gorm:"not null"`
+	AuthorGRID  string    `json:"author_gr_id" gorm:"column:author_gr_id;not null"`
+	AvgRating   float32   `json:"avg_rating" gorm:"not null"`
+	RatingCount uint      `json:"rating_count" gorm:"not null"`
+	LastUpdated time.Time `json:"last_updated" gorm:"column:last_updated"`
+}
+
+func (Book) TableName() string {
+	return "books"
 }
 
 func (b Book) CleanTitle() string {
-	return strings.TrimSpace(strings.Join(strings.Fields(b.Title), " "))
+	text := strings.Join(strings.Fields(b.Title), " ")
+	end := strings.LastIndex(text, "(")
+	if end > 0 {
+		return strings.TrimSpace(text[:end-1])
+	}
+	return strings.TrimSpace(text)
 }
 
 type Quote struct {
-	QuoteId   QuoteId `json:"libble_id"`
-	QuoteGRID string  `json:"quote_gr_id"`
-	Likes     int     `json:"likes"`
-	Text      string  `json:"text"`
+	ID          QuoteID   `json:"libble_id" gorm:"primaryKey;column:quote_id"`
+	QuoteGRID   string    `json:"quote_gr_id" gorm:"uniqueIndex;column:quote_gr_id;not null"`
+	LastUpdated time.Time `json:"last_updated" gorm:"column:last_updated"`
+	BookID      BookID    `json:"book_id" gorm:"index;column:book_id;not null"`
+	BookGRID    string    `json:"book_gr_id" gorm:"-"` // Not stored in DB, computed field
+	Text        string    `json:"text" gorm:"type:text;not null"`
+	Likes       int       `json:"likes" gorm:"not null"`
+}
 
-	BookId   BookId `json:"book_id"`
-	BookGRID string `json:"book_gr_id"`
+func (Quote) TableName() string {
+	return "quotes"
 }
 
 func (b UserBookData) IsRead() bool {
@@ -405,18 +442,18 @@ func DateSeed(t time.Time) int {
 	return t.Year() + t.YearDay()
 }
 
-func (s SaveData) PickDailyQuote() (quoteId QuoteId, err error) {
+func (a App) PickDailyQuote() (quoteID QuoteID, err error) {
 	// NOTE: This needs to be deterministic because we don't save quotes the user might see.
 	// We only change the status of a quote when they take an action (like skipping or guessing).
 	// So when they refresh the page, we need to return the same quote.
 
-	quoteId = NilID
-	quoteCount := len(s.Quotes)
+	quoteID = NilID
+	quoteCount := len(a.Quotes)
 	if quoteCount <= 0 {
-		return quoteId, fmt.Errorf("User has no quotes")
+		return quoteID, fmt.Errorf("User has no quotes")
 	}
 
-	options := s.Player.Settings.ScrapeOptions
+	options := a.User.Settings.ScrapeOptions
 
 	seed := int64(DateSeed(time.Now()))
 	rng := rand.New(rand.NewSource(seed))
@@ -433,15 +470,15 @@ func (s SaveData) PickDailyQuote() (quoteId QuoteId, err error) {
 		tries uint8
 	}
 
-	quotesMetaData := make(map[QuoteId]QuoteMetaData, quoteCount)
+	quotesMetaData := make(map[QuoteID]QuoteMetaData, quoteCount)
 
-	quotes := make([]QuoteId, quoteCount)
+	quotes := make([]QuoteID, quoteCount)
 	triedCount := 0
 	collisions := 0
 
 	quoteIndex := 0
-	for _, quote := range s.Quotes {
-		quotes[quoteIndex] = quote.QuoteId
+	for _, quote := range a.Quotes {
+		quotes[quoteIndex] = quote.ID
 		quoteIndex++
 	}
 	slices.Sort(quotes) // required to make picking deterministic
@@ -449,30 +486,30 @@ func (s SaveData) PickDailyQuote() (quoteId QuoteId, err error) {
 	for triedCount < quoteCount && collisions < quoteCount*2 {
 		quoteIndex := rng.Intn(quoteCount)
 
-		quoteId := quotes[quoteIndex]
-		metaData, found := quotesMetaData[quoteId]
+		quoteID := quotes[quoteIndex]
+		metaData, found := quotesMetaData[quoteID]
 		if found && metaData.tries > 0 {
 			collisions += 1
 			if metaData.tries >= 100 {
-				return quoteId, fmt.Errorf("Too many tries on quote %d", quoteId)
+				return quoteID, fmt.Errorf("Too many tries on quote %d", quoteID)
 			}
 			metaData.tries += 1
-			quotesMetaData[quoteId] = metaData
+			quotesMetaData[quoteID] = metaData
 			continue
 		}
 
 		triedCount += 1
-		if slices.Contains(s.Player.SeenQuotes, quoteId) {
+		if slices.Contains(a.User.SeenQuotes, quoteID) {
 			continue
 		}
 
 		// Check if book is read
-		quote, err := s.GetQuote(quoteId)
+		quote, err := a.GetQuote(quoteID)
 		if err != nil {
 			err = errors.Join(err)
 			continue
 		}
-		book, err := s.GetBook(quote.BookId)
+		book, err := a.GetBook(quote.BookID)
 		if err != nil {
 			err = errors.Join(err)
 			continue
@@ -480,17 +517,18 @@ func (s SaveData) PickDailyQuote() (quoteId QuoteId, err error) {
 		if !options.ShouldScrapeQuotes(book) {
 			continue
 		}
-		return quoteId, err
+		return quoteID, err
 	}
 
-	err = errors.Join(fmt.Errorf("Recycling quote for %s\n", s.Player.UserGRID))
+	err = errors.Join(fmt.Errorf("Recycling quote for %s\n", a.User.UserGRID))
 	quoteIndex = rng.Intn(quoteCount)
 	return quotes[quoteIndex], err
 }
 
 // UserSummary contains summary information about a user
 type UserSummary struct {
-	LibbleID   LibbleID `json:"libble_id"`
+	LibbleID   UserID `json:"libble_id"`
+	EmailHint  string `json:"email_hint"`
 	GameCount  int    `json:"game_count"`
 	LastPlayed string `json:"last_played"` // Empty string if never played
 }

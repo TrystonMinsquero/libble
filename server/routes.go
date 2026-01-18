@@ -1,12 +1,14 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"os"
 	"path"
 	"strconv"
 	"strings"
+	"sync"
 
 	. "libble/shared"
 
@@ -68,7 +70,7 @@ func setupRoutes(r *gin.Engine, node *snowflake.Node) {
 		options := player.Settings.ScrapeOptions
 
 		// Scrape books from Goodreads
-		books, err := scrapeBooks(userGRID, options)
+		books, err := scrapeUserBooks(userGRID, options)
 
 		// Resolve book IDs
 		for index := range books {
@@ -76,9 +78,9 @@ func setupRoutes(r *gin.Engine, node *snowflake.Node) {
 			bookID, idErr := GetOrCreateBookID(ub.Book.BookGRID, node)
 			if idErr != nil {
 				logg.Errorf("Failed to get book ID: %v", idErr)
-				bookID = BookId(node.Generate().Int64())
+				bookID = BookID(node.Generate().Int64())
 			}
-			ub.Book.BookId = bookID
+			ub.Book.ID = bookID
 		}
 
 		// Save books to database
@@ -123,7 +125,7 @@ func setupRoutes(r *gin.Engine, node *snowflake.Node) {
 		options := player.Settings.ScrapeOptions
 
 		// Scrape quotes from Goodreads for this specific book
-		quotes, err := scrapeQuotes(bookGRID, options)
+		quotes, err := scrapeBookQuotes(bookGRID, options)
 
 		// Resolve book and quote IDs
 		for index := range quotes {
@@ -133,17 +135,17 @@ func setupRoutes(r *gin.Engine, node *snowflake.Node) {
 			bookID, idErr := GetOrCreateBookID(quote.BookGRID, node)
 			if idErr != nil {
 				logg.Errorf("Failed to get book ID: %v", idErr)
-				bookID = BookId(node.Generate().Int64())
+				bookID = BookID(node.Generate().Int64())
 			}
-			quote.BookId = bookID
+			quote.BookID = bookID
 
 			// Get or create quote ID
 			quoteID, idErr := GetOrCreateQuoteID(quote.QuoteGRID, node)
 			if idErr != nil {
 				logg.Errorf("Failed to get quote ID: %v", idErr)
-				quoteID = QuoteId(node.Generate().Int64())
+				quoteID = QuoteID(node.Generate().Int64())
 			}
-			quote.QuoteId = quoteID
+			quote.ID = quoteID
 		}
 
 		// Save quotes to database
@@ -184,7 +186,7 @@ func setupRoutes(r *gin.Engine, node *snowflake.Node) {
 			return
 		}
 
-		var player Player
+		var player User
 		if err := c.BindJSON(&player); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
 			return
@@ -263,7 +265,7 @@ func setupRoutes(r *gin.Engine, node *snowflake.Node) {
 			return
 		}
 
-		userBook, err := data.GetBook(quote.BookId)
+		userBook, err := data.GetBook(quote.BookID)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"error": fmt.Sprintf("Failed to get book: %v", err),
@@ -278,6 +280,72 @@ func setupRoutes(r *gin.Engine, node *snowflake.Node) {
 		})
 	})
 }
+
+type UserCreationProgress struct {
+	Mutux  sync.RWMutex
+	User   User
+	Books  []UserBook
+	Quotes []Quote
+
+	InitialQuote           QuoteID
+	BookQuotesScraped      uint
+	FinishedScrapingQuotes bool
+
+	// if data is synced with db
+	UserSynced   bool
+	BooksSynced  bool
+	QuotesSynced bool
+
+	Error error
+}
+
+func (p *UserCreationProgress) Status() UserCreateStatus {
+	p.Mutux.RLock()
+	defer p.Mutux.RUnlock()
+	return UserCreateStatus{
+		BooksFound:      uint(len(p.Books)),
+		BooksCollected:  p.BookQuotesScraped,
+		QuotesCollected: uint(len(p.Quotes)),
+		InitialQuote:    p.InitialQuote,
+		Finished:        p.FinishedScrapingQuotes,
+		Error:           p.Error.Error(),
+	}
+}
+
+func (p *UserCreationProgress) BookQuotesScrapeCount() uint {
+	count := uint(0)
+	p.Mutux.RLock()
+	defer p.Mutux.RUnlock()
+	for _, book := range p.Books {
+		if p.User.Settings.ScrapeOptions.ShouldScrapeQuotes(book) {
+			count += 1
+		}
+	}
+	return count
+}
+
+func (p *UserCreationProgress) AddError(err error, contextFmt string, args ...any) bool {
+	if err == nil {
+		return false
+	}
+	context := fmt.Sprintf(contextFmt, args...)
+	if context != "" {
+		logg.Errorf("User Creation Error for %d (GRID: %s)\n%s\nError: %v", p.User.ID, p.User.UserGRID, context, err)
+	} else {
+		logg.Errorf("User Creation Error for %d (GRID: %s)\nError: %v", p.User.ID, p.User.UserGRID, err)
+	}
+	p.JoinError(err)
+	return true
+}
+
+func (p *UserCreationProgress) JoinError(err error) {
+	p.Mutux.Lock()
+	p.Error = errors.Join(p.Error, err)
+	p.Mutux.Unlock()
+}
+
+var userCreationMutex sync.RWMutex
+var userCreationProgress = make(map[UserID]*UserCreationProgress, 0)
 
 func setupUserRoutes(r *gin.Engine, node *snowflake.Node) {
 	user := r.Group("/user")
@@ -299,11 +367,6 @@ func setupUserRoutes(r *gin.Engine, node *snowflake.Node) {
 	})
 
 	user.POST("/create", func(c *gin.Context) {
-		type UserCreateRequest struct {
-			GRID          string        `json:"grid"`
-			ScrapeOptions ScrapeOptions `json:"scrape_options"`
-		}
-
 		var req UserCreateRequest
 		if err := c.BindJSON(&req); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
@@ -317,29 +380,133 @@ func setupUserRoutes(r *gin.Engine, node *snowflake.Node) {
 		}
 
 		// Create new player
-		libbleID := LibbleID(node.Generate().Int64())
-		settings := PlayerSettings{
+		userID := UserID(node.Generate().Int64())
+		settings := UserSettings{
 			GameSettings:  DefaultGameSettings(),
 			ScrapeOptions: req.ScrapeOptions,
 		}
 
-		if err := CreateUser(libbleID, req.GRID, settings); err != nil {
-			logg.Errorf("Failed to create user: %v", err)
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
-			return
-		}
-
-		player := Player{
-			ID:         libbleID,
+		user := User{
+			ID:         userID,
 			UserGRID:   req.GRID,
 			Settings:   settings,
-			SeenQuotes: []QuoteId{},
+			SeenQuotes: []QuoteID{},
 			Games:      []Game{},
 		}
 
-		logg.Infof("Created new user %d from GRID '%s'", libbleID, req.GRID)
-		c.JSON(http.StatusCreated, gin.H{"player": player})
+		userCreationMutex.Lock()
+		progress := new(UserCreationProgress)
+		progress.User = user
+		userCreationProgress[userID] = progress
+		userCreationMutex.Unlock()
+
+		go progress.StartCreation(user)
+		// if err := CreateUser(libbleID, req.GRID, settings); err != nil {
+		// 	logg.Errorf("Failed to create user: %v", err)
+		// 	c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
+		// 	return
+		// }
+
+		c.JSON(http.StatusCreated, gin.H{"player": user})
 	})
+
+	user.GET("/create/status/:ID", func(ctx *gin.Context) {
+		var status UserCreateStatus
+		userID, err := parseLibbleID(ctx, "ID")
+		if err != nil {
+			status.Error = err.Error()
+			ctx.JSON(http.StatusBadRequest, status)
+			return
+		}
+		userCreationMutex.RLock()
+		progress, found := userCreationProgress[userID]
+		userCreationMutex.RUnlock()
+
+		if !found {
+			status.Error = "User is currently not being created."
+			ctx.JSON(http.StatusBadRequest, status)
+			return
+		}
+
+		status = progress.Status()
+		ctx.JSON(http.StatusOK, status)
+	})
+}
+
+// Will start all the jobs to create the user. See the status from /user/create/status
+func (p *UserCreationProgress) StartCreation(user User) {
+	p.User = user
+	// Sync user to database
+	go func() {
+		tx := db.Create(&user)
+		if tx.Error != nil {
+			p.AddError(tx.Error, "Failed to sync user to database")
+		} else {
+			p.UserSynced = true
+		}
+	}()
+
+	options := user.Settings.ScrapeOptions
+
+	// Scrape all the books
+	go func() {
+		books, scrapeErr := scrapeUserBooks(user.UserGRID, options)
+		p.Books = books
+
+		p.AddError(scrapeErr, "Issue(s) when scraping user books")
+		if len(books) == 0 {
+			p.JoinError(fmt.Errorf("No books found for %s", user.UserGRID))
+			return
+		}
+
+		go func() {
+			tx := db.Create(&p.Books)
+			if tx.Error != nil {
+				p.AddError(tx.Error, "Failed to sync books to database")
+			} else {
+				p.BooksSynced = true
+			}
+		}()
+
+		go func() {
+			p.Mutux.Lock()
+			if len(p.Quotes) > 0 {
+				panic("Trying to add quotes to progress twice!")
+			}
+			p.Quotes = make([]Quote, 0, 100)
+			p.Mutux.Unlock()
+
+			var wg sync.WaitGroup
+
+			for _, userBook := range books {
+				if options.ShouldScrapeQuotes(userBook) {
+					continue
+				}
+
+				book := userBook.Book
+
+				wg.Add(1)
+				go func() {
+					defer wg.Done()
+
+					bookQuotes, err := scrapeBookQuotes(book.BookGRID, options)
+					p.AddError(err, "Issue when scraping quotes for book GRID %s", book.BookGRID)
+					if len(bookQuotes) == 0 {
+						return
+					}
+
+					p.Mutux.Lock()
+					defer p.Mutux.Unlock()
+
+					p.BookQuotesScraped += 1
+					logg.Debugf("Scraped %d Quotes from %s", len(bookQuotes), book.Title)
+					p.Quotes = append(p.Quotes, bookQuotes...)
+				}()
+			}
+			wg.Wait()
+			p.FinishedScrapingQuotes = true
+		}()
+	}()
 }
 
 func setupScrapeRoutes(r *gin.Engine) {
@@ -350,7 +517,7 @@ func setupScrapeRoutes(r *gin.Engine) {
 
 	scrapeGR.GET("/user-books/:GRID", func(ctx *gin.Context) {
 		userGRID := ctx.Param("GRID")
-		books, err := scrapeBooks(userGRID, options)
+		books, err := scrapeUserBooks(userGRID, options)
 		res := gin.H{
 			"books": books,
 		}
@@ -399,11 +566,11 @@ func hostSite(r *gin.Engine) {
 	}
 }
 
-func parseLibbleID(c *gin.Context, paramName string) (LibbleID, error) {
+func parseLibbleID(c *gin.Context, paramName string) (UserID, error) {
 	libbleIDStr := c.Param(paramName)
 	libbleIDUint, err := strconv.ParseUint(libbleIDStr, 10, 64)
 	if err != nil {
 		return 0, fmt.Errorf("invalid libbleID format")
 	}
-	return LibbleID(libbleIDUint), nil
+	return UserID(libbleIDUint), nil
 }

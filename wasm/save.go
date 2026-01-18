@@ -41,7 +41,7 @@ func isStaticSaveDataField(jsonFieldName string) bool {
 	return false
 }
 
-func saveAllDataFiltered(data SaveData, filter FieldPredicate) error {
+func saveAllDataFiltered(data App, filter FieldPredicate) error {
 	v := reflect.ValueOf(data)
 	t := v.Type()
 	var err error
@@ -59,7 +59,7 @@ func saveAllDataFiltered(data SaveData, filter FieldPredicate) error {
 	return err
 }
 
-func syncPlayer(player Player) {
+func syncPlayer(player User) {
 	libbleID := loadLibbleID()
 	if libbleID == "" {
 		logErr("Can't sync to server because no libble.id is not saved")
@@ -73,16 +73,16 @@ func syncPlayer(player Player) {
 	}
 }
 
-func saveAllData(data SaveData) error {
+func saveAllData(data App) error {
 	return saveAllDataFiltered(data, func(s string) bool { return true })
 }
 
-func saveNonStaticData(data SaveData) error {
+func saveNonStaticData(data App) error {
 	err := saveAllDataFiltered(data, func(s string) bool { return !isStaticSaveDataField(s) })
 	if data.NeedsServer {
-		syncPlayer(data.Player)
+		syncPlayer(data.User)
 	} else {
-		go syncPlayer(data.Player)
+		go syncPlayer(data.User)
 	}
 	return err
 }
@@ -91,7 +91,7 @@ func canPlay() bool {
 	return loadLibbleID() != ""
 }
 
-func loadAllDataFiltered(data *SaveData, filter FieldPredicate) error {
+func loadAllDataFiltered(data *App, filter FieldPredicate) error {
 	pv := reflect.ValueOf(data)
 	v := pv.Elem()
 	t := v.Type()
@@ -112,10 +112,10 @@ func loadAllDataFiltered(data *SaveData, filter FieldPredicate) error {
 	return err
 }
 
-func loadNonStaticData(data *SaveData) error {
+func loadNonStaticData(data *App) error {
 	return loadAllDataFiltered(data, func(s string) bool { return isStaticSaveDataField(s) })
 }
 
-func loadAllData(data *SaveData) error {
+func loadAllData(data *App) error {
 	return loadAllDataFiltered(data, func(s string) bool { return true })
 }

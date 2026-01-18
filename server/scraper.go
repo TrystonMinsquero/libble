@@ -23,15 +23,9 @@ const (
 
 // TODO: reset scraper cache (`requestCache`) periodically (only do once production ready)
 
-func scrapeGoodreads(userGRID string, options ScrapeOptions) ([]UserBook, []Quote, error) {
-	books, err := scrapeBooks(userGRID, options)
-	if err != nil {
-		return books, nil, err
-	}
-
-	readCount := 0
+func scrapeManyBooksQuotes(books []UserBook, options ScrapeOptions) ([]Quote, error) {
 	quotes := make([]Quote, 0, 100)
-	startTime := time.Now()
+	var err error
 
 	var wg sync.WaitGroup
 	var mutex sync.Mutex
@@ -42,31 +36,28 @@ func scrapeGoodreads(userGRID string, options ScrapeOptions) ([]UserBook, []Quot
 
 		book := userBook.Book
 
-		readCount += 1
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
 
-			bookQuotes, err := scrapeQuotes(book.BookGRID, options)
-			if err != nil {
-				logg.Error(err)
-				return
-			}
+			bookQuotes, scrapeErr := scrapeBookQuotes(book.BookGRID, options)
 
 			mutex.Lock()
 			defer mutex.Unlock()
+
+			if scrapeErr != nil {
+				err = errors.Join(err, scrapeErr)
+				logg.Error(scrapeErr)
+				return
+			}
+
 			logg.Debugf("Scraped %d Quotes from %s", len(bookQuotes), book.Title)
 			quotes = append(quotes, bookQuotes...)
 		}()
 	}
 
 	wg.Wait()
-	elapsed := time.Since(startTime)
-
-	logg.Infof("Scraped goodreads with '%s' for %d quotes (%d/%d books) in %v",
-		userGRID, len(quotes), readCount, len(books), elapsed)
-
-	return books, quotes, err
+	return quotes, err
 }
 
 func scrapeForNextPage(e *colly.HTMLElement) string {
@@ -99,7 +90,7 @@ func parseGRID(href string) string {
 	return ""
 }
 
-func scrapeBooks(userGRID string, options ScrapeOptions) ([]UserBook, error) {
+func scrapeUserBooks(userGRID string, options ScrapeOptions) ([]UserBook, error) {
 	bookCollector := colly.NewCollector(
 		defaultCollectorOptions(options),
 	)
@@ -294,7 +285,7 @@ func scrapeUserBook(bookElem *colly.HTMLElement) (UserBook, error) {
 	return userBook, err
 }
 
-func scrapeQuotes(bookGRID string, options ScrapeOptions) ([]Quote, error) {
+func scrapeBookQuotes(bookGRID string, options ScrapeOptions) ([]Quote, error) {
 	url := "https://" + domain + "/book/quotes/" + bookGRID
 	quoteCollector := colly.NewCollector(
 		defaultCollectorOptions(options),

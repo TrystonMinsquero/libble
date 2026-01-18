@@ -17,6 +17,13 @@
 		</script>
 	</head>
 	<body>
+		<!-- User Icon - Fixed position in top right -->
+		<div class="user-icon-container" hidden>
+			<button id="userIconBtn" class="user-icon-btn" title="Account Settings">
+				👤
+			</button>
+		</div>
+
 		<div class="landing-container">
 			<h1>📖 Libble</h1>
 			<p class="description">
@@ -33,14 +40,13 @@
 				       title="Please enter a valid numeric Goodreads User ID"
 				>
 				<button id="submit-button" type="submit">Start Playing</button>
-				<div id="status-message" class="status-message"></div>
-				<div id="progress-container" class="progress-container">
+				<div id="status-message" class="status-message" hidden></div>
+				<div id="progress-container" class="progress-container" hidden>
 					<div class="progress-bar">
 						<div id="progress-fill" class="progress-fill"></div>
 					</div>
 					<div id="progress-text" class="progress-text"></div>
 				</div>
-				<div id="error-message" class="error-message"></div>
 			</form>
 
 			<div class="help-text">
@@ -51,6 +57,19 @@
 				<p>Your User ID is the number in your profile URL: goodreads.com/user/show/<strong>12345678</strong></p>
 			</div>
 		</div>
+
+		<!-- Settings Modal -->
+		<div id="settingsModal" class="modal" hidden>
+			<div class="modal-content">
+				<button class="modal-close" id="closeModalBtn">✖</button>
+				<h2>Account Settings</h2>
+
+				<div id="settingsContent">
+					<!-- Populated by WASM based on auth state -->
+				</div>
+			</div>
+		</div>
+
 		<!-- <script src="js/start.js"></script> -->
 	</body>
 </html>

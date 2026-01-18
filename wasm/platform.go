@@ -103,19 +103,19 @@ func loadJson(key string, data any) error {
 	return nil
 }
 
-func fetch(path string, data any) error {
-	return fetchMethod(path, data, "GET", nil)
+func fetch(path string, response any) error {
+	return fetchMethod(path, response, "GET", nil)
 }
 
-func post(path string, data any, body any) error {
-	return fetchMethod(path, data, "POST", body)
+func post(path string, response any, request any) error {
+	return fetchMethod(path, response, "POST", request)
 }
 
-func put(path string, data any, body any) error {
-	return fetchMethod(path, data, "PUT", body)
+func put(path string, response any, request any) error {
+	return fetchMethod(path, response, "PUT", request)
 }
 
-func fetchMethod(path string, data any, method string, body any) (err error) {
+func fetchMethod(path string, response any, method string, request any) (err error) {
 	url := strings.TrimSuffix(APIOrigin, "/") + "/" + strings.TrimPrefix(path, "/")
 
 	// Build fetch options
@@ -127,8 +127,8 @@ func fetchMethod(path string, data any, method string, body any) (err error) {
 	}
 
 	// Add body for POST/PUT requests
-	if body != nil {
-		jsonBytes, err := json.Marshal(body)
+	if request != nil {
+		jsonBytes, err := json.Marshal(request)
 		if err != nil {
 			return fmt.Errorf("Failed to marshal request body: %v", err)
 		}
@@ -149,11 +149,11 @@ func fetchMethod(path string, data any, method string, body any) (err error) {
 
 	// Handle response
 	promise.Call("then", js.FuncOf(func(this js.Value, args []js.Value) any {
-		response := args[0]
-		status := response.Get("status").Int()
+		res := args[0]
+		status := res.Get("status").Int()
 
 		// Check for error header
-		headers := response.Get("headers")
+		headers := res.Get("headers")
 		errorHeader := headers.Call("get", "error")
 		if errorHeader.Truthy() {
 			resultChan <- fmt.Errorf("Error in header for %s\n%s", url, errorHeader.String())
@@ -161,12 +161,12 @@ func fetchMethod(path string, data any, method string, body any) (err error) {
 		}
 
 		// Get response text
-		textPromise := response.Call("text")
+		textPromise := res.Call("text")
 		textPromise.Call("then", js.FuncOf(func(this js.Value, args []js.Value) any {
 			bodyText := args[0].String()
 
 			if status >= 200 && status < 300 {
-				if err := json.Unmarshal([]byte(bodyText), data); err != nil {
+				if err := json.Unmarshal([]byte(bodyText), response); err != nil {
 					resultChan <- fmt.Errorf("Error unmarshalling json for %s\n%v", url, err)
 					return nil
 				}

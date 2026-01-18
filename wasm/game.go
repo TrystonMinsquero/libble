@@ -24,13 +24,13 @@ func initGame() {
 	// Get libble ID
 	libbleIDStr := loadLibbleID()
 
-	var data SaveData
+	var app App
 
 	// Try loading Player from LocalStorage
-	if err := loadJson(saveKeyPlayer, &data.Player); err != nil {
+	if err := loadJson(saveKeyPlayer, &app.User); err != nil {
 		debugPrint("Player not in LocalStorage, fetching from server...")
 		type PlayerResponse struct {
-			Player Player `json:"player"`
+			Player User `json:"player"`
 		}
 		var resp PlayerResponse
 		if err := fetch("/game/player/"+libbleIDStr, &resp); err != nil {
@@ -38,14 +38,14 @@ func initGame() {
 			sendToStart()
 			return
 		}
-		data.Player = resp.Player
+		app.User = resp.Player
 		debugPrint("Loaded player from server")
 	} else {
 		debugPrint("Loaded player from LocalStorage")
 	}
 
 	// Try loading Books from LocalStorage
-	if err := loadJson(saveKeyBooks, &data.Books); err != nil || len(data.Books) == 0 {
+	if err := loadJson(saveKeyBooks, &app.Books); err != nil || len(app.Books) == 0 {
 		debugPrint("Books not in LocalStorage, fetching from server...")
 		type BooksResponse struct {
 			Books []UserBook `json:"books"`
@@ -56,93 +56,93 @@ func initGame() {
 			sendToStart()
 			return
 		}
-		data.Books = resp.Books
-		debugPrint("Loaded %d books from server", len(data.Books))
+		app.Books = resp.Books
+		debugPrint("Loaded %d books from server", len(app.Books))
 	} else {
-		debugPrint("Loaded %d books from LocalStorage", len(data.Books))
+		debugPrint("Loaded %d books from LocalStorage", len(app.Books))
 	}
 
-	dailyQuoteId := QuoteId(NilID)
+	dailyQuoteID := QuoteID(NilID)
 	// Try loading Quotes from LocalStorage
-	if err := loadJson(saveKeyQuotes, &data.Quotes); err != nil || len(data.Quotes) <= 0 {
-		fetchedQuote, err := fetchDailyQuote(&data)
+	if err := loadJson(saveKeyQuotes, &app.Quotes); err != nil || len(app.Quotes) <= 0 {
+		fetchedQuote, err := fetchDailyQuote(&app)
 		if err != nil {
 			log(err, "Failed to fetch daily quote")
 			sendToStart()
 			return
 		}
 
-		dailyQuoteId = fetchedQuote
-		data.NeedsServer = true
+		dailyQuoteID = fetchedQuote
+		app.NeedsServer = true
 		debugPrint("Loaded today's quote from server")
 	} else {
-		debugPrint("Loaded %d quotes from LocalStorage", len(data.Quotes))
+		debugPrint("Loaded %d quotes from LocalStorage", len(app.Quotes))
 	}
-	data.PopulateLookups()
+	app.PopulateLookups()
 
-	if dailyQuoteId == NilID {
+	if dailyQuoteID == NilID {
 		debugPrint("Picking Daily Quote")
-		quoteId, err := data.PickDailyQuote()
+		quoteID, err := app.PickDailyQuote()
 		log(err, "Error when picking daily quote")
-		if quoteId == NilID {
+		if quoteID == NilID {
 			sendToStart()
 			return
 		}
-		dailyQuoteId = quoteId
+		dailyQuoteID = quoteID
 	}
 
-	debugPrint("Daily quote is %d", dailyQuoteId)
+	debugPrint("Daily quote is %d", dailyQuoteID)
 
-	if _, err := data.Player.InitTodaysGame(data, dailyQuoteId); err != nil {
+	if _, err := app.User.InitTodaysGame(app, dailyQuoteID); err != nil {
 		log(err, "Failed initializing today's game")
 		sendToStart()
 		return
 	}
 
-	debugPrint("Today's book is %s", data.Player.TodaysGame().Book.Book.CleanTitle())
+	debugPrint("Today's book is %s", app.User.TodaysGame().Book.Book.CleanTitle())
 
 	debugPrint("Setting update autocomplete")
 
 	// convert book map to slice
-	bookCount := len(data.Books)
+	bookCount := len(app.Books)
 	allBooks := make([]Book, 0, bookCount)
-	for _, book := range data.Books {
-		if !data.Player.Settings.ScrapeOptions.ShouldScrapeQuotes(book) {
+	for _, book := range app.Books {
+		if !app.User.Settings.ScrapeOptions.ShouldScrapeQuotes(book) {
 			continue
 		}
 		allBooks = append(allBooks, book.Book)
 	}
-	debugPrint("Using %d/%d books (from scrape options)", len(allBooks), len(data.Books))
+	debugPrint("Using %d/%d books (from scrape options)", len(allBooks), len(app.Books))
 
-	setupHTML(&data, allBooks)
+	setupHTML(&app, allBooks)
 }
 
-func pickDailyQuote(data *SaveData) (QuoteId, error) {
+func pickDailyQuote(data *App) (QuoteID, error) {
 	if !data.NeedsServer {
 		return data.PickDailyQuote()
 	}
 	return fetchDailyQuote(data)
 }
 
-func fetchDailyQuote(data *SaveData) (QuoteId, error) {
+func fetchDailyQuote(app *App) (QuoteID, error) {
 	type DailyGameResponse struct {
 		Quote Quote    `json:"quote"`
 		Book  UserBook `json:"book"`
 	}
 	var dailyResp DailyGameResponse
-	var dailyQuote QuoteId
+	var dailyQuote QuoteID
 	libbleID := loadLibbleID()
 	if err := fetch("/game/daily/"+libbleID, &dailyResp); err != nil {
 		return dailyQuote, err
 	}
-	data.AddQuote(dailyResp.Quote)
-	return dailyResp.Quote.QuoteId, nil
+	app.AddQuote(dailyResp.Quote)
+	return dailyResp.Quote.ID, nil
 }
 
-func setupHTML(data *SaveData, allBooks Books) {
+func setupHTML(app *App, allBooks Books) {
 	doc := dom.GetWindow().Document()
 
-	game := data.Player.TodaysGame()
+	game := app.User.TodaysGame()
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -245,7 +245,7 @@ func setupHTML(data *SaveData, allBooks Books) {
 		e.PreventDefault()
 		if handleRevist() {
 			go func() {
-				onSubmit(input, data, setFeedback)
+				onSubmit(input, app, setFeedback)
 				updateInputStates()
 			}()
 		}
@@ -257,7 +257,7 @@ func setupHTML(data *SaveData, allBooks Books) {
 		if game.Attempts() <= 0 && handleRevist() {
 			// Run in goroutine to avoid blocking the event loop
 			go func() {
-				err := onSkip(data, setFeedback)
+				err := onSkip(app, setFeedback)
 				log(err, "Failed skipping current quote")
 
 				quoteElement.SetTextContent(game.Quote.Text)
@@ -281,7 +281,7 @@ func setupHTML(data *SaveData, allBooks Books) {
 						setFeedback(msg, FBStatusHint)
 					}
 					updateInputStates()
-					saveErr := saveNonStaticData(*data)
+					saveErr := saveNonStaticData(*app)
 					log(saveErr, "Failed saving data after using hint")
 				}()
 			}
@@ -320,6 +320,9 @@ func setupHTML(data *SaveData, allBooks Books) {
 	})
 
 	setupAutocomplete(input, suggestions, allBooks)
+
+	// Setup user icon
+	setupUserIcon()
 }
 
 const (
@@ -341,18 +344,18 @@ func setFeedbackElem(e dom.HTMLElement, message string, status string) {
 
 func onSubmit(
 	input *dom.HTMLInputElement,
-	data *SaveData,
+	app *App,
 	setFeedback func(msg string, status string),
 ) bool {
 
 	query := strings.ToLower(strings.TrimSpace(input.Value()))
-	game := data.Player.TodaysGame()
+	game := app.User.TodaysGame()
 	target := strings.ToLower(game.Book.Book.CleanTitle())
 
-	defer saveNonStaticData(*data)
+	defer saveNonStaticData(*app)
 
 	if query == target {
-		game.Guesses = append(game.Guesses, game.Quote.BookId)
+		game.Guesses = append(game.Guesses, game.Quote.BookID)
 		attempts := len(game.Guesses)
 		s := ""
 		if attempts > 1 {
@@ -361,11 +364,11 @@ func onSubmit(
 		message := fmt.Sprintf("Correct! You got it in %d attempt%s", attempts, s)
 		setFeedback(message, FBStatusSuccess)
 		return true
-	} else if bookId := data.FindBookId(query); bookId != NilID {
-		if slices.Contains(game.Guesses, bookId) {
+	} else if bookID := app.FindBookID(query); bookID != NilID {
+		if slices.Contains(game.Guesses, bookID) {
 			setFeedback("You already tried that guess!", FBStatusWarn)
 		} else {
-			game.Guesses = append(game.Guesses, bookId)
+			game.Guesses = append(game.Guesses, bookID)
 
 			if len(game.Guesses) >= game.Settings.MaxGuesses {
 				msg := fmt.Sprintf("Failed! The answer was \"%s\"", game.Book.Book.CleanTitle())
@@ -384,36 +387,36 @@ func onSubmit(
 }
 
 func onSkip(
-	data *SaveData,
+	app *App,
 	setFeedback func(msg string, status string),
 ) error {
-	game := data.Player.TodaysGame()
+	game := app.User.TodaysGame()
 
 	if game.Started() {
 		return fmt.Errorf("Trying to skip after the game already started")
 	}
 
 	// Mark quote as seen so it won't appear again
-	if !slices.Contains(data.Player.SeenQuotes, game.QuoteID) {
-		data.Player.SeenQuotes = append(data.Player.SeenQuotes, game.QuoteID)
+	if !slices.Contains(app.User.SeenQuotes, game.QuoteID) {
+		app.User.SeenQuotes = append(app.User.SeenQuotes, game.QuoteID)
 		debugPrint("Skipping quote %d", game.QuoteID)
-		if data.NeedsServer {
-			syncPlayer(data.Player) // Need to sync since pickDailyQuote will fetch data from server
+		if app.NeedsServer {
+			syncPlayer(app.User) // Need to sync since pickDailyQuote will fetch data from server
 		}
 	}
 
 	msg := fmt.Sprintf("Skipped! The answer was \"%s\"", game.Book.Book.CleanTitle())
 	setFeedback(msg, FBStatusError)
 
-	dailyQuoteId, err := pickDailyQuote(data)
-	if dailyQuoteId == NilID {
+	dailyQuoteID, err := pickDailyQuote(app)
+	if dailyQuoteID == NilID {
 		return fmt.Errorf("Failed to repick daily quote when skipping:\n%v", err)
 	}
-	log(err, "Issue when to repickng daily quote when skipping")
-	game.QuoteID = dailyQuoteId
+	log(err, "Issue when to repicking daily quote when skipping")
+	game.QuoteID = dailyQuoteID
 	game.Date = time.Now()
-	saveNonStaticData(*data)
-	if err := game.Init(*data); err != nil {
+	saveNonStaticData(*app)
+	if err := game.Init(*app); err != nil {
 		return err
 	}
 	debugPrint("The book is now %s", game.Book.Book.CleanTitle())
