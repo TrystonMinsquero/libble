@@ -525,7 +525,6 @@ input[type="text"]:disabled {
   color: #2b1810;
   border: 4px solid #4a90e2;
   box-shadow: 4px 4px 0px rgba(74, 144, 226, 0.3);
-  display: block;
 }
 
 .status-message.error {
