@@ -45,7 +45,11 @@ build_wasm() {
 
 
 build_server() {
-    go build -o ./main ./server
+    local server_args=""
+    if [[ $MODE == "debug" ]]; then
+        local server_args="-race"
+    fi
+    go build $server_args -o ./main ./server
 }
 
 # Parse arguments
