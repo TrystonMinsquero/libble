@@ -22,6 +22,7 @@ fi
 }
 
 build_wasm() {
+    # TODO: change to use MODE instead and set GIN_MODE
     if [[ $GIN_MODE == "debug" ]]; then
         API_ORIGIN=""
         MODE="debug"
