@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	. "libble/shared"
 
@@ -19,9 +20,9 @@ func initStart() {
 	userGridInput := getElemByIDAs[*dom.HTMLInputElement](doc, "userId")
 	submitButton := getElemByIDAs[*dom.HTMLButtonElement](doc, "submit-button")
 
-	showError := func(message string) {
+	showError := func() {
 		statusMessage.Class().Add("error")
-		statusMessage.SetTextContent("There was an issue creating your account\nPlease try again later...")
+		statusMessage.SetTextContent("There was an issue creating your account\nPlease try again later...\n(See console for more info)")
 		setVisible(statusMessage, true)
 		setVisible(progressContainer, false)
 	}
@@ -37,7 +38,7 @@ func initStart() {
 		setVisible(progressContainer, false)
 	}
 
-	showProgress := func(current, total, cummulativeTotal int) {
+	showProgress := func(current, total, cummulativeTotal uint) {
 		setVisible(progressContainer, true)
 		percentage := (float64(current) / float64(total)) * 100
 		progressFill.SetAttribute("style", fmt.Sprintf("width: %.1f%%", percentage))
@@ -47,7 +48,7 @@ func initStart() {
 	_ = showProgress
 	_ = showStatus
 
-	pressSubmit := func() {
+	createUser := func() (UserID, error) {
 		hideMessages()
 		userGRID := strings.TrimSpace(userGridInput.Value())
 
@@ -64,32 +65,85 @@ func initStart() {
 		})
 
 		if err != nil {
-			log(err, "Failed creating user")
-			showError(err.Error())
-			return
+			return createResp.UserID, err
 		}
 		if createResp.Error != "" {
-			log(err, "Failed creating user")
-			showError(createResp.Error)
+			return createResp.UserID, fmt.Errorf(createResp.Error)
+		}
+		return createResp.UserID, nil
+	}
+
+	var updateStatus func(userID string)
+	updateStatus = func(userID string) {
+		var status UserCreateStatus
+		const frequency = time.Millisecond * 500
+
+	update:
+		for {
+			err := fetch("/user/create/status/"+userID, &status)
+			if err != nil {
+				log(err, "Failed fetching status for "+userID)
+				showError()
+				break update
+			}
+
+			debugPrint("%+v", status)
+			switch status.State {
+			case UserCreateState_NeedsReboot:
+				logErr("Rebooting from a failed state %s", userID)
+				go func() {
+					createUser()
+					time.Sleep(frequency)
+					go updateStatus(userID)
+				}()
+				break update
+			case UserCreateState_Finished:
+				showStatus(fmt.Sprintf("Done! Found %d quotes from %d books!",
+					status.QuotesCollected, status.BooksCollected))
+				if status.BooksCollected > 0 {
+					showProgress(status.BooksFound, status.BooksFound, status.QuotesCollected)
+				} else {
+					setVisible(progressContainer, false)
+				}
+				break update
+			default:
+				if status.State != UserCreateState_InProgress {
+					logErr("State \"%s\" from status is not a valid state", status.State)
+					showError()
+					break update
+				}
+			}
+
+			if status.BooksFound == 0 {
+				showStatus("Fetching your books...")
+			} else {
+				if status.InitialQuote != NilID {
+					showStatus("Found a quote, play now!")
+					// TODO: Finish this. Working on the flow to go to the actual game.
+					//       Need to figure out how to bring initial quote, maybe setting localStorage?
+					//       Will likely need to modify canPlay.
+					//       Will likely need to modify routes.go file.
+				} else {
+					showStatus(fmt.Sprintf("Found %d books. Fetching your quotes...", status.BooksFound))
+				}
+
+				showProgress(status.BooksCollected, status.BooksFound, status.QuotesCollected)
+			}
+
+			// Wait to verify the next call
+			time.Sleep(frequency)
+		}
+	}
+
+	pressSubmit := func() {
+		userID, err := createUser()
+		if err != nil {
+			log(err, "Failed to create user")
+			showError()
 			return
 		}
 
-		// TODO: you were in the middle of doing this. Finish it.
-		//       maybe test to make sure user/create flow works first?
-		go func() {
-			var status UserCreateStatus
-			for {
-				id := fmt.Sprintf("%d", createResp.UserID)
-				err := fetch("/user/create/status/"+id, &status)
-				if err != nil {
-					showError(err.Error())
-					break
-				}
-				if status.BooksCollected > 0 {
-
-				}
-			}
-		}()
+		go updateStatus(fmt.Sprintf("%d", userID))
 
 		// Perform the fetch in a goroutine
 		// go func() {
@@ -248,7 +302,7 @@ func initStart() {
 
 	form.AddEventListener("submit", false, func(e dom.Event) {
 		e.PreventDefault()
-		pressSubmit()
+		go pressSubmit()
 	})
 
 	// Setup user icon
