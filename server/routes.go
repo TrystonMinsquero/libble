@@ -3,12 +3,14 @@ package main
 import (
 	"errors"
 	"fmt"
+	"math/rand"
 	"net/http"
 	"os"
 	"path"
 	"strconv"
 	"strings"
 	"sync"
+	"time"
 
 	. "libble/shared"
 
@@ -299,16 +301,29 @@ type UserCreationProgress struct {
 	Error error
 }
 
+func (p *UserCreationProgress) State() UserCreateState {
+	p.Mutux.RLock()
+	defer p.Mutux.RUnlock()
+	if p.FinishedScrapingQuotes && p.UserSynced && p.BooksSynced && p.QuotesSynced {
+		return UserCreateState_Finished
+	}
+	return p.User.CreateState
+}
+
 func (p *UserCreationProgress) Status() UserCreateStatus {
 	p.Mutux.RLock()
 	defer p.Mutux.RUnlock()
+	var errStr string
+	if p.Error != nil {
+		errStr = p.Error.Error()
+	}
 	return UserCreateStatus{
 		BooksFound:      uint(len(p.Books)),
 		BooksCollected:  p.BookQuotesScraped,
 		QuotesCollected: uint(len(p.Quotes)),
 		InitialQuote:    p.InitialQuote,
-		Finished:        p.FinishedScrapingQuotes,
-		Error:           p.Error.Error(),
+		State:           p.State(),
+		Error:           errStr,
 	}
 }
 
@@ -368,14 +383,17 @@ func setupUserRoutes(r *gin.Engine, node *snowflake.Node) {
 
 	user.POST("/create", func(c *gin.Context) {
 		var req UserCreateRequest
+		var res UserCreateResponse
 		if err := c.BindJSON(&req); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+			res.Error = fmt.Sprintf("Invalid request body. %v", err)
+			c.JSON(http.StatusBadRequest, res)
 			return
 		}
 
 		req.GRID = strings.TrimSpace(req.GRID)
 		if req.GRID == "" {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Missing 'grid' field"})
+			res.Error = "Missing 'grid' field"
+			c.JSON(http.StatusBadRequest, res)
 			return
 		}
 
@@ -387,27 +405,18 @@ func setupUserRoutes(r *gin.Engine, node *snowflake.Node) {
 		}
 
 		user := User{
-			ID:         userID,
-			UserGRID:   req.GRID,
-			Settings:   settings,
-			SeenQuotes: []QuoteID{},
-			Games:      []Game{},
+			ID:          userID,
+			UserGRID:    req.GRID,
+			Settings:    settings,
+			SeenQuotes:  []QuoteID{},
+			Games:       []Game{},
+			CreateState: UserCreateState_InProgress,
 		}
 
-		userCreationMutex.Lock()
-		progress := new(UserCreationProgress)
-		progress.User = user
-		userCreationProgress[userID] = progress
-		userCreationMutex.Unlock()
-
+		progress := NewUserCreationProgress(user)
 		go progress.StartCreation(user)
-		// if err := CreateUser(libbleID, req.GRID, settings); err != nil {
-		// 	logg.Errorf("Failed to create user: %v", err)
-		// 	c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
-		// 	return
-		// }
-
-		c.JSON(http.StatusCreated, gin.H{"player": user})
+		res.UserID = user.ID
+		c.JSON(http.StatusCreated, res)
 	})
 
 	user.GET("/create/status/:ID", func(ctx *gin.Context) {
@@ -422,20 +431,50 @@ func setupUserRoutes(r *gin.Engine, node *snowflake.Node) {
 		progress, found := userCreationProgress[userID]
 		userCreationMutex.RUnlock()
 
-		if !found {
-			status.Error = "User is currently not being created."
-			ctx.JSON(http.StatusBadRequest, status)
+		if found {
+			status = progress.Status()
+			ctx.JSON(http.StatusOK, status)
 			return
 		}
 
-		status = progress.Status()
-		ctx.JSON(http.StatusOK, status)
+		user, err := GetUser(userID)
+		if err != nil {
+			status.Error = err.Error()
+			ctx.JSON(http.StatusNotFound, status)
+			return
+		}
+		status.State = user.CreateState
+		switch user.CreateState {
+		case UserCreateState_Finished:
+			ctx.JSON(http.StatusAccepted, status)
+		case UserCreateState_InProgress:
+			// We know this was in progress on another server,
+			// otherwise would have caught from our userCreationProgress search.
+			user.CreateState = UserCreateState_NeedsReboot
+			status.State = UserCreateState_NeedsReboot
+			fallthrough
+		case UserCreateState_NeedsReboot:
+			// Caches the state found so we don't have to ask the database again
+			NewUserCreationProgress(user)
+			ctx.JSON(http.StatusAccepted, status)
+		}
+
+		ctx.JSON(http.StatusBadRequest, status)
 	})
+}
+
+func NewUserCreationProgress(user User) *UserCreationProgress {
+	p := new(UserCreationProgress)
+	p.User = user
+	userCreationMutex.Lock()
+	userCreationProgress[user.ID] = p
+	userCreationMutex.Unlock()
+	return p
 }
 
 // Will start all the jobs to create the user. See the status from /user/create/status
 func (p *UserCreationProgress) StartCreation(user User) {
-	p.User = user
+	user.CreateState = UserCreateState_InProgress
 	// Sync user to database
 	go func() {
 		tx := db.Create(&user)
@@ -460,9 +499,9 @@ func (p *UserCreationProgress) StartCreation(user User) {
 		}
 
 		go func() {
-			tx := db.Create(&p.Books)
-			if tx.Error != nil {
-				p.AddError(tx.Error, "Failed to sync books to database")
+			_, err := SaveBooks(p.Books, p.User.ID)
+			if err != nil {
+				p.AddError(err, "Failed to sync books to database")
 			} else {
 				p.BooksSynced = true
 			}
@@ -495,6 +534,10 @@ func (p *UserCreationProgress) StartCreation(user User) {
 						return
 					}
 
+					// TODO: delete
+					fakeSeconds := rand.Intn(5)
+					time.Sleep(time.Second * time.Duration(fakeSeconds))
+
 					p.Mutux.Lock()
 					defer p.Mutux.Unlock()
 
@@ -504,7 +547,20 @@ func (p *UserCreationProgress) StartCreation(user User) {
 				}()
 			}
 			wg.Wait()
+
+			p.Mutux.Lock()
 			p.FinishedScrapingQuotes = true
+			p.Mutux.Unlock()
+			go func() {
+				_, err := SaveQuotes(p.Quotes)
+				if err != nil {
+					p.AddError(err, "Failed to sync quotes to database")
+				} else {
+					p.Mutux.Lock()
+					p.QuotesSynced = true
+					p.Mutux.Unlock()
+				}
+			}()
 		}()
 	}()
 }

@@ -90,6 +90,20 @@ func CreateUser(userID UserID, userGRID string, settings UserSettings) error {
 	return nil
 }
 
+func UpdateUserCreateState(user User, state UserCreateState) error {
+	result := db.Model(&user).Where("user_id = ?", user.ID).UpdateColumn("state", state)
+	return result.Error
+}
+
+func GetUser(userID UserID) (User, error) {
+	var user User
+	result := db.Where("user_id = ?", userID).Find(&user)
+	if result.Error != nil {
+		return user, result.Error
+	}
+	return user, nil
+}
+
 // GetUsersByGRID returns summary info for all users with a given Goodreads user ID
 func GetUsersByGRID(userGRID string) ([]UserSummary, error) {
 	var players []User

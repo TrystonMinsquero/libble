@@ -23,8 +23,9 @@ type User struct {
 	UserGRID string       `json:"user_gr_id,omitempty" gorm:"column:user_gr_id;not null;index"`
 	Settings UserSettings `json:"settings" gorm:"type:text;serializer:json"`
 
-	Email      string     `json:"email,omitempty" gorm:"not null"`
-	VerifiedAt *time.Time `json:"verified_at" gorm:"column:verified_email_time"`
+	Email       string          `json:"email,omitempty" gorm:"not null"`
+	VerifiedAt  *time.Time      `json:"verified_at" gorm:"column:verified_email_time"`
+	CreateState UserCreateState `json:"-" gorm:"column:create_state"`
 
 	SeenQuotes []QuoteID `json:"seen_quote_ids" gorm:"type:text;serializer:json"`
 	Games      []Game    `json:"games" gorm:"type:text;serializer:json"`
@@ -133,7 +134,7 @@ func (a App) FindBookID(query string) BookID {
 type UserBook struct {
 	UserID   UserID       `json:"-" gorm:"primaryKey;column:user_id"`
 	BookID   BookID       `json:"-" gorm:"primaryKey;column:book_id"`
-	Book     Book         `json:"book" gorm:"foreignKey:BookID;references:BookID"`
+	Book     Book         `json:"book" gorm:"foreignKey:BookID;references:ID"`
 	UserData UserBookData `json:"user_book_data" gorm:"embedded"`
 }
 
